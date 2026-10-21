@@ -1,0 +1,71 @@
+smell,source,project,n,n_smelly,single_class,flag,macro_F1,MCC,ROC_AUC
+CM,"Step 3 LOPO LR (nested tuning, full features)",Blankj_AndroidUtilCode,77,37,False,,0.7861111111111111,0.6006340493688825,0.7496621621621622
+CM,"Step 3 LOPO LR (nested tuning, full features)",MovingBlocks_Terasology,355,217,False,,0.5257237942096463,0.07038401158808312,0.5252287450744674
+CM,"Step 3 LOPO LR (nested tuning, full features)",MyCATApache_Mycat-Server,412,303,False,,0.475364874130669,0.03315521151049916,0.5159869197928967
+CM,"Step 3 LOPO LR (nested tuning, full features)",alibaba_arthas,167,141,False,,0.595933075933076,0.23110341016343408,0.7375886524822695
+CM,"Step 3 LOPO LR (nested tuning, full features)",igniterealtime_Smack,199,108,False,,0.4816649642492339,0.00021230173657629833,0.47150997150997154
+CM,"Step 3 LOPO LR (nested tuning, full features)",kevin-wayne_algs4,263,181,False,,0.4676113360323887,0.07901072097232106,0.5224700175178547
+CM,"Step 3 LOPO LR (nested tuning, full features)",lettuce-io_lettuce-core,173,106,False,,0.41868279569892475,-0.07904612092966026,0.5050689946493946
+CM,"Step 3 LOPO LR (nested tuning, full features)",linlinjava_litemall,34,23,False,,0.8277608915906788,0.6574294173028599,0.8893280632411067
+CM,"Step 3 LOPO LR (nested tuning, full features)",macrozheng_mall,12,11,False,< 20 entities,0.4957983193277311,0.30151134457776363,0.7272727272727273
+CM,"Step 3 LOPO LR (nested tuning, full features)",shuzheng_zheng,3,2,False,< 20 entities,0.25,-0.5,0.5
+CM,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",Blankj_AndroidUtilCode,77,37,False,,0.7421117574475586,0.5313162698265093,0.8128378378378378
+CM,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",MovingBlocks_Terasology,355,217,False,,0.5340452424163858,0.07493878352749613,0.5422927936953182
+CM,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",MyCATApache_Mycat-Server,412,303,False,,0.43904874285195605,-0.027107334454148414,0.5113240681866352
+CM,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",alibaba_arthas,167,141,False,,0.6055118110236221,0.2680938932607424,0.7654118930714675
+CM,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",igniterealtime_Smack,199,108,False,,0.48638663967611334,-0.010298348134869227,0.475986975986976
+CM,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",kevin-wayne_algs4,263,181,False,,0.44305523323276863,0.09211477973067939,0.5147217356151462
+CM,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",lettuce-io_lettuce-core,173,106,False,,0.42651933701657463,-0.07885472777757291,0.5064770487186708
+CM,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",linlinjava_litemall,34,23,False,,0.7588652482269503,0.5194504037948523,0.8537549407114624
+CM,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",macrozheng_mall,12,11,False,< 20 entities,0.6210526315789473,0.42640143271122083,0.9090909090909091
+CM,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",shuzheng_zheng,3,2,False,< 20 entities,0.6666666666666666,0.5,0.5
+CM,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",Blankj_AndroidUtilCode,77,37,False,,0.5404232230059685,0.19859068908486865,0.5641891891891891
+CM,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",MovingBlocks_Terasology,355,217,False,,0.49449838187702266,0.060478275679026444,0.5298871301676351
+CM,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",MyCATApache_Mycat-Server,412,303,False,,0.49661004767494793,-0.004489774919906035,0.5034819995761044
+CM,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",alibaba_arthas,167,141,False,,0.5827086456771614,0.16861042242675406,0.5840152755046372
+CM,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",igniterealtime_Smack,199,108,False,,0.4159941305942773,-0.043588071801449066,0.5126678876678876
+CM,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",kevin-wayne_algs4,263,181,False,,0.4470142977291842,-0.06362864698668547,0.458260342271931
+CM,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",lettuce-io_lettuce-core,173,106,False,,0.4835398519609046,0.018548740251910983,0.5149957758377922
+CM,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",linlinjava_litemall,34,23,False,,0.5502645502645502,0.22817408071403383,0.5375494071146245
+CM,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",macrozheng_mall,12,11,False,< 20 entities,0.4782608695652174,0.0,0.3181818181818182
+CM,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",shuzheng_zheng,3,2,False,< 20 entities,0.25,-0.5,0.5
+LPL,"Step 3 LOPO GB (nested tuning, full features)",Blankj_AndroidUtilCode,151,122,False,,0.6754508924399589,0.41617330380039186,0.9584511023176936
+LPL,"Step 3 LOPO GB (nested tuning, full features)",MovingBlocks_Terasology,239,140,False,,0.6351276110422617,0.27046285626580363,0.7004689754689755
+LPL,"Step 3 LOPO GB (nested tuning, full features)",MyCATApache_Mycat-Server,179,105,False,,0.6364630526480237,0.32984271082389294,0.7600386100386101
+LPL,"Step 3 LOPO GB (nested tuning, full features)",alibaba_arthas,59,53,False,,0.4968483500185391,0.16541520534425638,0.6037735849056604
+LPL,"Step 3 LOPO GB (nested tuning, full features)",igniterealtime_Smack,197,115,False,,0.6761930010604453,0.3523860021208908,0.6819194061505832
+LPL,"Step 3 LOPO GB (nested tuning, full features)",kevin-wayne_algs4,51,22,False,,0.44363636363636366,0.11877113736973438,0.5391849529780565
+LPL,"Step 3 LOPO GB (nested tuning, full features)",lettuce-io_lettuce-core,360,238,False,,0.4999795743290167,0.04199200259731042,0.5432738669238187
+LPL,"Step 3 LOPO GB (nested tuning, full features)",linlinjava_litemall,40,37,False,,0.5618153364632238,0.14619957418529833,0.7567567567567568
+LPL,"Step 3 LOPO GB (nested tuning, full features)",macrozheng_mall,17,15,False,< 20 entities,0.46875,0.0,1.0
+LPL,"Step 3 LOPO GB (nested tuning, full features)",shuzheng_zheng,32,20,False,,0.5076923076923077,0.01642880193633814,0.39791666666666664
+LPL,"Step 3 LOPO LR (nested tuning, full features)",Blankj_AndroidUtilCode,151,122,False,,0.3941020062847474,-0.12091592080039726,0.3824194460146976
+LPL,"Step 3 LOPO LR (nested tuning, full features)",MovingBlocks_Terasology,239,140,False,,0.6179571456795445,0.2361160854647797,0.6546176046176047
+LPL,"Step 3 LOPO LR (nested tuning, full features)",MyCATApache_Mycat-Server,179,105,False,,0.6368715083798883,0.3131274131274131,0.7331402831402831
+LPL,"Step 3 LOPO LR (nested tuning, full features)",alibaba_arthas,59,53,False,,0.2575358501609599,-0.07596177114740713,0.3553459119496855
+LPL,"Step 3 LOPO LR (nested tuning, full features)",igniterealtime_Smack,197,115,False,,0.6783888665863775,0.3577046510349335,0.6830858960763521
+LPL,"Step 3 LOPO LR (nested tuning, full features)",kevin-wayne_algs4,51,22,False,,0.5203761755485893,0.04075235109717868,0.5744514106583072
+LPL,"Step 3 LOPO LR (nested tuning, full features)",lettuce-io_lettuce-core,360,238,False,,0.49043250327654,0.0337691822162369,0.5564643890343023
+LPL,"Step 3 LOPO LR (nested tuning, full features)",linlinjava_litemall,40,37,False,,0.53125,0.207715453956552,0.7207207207207207
+LPL,"Step 3 LOPO LR (nested tuning, full features)",macrozheng_mall,17,15,False,< 20 entities,0.43333333333333335,-0.13333333333333333,0.8
+LPL,"Step 3 LOPO LR (nested tuning, full features)",shuzheng_zheng,32,20,False,,0.4056695992179863,-0.14785921742704325,0.5104166666666666
+LPL,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",Blankj_AndroidUtilCode,151,122,False,,0.42591531691057755,-0.09935615078108827,0.25127190503109104
+LPL,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",MovingBlocks_Terasology,239,140,False,,0.5638763397998051,0.13227882924379744,0.6344516594516595
+LPL,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",MyCATApache_Mycat-Server,179,105,False,,0.6198150924537731,0.29194713044018333,0.7233590733590733
+LPL,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",alibaba_arthas,59,53,False,,0.22011494252873565,0.12344827865802117,0.33962264150943394
+LPL,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",igniterealtime_Smack,197,115,False,,0.6010903426791276,0.21024495777881747,0.686373276776246
+LPL,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",kevin-wayne_algs4,51,22,False,,0.6040372670807453,0.2799462554779271,0.6026645768025078
+LPL,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",lettuce-io_lettuce-core,360,238,False,,0.48346918215953844,0.005127587755344764,0.5330107452817192
+LPL,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",linlinjava_litemall,40,37,False,,0.5144724556489262,0.18904770757413522,0.7747747747747747
+LPL,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",macrozheng_mall,17,15,False,< 20 entities,0.43333333333333335,-0.13333333333333333,0.8666666666666667
+LPL,"Tier 1 LOPO LR (default hyperparameters, Tier 1 features)",shuzheng_zheng,32,20,False,,0.37254901960784315,-0.2277100170213244,0.42916666666666664
+LPL,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",Blankj_AndroidUtilCode,151,122,False,,0.6094284522319566,0.2357127791394304,0.6814584511023177
+LPL,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",MovingBlocks_Terasology,239,140,False,,0.5899455769762938,0.18364331538664508,0.6239538239538239
+LPL,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",MyCATApache_Mycat-Server,179,105,False,,0.6086129860252876,0.2203758097234827,0.6879021879021879
+LPL,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",alibaba_arthas,59,53,False,,0.4573578595317726,-0.004015772804924458,0.5660377358490566
+LPL,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",igniterealtime_Smack,197,115,False,,0.5356693903205532,0.07314148744952452,0.5708377518557795
+LPL,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",kevin-wayne_algs4,51,22,False,,0.4974379188017344,0.09219357380739282,0.6575235109717869
+LPL,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",lettuce-io_lettuce-core,360,238,False,,0.47332421340629277,-0.03902437845972611,0.5033923405427745
+LPL,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",linlinjava_litemall,40,37,False,,0.4666666666666667,-0.06532553344640132,0.6486486486486487
+LPL,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",macrozheng_mall,17,15,False,< 20 entities,0.46875,0.0,1.0
+LPL,"Tier 1 LOPO RF (default hyperparameters, Tier 1 features)",shuzheng_zheng,32,20,False,,0.34545454545454546,-0.29814239699997197,0.325
