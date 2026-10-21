@@ -1,0 +1,140 @@
+### 1.1 Loading
+
+- The four Zenodo files match the record's MD5 checksums (plan §0).
+- No MySQL server was available. Both dumps were converted to SQLite by `src/convert_sql.py`, which parses the mysqldump `INSERT` tuples byte by byte.
+- Row counts: `annotation` 10,267; `sample` 99,387; `method_metrics` 110,982; `class_metrics` 14,458; DACOSX `entry` 207,605.
+- The `smell` table is empty in both dumps, and so is the `repository` table in the extended dump.
+- The `sample`, `method_metrics` and `class_metrics` tables are identical in the two dumps.
+
+### 1.2 Snippet and annotation counts versus the DACOS paper (Table II)
+
+| smell | paper_snippets | paper_annotations | sample_rows | entities | annotations |
+|---|---|---|---|---|---|
+| CM | 2197 | 4349 | 2275 | 2275 | 4555 |
+| LPL | 1634 | 3221 | 1694 | 1694 | 3392 |
+| MA | 1361 | 2697 | 1341 | 1009 | 2710 |
+| Total (distinct) | 5192 | 10267 | 5115 | 4783 | 10267 |
+
+- The annotation total matches the paper (10,267).
+- The number of distinct annotated `sample` rows is 5,115, not 5,192. The paper's 5,192 equals the sum of its per-smell snippet counts.
+- 195 snippets were offered for both CM and LPL, so they appear in both rows above.
+- Neither the sample-row counts nor the entity counts reproduce the paper's per-smell numbers.
+- The `annotation` table has no annotator identifier and no timestamp. The number of distinct annotators cannot be determined from the data; the paper reports 86.
+
+### 1.3 Duplicate sample rows
+
+- 332 MA classes appear as two `sample` rows with the same `designite_id`, path and metrics. That leaves 1,009 distinct MA classes instead of 1,341.
+- Each copy carries 2 annotations. All 1,328 annotation ids are distinct, so these are not copied rows. The two copies' (checkbox, `is_smell`) sequences, in id order, are identical for 155 of the 332 classes.
+- Following plan D3, their annotations are pooled, giving 4 annotations per class.
+- No method snippet is duplicated.
+
+### 1.4 DACOSX entries
+
+| smellPresented | label | entries | on_methods | on_classes | granularity_consistent | consistent_metric_range |
+|---|---|---|---|---|---|---|
+| 1 | MA present | 1218 | 573 | 645 | 645 | lcom 0.807107–1 |
+| 2 | LPL present | 223 | 172 | 51 | 172 | pc 7–15 |
+| 3 | CM present | 465 | 428 | 37 | 428 | cc 11–75 |
+| 4 | MA absent | 18456 | 9187 | 9269 | 9269 | lcom -1–0.395349 |
+| 5 | LPL absent | 93219 | 82987 | 10232 | 82987 | pc 0–2 |
+| 6 | CM absent | 94024 | 83181 | 10843 | 83181 | cc 1–3 |
+
+- 30,923 of 207,605 entries attach a smell to the other granularity (MA codes on method snippets; CM/LPL codes on class snippets). They are excluded (D4).
+  - In these entries the label does not separate the stored metric of that granularity. MA codes on methods: cc 1–12 for 'present' versus 1–31 for 'absent'. CM codes on classes: lcom -1–1 versus -1–1. LPL codes on classes: lcom -1–1 versus -1–1.
+- Within the consistent entries, present and absent are separated by the stored metric, as the column `consistent_metric_range` shows.
+- 157 consistent DACOSX entries are the same snippet as a DACOS snippet annotated for the same smell (CM 50, LPL 41, MA 66; all are 'present'). They are removed before any training.
+- The paper's DacosX totals (CM 94,489; LPL 93,442; MA 19,674) equal the raw entry counts per smell code pair, including the cross-granularity entries.
+
+### 1.5 Primary-metric ranges: paper Table I versus annotated data (descriptive, D10)
+
+Set: every annotated entity (all 10,267 annotations, before the consistency filter).
+
+| smell | metric | paper_Table_I_band | observed_annotated_min | observed_annotated_max | share_inside_Table_I_band | share_above_band | share_below_band | DesigniteJava_default |
+|---|---|---|---|---|---|---|---|---|
+| CM | cc | 4–7 | 5.0 | 14.0 | 0.744 | 0.256 | 0.0 | >= 8 |
+| LPL | pc | 3–6 | 3.0 | 10.0 | 0.976 | 0.024 | 0.0 | >= 5 |
+| MA | lcom | 0.4–0.8 | 0.402 | 1.0 | 0.935 | 0.065 | 0.0 | >= 0.8 (and NOF>=7, NOM>=7) |
+
+- Each smell's annotated range differs from the paper's Table I band. Of 1,562 method samples with cc = 4, 1,562 are neither offered for CM annotation nor included in DACOSX for CM.
+- The DesigniteJava defaults come from `ThresholdsDTO` in github.com/tushartushar/DesigniteJava (commit 3321c56). The rule is metric ≥ threshold.
+
+### 1.6 Smell checkbox versus `is_smell` (consistency filter, D7)
+
+- In the public Tagman source, `is_smell` is set to true when any checkbox is ticked.
+- An annotation with checkbox = 1 and `is_smell` = 0 contradicts itself. Such annotations are excluded from the primary analysis.
+
+| smell | checkbox | is_smell=0 | is_smell=1 |
+|---|---|---|---|
+| CM | 0 | 1426 | 116 |
+| CM | 1 | 416 | 2597 |
+| LPL | 0 | 1083 | 205 |
+| LPL | 1 | 0 | 2104 |
+| MA | 0 | 210 | 5 |
+| MA | 1 | 965 | 1530 |
+
+| smell | excluded | excluded_in_run | share_in_run |
+|---|---|---|---|
+| CM | 416 | 416 | 1.0 |
+| LPL | 0 | 0 | n/a |
+| MA | 965 | 917 | 0.95 |
+
+- The filter removes 1,381 annotations in total. Of these, 1,333 lie inside an answer run (section 1.7).
+
+### 1.7 Runs of identical answers
+
+- Annotations were ordered by annotation id within each smell. Runs are maximal sequences of at least 40 identical checkbox answers (the fixed rule for R4).
+- The column `log10_P_run_if_independent` gives the log10 probability of one specific run of that length, if answers were independent draws at the smell's overall yes-rate. It is a scale reference, not a test.
+- The data contain no annotator or time information. They cannot show whether a run reflects one annotator's sequence or a recording artefact.
+
+| smell | first_ann_id | last_ann_id | length | answer | smell_yes_rate | log10_P_run_if_independent |
+|---|---|---|---|---|---|---|
+| CM | 787 | 1364 | 63 | 1 | 0.661 | -11.3 |
+| CM | 2008 | 2090 | 40 | 1 | 0.661 | -7.2 |
+| CM | 3854 | 4234 | 69 | 1 | 0.661 | -12.4 |
+| CM | 4605 | 5066 | 50 | 1 | 0.661 | -9.0 |
+| CM | 9225 | 9396 | 170 | 1 | 0.661 | -30.5 |
+| CM | 9397 | 9469 | 73 | 0 | 0.661 | -34.3 |
+| CM | 9470 | 9715 | 246 | 1 | 0.661 | -44.2 |
+| CM | 9932 | 11111 | 133 | 0 | 0.661 | -62.6 |
+| LPL | 941 | 1261 | 55 | 1 | 0.62 | -11.4 |
+| LPL | 3068 | 4724 | 305 | 0 | 0.62 | -128.3 |
+| LPL | 9254 | 9709 | 41 | 0 | 0.62 | -17.2 |
+| LPL | 9927 | 11063 | 1054 | 1 | 0.62 | -218.6 |
+| LPL | 11067 | 12114 | 296 | 0 | 0.62 | -124.5 |
+| MA | 6 | 4859 | 1474 | 1 | 0.921 | -52.9 |
+| MA | 9786 | 9926 | 141 | 1 | 0.921 | -5.1 |
+
+Run coverage per smell:
+
+| smell | annotations | in_run | share |
+|---|---|---|---|
+| CM | 4555 | 844 | 0.185 |
+| LPL | 3392 | 1751 | 0.516 |
+| MA | 2710 | 1615 | 0.596 |
+
+Figure: `figures/audit_answer_runs.pdf` (.png): each smell's checkbox answers against annotation id, with a centred rolling yes-rate over 50 annotations and the runs shaded.
+
+### 1.8 Source code, features and metric cross-check
+
+- 5,113 of 5,115 annotated `sample` rows have their file in `files.zip`. The 2 missing are /codesplit_java_class/macrozheng_mall/macrozheng_mall/com.macro.mall.portal.service.impl/PortalBrandServiceImpl.code, /codesplit_java_method/macrozheng_mall/macrozheng_mall/com.macro.mall.portal.service/PortalBrandService/productList.code. These snippets have no computed features and drop out of feature-based analyses.
+- Feature extraction (`src/features.py`): paths needed: 95510; computed: 95496; missing from zip: 14; failed: 0.
+- Lizard 1.17.13 cross-check on 3,491 DACOS method snippets that lizard parsed:
+  - cc matches DesigniteJava exactly for 0.592 of snippets (Spearman 0.920).
+  - Parameter count matches exactly for 0.957 (Spearman 0.979).
+  - The stored DesigniteJava values are used throughout.
+
+### 1.9 Analysis sets after the consistency filter, and eligibility (D7a, D8)
+
+| smell | annotation_set | entities_ge2_usable | unanimous_smelly | unanimous_benign | split | ties | minority_unanimous | eligible_for_models |
+|---|---|---|---|---|---|---|---|---|
+| CM | primary (filtered) | 1860 | 1129 | 566 | 165 | 164 | 566 | True |
+| CM | unfiltered | 2275 | 1301 | 565 | 409 | 407 | 565 |  |
+| LPL | primary (filtered) | 1694 | 868 | 458 | 368 | 366 | 458 | True |
+| LPL | unfiltered | 1694 | 868 | 458 | 368 | 366 | 458 |  |
+| MA | primary (filtered) | 587 | 400 | 8 | 179 | 78 | 8 | False |
+| MA | unfiltered | 1009 | 822 | 7 | 180 | 76 | 7 |  |
+
+- Entities left with fewer than 2 usable annotations after the filter are excluded (CM: 415; LPL: 0; MA: 422).
+- Eligibility rule D8: at least 150 entities with ≥ 2 usable annotations and at least 30 unanimous entities in the minority class.
+- **Multifaceted Abstraction does not meet the rule. It is reported descriptively only (RQ1 agreement, RQ2 threshold ROC), and every model section skips it.**
+

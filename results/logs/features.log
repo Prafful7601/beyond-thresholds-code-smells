@@ -1,0 +1,15 @@
+paths needed: 95510; computed: 95496; missing from zip: 14; failed: 0; runtime 15.9s
+        is_class  statements  max_nesting  comment_ratio  method_calls
+count  95496.000   95496.000    95496.000      95496.000     95496.000
+mean       0.086       7.620        0.364          0.134         6.911
+std        0.280      80.571        0.893          0.250        67.485
+min        0.000       0.000        0.000          0.000         0.000
+25%        0.000       1.000        0.000          0.000         0.000
+50%        0.000       2.000        0.000          0.000         1.000
+75%        0.000       4.000        0.000          0.111         5.000
+max        1.000   17775.000       10.000          0.929     16458.000
+
+lizard 1.17.13 cross-check on 3491 DACOS method snippets:
+  cc exact match 0.592, Spearman 0.920, median |diff| 0.0
+  pc exact match 0.957, Spearman 0.979
+

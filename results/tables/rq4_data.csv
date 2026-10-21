@@ -1,0 +1,3 @@
+smell,features,DACOS_unanimous,DACOS_missing_features,DACOS_test_n,DACOS_smelly,DACOS_benign,DACOSX_consistent,DACOSX_overlap_removed,DACOSX_missing_features,DACOSX_train_n,DACOSX_present,DACOSX_absent
+CM,"cc, loc, statements, max_nesting, comment_ratio, method_calls",1695,0,1695,1129,566,83609,50,10,83549,378,83171
+LPL,"pc, loc, statements, max_nesting, comment_ratio, method_calls",1326,1,1325,867,458,83159,41,8,83110,131,82979

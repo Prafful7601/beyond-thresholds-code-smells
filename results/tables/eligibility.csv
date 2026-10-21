@@ -1,0 +1,7 @@
+smell,annotation_set,entities_ge2_usable,unanimous_smelly,unanimous_benign,split,ties,minority_unanimous,eligible_for_models
+CM,primary (filtered),1860,1129,566,165,164,566,True
+CM,unfiltered,2275,1301,565,409,407,565,
+LPL,primary (filtered),1694,868,458,368,366,458,True
+LPL,unfiltered,1694,868,458,368,366,458,
+MA,primary (filtered),587,400,8,179,78,8,False
+MA,unfiltered,1009,822,7,180,76,7,

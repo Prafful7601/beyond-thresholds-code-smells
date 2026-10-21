@@ -1,0 +1,4 @@
+set,smell,entities,annotations,yes_rate,pct_agreement,pct_agreement_lo,pct_agreement_hi,kripp_alpha,alpha_lo,alpha_hi,unanimous_share
+primary,CM,1860,3724,0.651,0.912,0.898,0.924,0.804,0.774,0.832,0.911
+primary,LPL,1694,3392,0.62,0.783,0.764,0.802,0.54,0.498,0.577,0.783
+primary,MA,587,1716,0.875,0.786,0.76,0.814,0.02,-0.035,0.077,0.695

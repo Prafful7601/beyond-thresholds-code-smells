@@ -1,0 +1,65 @@
+**Method.**
+- Data: consistency-filtered annotations, unanimous entities only. With 2 annotations, majority labels with ties excluded are exactly the unanimous entities (D11).
+- Each smell's primary metric is the stored DesigniteJava value (cc, pc, lcom).
+- ROC-AUC uses `sklearn.metrics.roc_auc_score`. H2a is tested with a one-sided Mann–Whitney U test (smelly > benign).
+- Youden cut-off: the rule is metric ≥ c, with c taken from the observed values; the smallest c maximising J = TPR − FPR is used.
+- 95% CIs are bootstrap percentile intervals (B = 2000, resampling entities, seed 20261021). Resamples with a single class were skipped (CM 0, LPL 0, MA 0).
+- Precision, recall and F1 treat "smelly" as the positive class. They are evaluated at fixed cut-offs: the full-sample Youden cut-off and the DesigniteJava default.
+  - Their CIs resample entities with the cut-off held fixed.
+  - The Youden figures are in-sample, so they are optimistic.
+- For MA, the full DesigniteJava rule (LCOM ≥ 0.8, NOF ≥ 7, NOM ≥ 7) is also reported.
+- A rule that predicts no entity as smelly has undefined precision (shown as n/a); its recall and F1 are 0.
+- MA is descriptive only (D8): its unanimous set has 8 benign entities, so its CIs are wide.
+
+**Discrimination and cut-offs**
+
+| smell | metric | n (smelly/benign) | ROC-AUC [95% CI] | MWU U | p (one-sided, AUC>0.5) | Youden cut [95% CI] | Youden J | Designite default | default outside Youden CI | Table I band |
+|---|---|---|---|---|---|---|---|---|---|---|
+| CM | cc | 1695 (1129/566) | 0.541 [0.513, 0.568] | 345950 | 0.0021 | ≥ 6 [6, 9] | 0.063 | ≥ 8 | no | 4–7 |
+| LPL | pc | 1326 (868/458) | 0.433 [0.409, 0.458] | 172182 | 1.0000 | ≥ 6 [3, 10] | 0.007 | ≥ 5 | no | 3–6 |
+| MA | lcom | 408 (400/8) | 0.520 [0.299, 0.727] | 1662 | 0.4238 | ≥ 0.52 [0.52, 0.75] | 0.210 | ≥ 0.8 | yes | 0.4–0.8 |
+
+**Precision, recall and F1 at each cut-off**
+
+| smell | rule | precision [95% CI] | recall [95% CI] | F1 [95% CI] |
+|---|---|---|---|---|
+| CM | Youden: cc ≥ 6 | 0.687 [0.660, 0.715] | 0.683 [0.656, 0.710] | 0.685 [0.663, 0.707] |
+| CM | DesigniteJava default: cc ≥ 8 | 0.701 [0.659, 0.746] | 0.270 [0.244, 0.296] | 0.390 [0.359, 0.421] |
+| LPL | Youden: pc ≥ 6 | 0.719 [0.548, 0.875] | 0.026 [0.016, 0.038] | 0.051 [0.031, 0.072] |
+| LPL | DesigniteJava default: pc ≥ 5 | 0.642 [0.586, 0.701] | 0.203 [0.176, 0.229] | 0.308 [0.273, 0.342] |
+| MA | Youden: lcom ≥ 0.52 | 0.987 [0.971, 1.000] | 0.585 [0.537, 0.632] | 0.735 [0.696, 0.772] |
+| MA | DesigniteJava default: lcom ≥ 0.8 | n/a [n/a, n/a] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| MA | DesigniteJava full MA rule: lcom ≥ 0.8 & NOF ≥ 7 & NOM ≥ 7 | n/a [n/a, n/a] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+
+**Share smelly by primary-metric value (unanimous entities)**
+
+| smell | value | entities | share_smelly |
+|---|---|---|---|
+| CM | 5 | 573 | 0.625 |
+| CM | 6 | 399 | 0.674 |
+| CM | 7 | 288 | 0.684 |
+| CM | 8 | 174 | 0.649 |
+| CM | 9 | 133 | 0.729 |
+| CM | 10 | 99 | 0.687 |
+| CM | 11 | 9 | 1.0 |
+| CM | 12 | 9 | 0.889 |
+| CM | 13 | 8 | 0.875 |
+| CM | 14 | 3 | 1.0 |
+| LPL | 3 | 137 | 1.0 |
+| LPL | 4 | 915 | 0.607 |
+| LPL | 5 | 242 | 0.632 |
+| LPL | 6 | 23 | 0.826 |
+| LPL | 7 | 3 | 0.333 |
+| LPL | 8 | 2 | 0.5 |
+| LPL | 9 | 3 | 0.333 |
+| LPL | 10 | 1 | 1.0 |
+| MA | 0.4–0.5 | 171 | 0.971 |
+| MA | 0.5–0.6 | 60 | 1.0 |
+| MA | 0.6–0.7 | 121 | 0.992 |
+| MA | 0.7–0.8 | 56 | 0.964 |
+
+Tables: `tables/rq2_threshold_validity.csv`, `tables/rq2_share_smelly_by_metric.csv`. Figures: `figures/rq2_roc.pdf`, `figures/rq2_share_smelly_by_metric.pdf` (.png).
+
+The positions of the paper's Table I bands relative to the annotated ranges are in section 1.5 (descriptive only, D10).
+
+**Summary.** CM: AUC 0.541 [0.513, 0.568], Youden cut-off cc ≥ 6 [6, 9] against the default ≥ 8; LPL: AUC 0.433 [0.409, 0.458], Youden cut-off pc ≥ 6 [3, 10] against the default ≥ 5; MA: AUC 0.520 [0.299, 0.727], Youden cut-off lcom ≥ 0.52 [0.52, 0.75] against the default ≥ 0.8.

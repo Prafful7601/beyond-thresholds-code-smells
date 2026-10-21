@@ -1,0 +1,7 @@
+smellPresented,label,entries,on_methods,on_classes,granularity_consistent,consistent_metric_range
+1,MA present,1218,573,645,645,lcom 0.807107–1
+2,LPL present,223,172,51,172,pc 7–15
+3,CM present,465,428,37,428,cc 11–75
+4,MA absent,18456,9187,9269,9269,lcom -1–0.395349
+5,LPL absent,93219,82987,10232,82987,pc 0–2
+6,CM absent,94024,83181,10843,83181,cc 1–3
