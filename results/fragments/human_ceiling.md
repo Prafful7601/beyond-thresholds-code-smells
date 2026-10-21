@@ -1,0 +1,48 @@
+**Analysis type: primary (human ceiling).** plan.md §5.2.
+
+**Method.**
+- Population: primary-set entities (R5 set for "LPL R5") with exactly 2 usable annotations, unanimous and split.
+- **Human vs human.** One annotation is the prediction and the other the target, with random roles in each of 2000 designations. MCC, macro-F1 and accuracy are computed over entities and averaged over designations.
+  - Only split entities depend on the designation. Each designation is therefore simulated exactly by binomial draws on the split counts (sufficient statistics), which is equivalent to drawing roles entity by entity.
+- **Model vs one human.**
+  - The best model of the run (CM LR, LPL GB, LPL R5 SVM) uses section-B fold hyperparameters on the 25 splits, trained on unanimous training entities only.
+  - It predicts every held-out entity in the population, ties included.
+  - In designation d it is scored against the same target annotation as the human, using repeat d mod 5. The comparison is paired.
+- **CIs.** Bootstrap over entities (B = 2000); each resample re-draws 2000 designations. The gap and the ratio use the same resamples and draws.
+- **Second ceiling: near-duplicate pairs.**
+  - Pairs of different entities in the same project with identical near-duplicate keys (identifiers → ID, literals → LIT), primary set (R5 set for LPL R5).
+  - One random annotation per entity, random roles, 2000 designations. CI from a bootstrap over near-duplicate groups (clusters).
+
+Population sizes:
+
+| population | entities_with_exactly_2_usable | dropped_missing_features |
+|---|---|---|
+| CM | 1858 | 0 |
+| LPL | 1692 | 1 |
+| LPL R5 | 1555 | 0 |
+
+**Ceiling table**
+
+| population | best_model | metric | entities | unanimous | split | human vs human [95% CI] | model vs one human [95% CI] | gap human − model [95% CI] | ratio model/human MCC [95% CI] |
+|---|---|---|---|---|---|---|---|---|---|
+| CM | LR | MCC | 1858 | 1694 | 164 | 0.806 [0.776, 0.833] | 0.091 [0.053, 0.130] | 0.715 [0.666, 0.760] | 0.113 [0.066, 0.162] |
+| CM | LR | macro_F1 | 1858 | 1694 | 164 | 0.903 [0.888, 0.916] | 0.524 [0.505, 0.544] | 0.379 [0.354, 0.402] |  |
+| CM | LR | accuracy | 1858 | 1694 | 164 | 0.912 [0.899, 0.924] | 0.530 [0.511, 0.550] | 0.381 [0.357, 0.404] |  |
+| LPL | GB | MCC | 1691 | 1325 | 366 | 0.540 [0.498, 0.581] | 0.171 [0.133, 0.210] | 0.369 [0.317, 0.421] | 0.317 [0.248, 0.391] |
+| LPL | GB | macro_F1 | 1691 | 1325 | 366 | 0.770 [0.749, 0.790] | 0.584 [0.565, 0.603] | 0.186 [0.161, 0.212] |  |
+| LPL | GB | accuracy | 1691 | 1325 | 366 | 0.784 [0.763, 0.803] | 0.618 [0.600, 0.636] | 0.166 [0.141, 0.191] |  |
+| LPL R5 | SVM | MCC | 1555 | 1189 | 366 | 0.515 [0.472, 0.558] | 0.201 [0.162, 0.243] | 0.313 [0.257, 0.366] | 0.391 [0.314, 0.478] |
+| LPL R5 | SVM | macro_F1 | 1555 | 1189 | 366 | 0.757 [0.736, 0.779] | 0.576 [0.556, 0.598] | 0.181 [0.153, 0.208] |  |
+| LPL R5 | SVM | accuracy | 1555 | 1189 | 366 | 0.765 [0.745, 0.786] | 0.631 [0.612, 0.650] | 0.134 [0.108, 0.160] |  |
+
+**Second ceiling: human-vs-human agreement between structurally identical snippets of the same project**
+
+| smell | groups | pairs | MCC [95% CI] | macro_F1 [95% CI] | accuracy [95% CI] |
+|---|---|---|---|---|---|
+| CM | 63 | 104 | 0.082 [-0.112, 0.301] | 0.539 [0.441, 0.648] | 0.573 [0.470, 0.687] |
+| LPL | 209 | 1393 | 0.099 [0.039, 0.183] | 0.549 [0.519, 0.591] | 0.625 [0.583, 0.648] |
+| LPL R5 | 180 | 1352 | 0.087 [0.028, 0.158] | 0.543 [0.514, 0.579] | 0.613 [0.563, 0.638] |
+
+Tables: `tables/human_ceiling.csv`, `tables/human_ceiling_neardup.csv`. Figure: `figures/human_ceiling.pdf` (.png). Runtime 481s.
+
+**Summary (MCC).** CM: human 0.806, model 0.091, ratio 0.11; LPL: human 0.540, model 0.171, ratio 0.32; LPL R5: human 0.515, model 0.201, ratio 0.39.

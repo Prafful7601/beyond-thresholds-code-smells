@@ -36,4 +36,4 @@ Cell format: estimate [95% bootstrap CI]; n = entities (labelled entities for RQ
 | RQ5 features with BH p < 0.05 (of 6) | CM | 0; n=1860 | 0; n=2275 | 0; n=1470 | n/a | 0; n=2275 | n/a | n/a | n/a |
 | RQ5 features with BH p < 0.05 (of 6) | LPL | 3; n=1694 | 2; n=1694 | 0; n=254 | 3; n=1557 | 3; n=1694 | n/a | n/a | n/a |
 
-Tables: `tables/robustness_summary.csv` (this table), `tables/robustness_long.csv` (numeric). Runtime 98s.
+Tables: `tables/robustness_summary.csv` (this table), `tables/robustness_long.csv` (numeric). Runtime 96s.

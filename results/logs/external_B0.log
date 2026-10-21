@@ -1,0 +1,70 @@
+**Analysis type: descriptive audit (B0).** Nothing beyond counts is computed; B1 waits for the PI's go-ahead.
+
+- Source: Zenodo 10.5281/zenodo.10475432 (v1.0, 2024-01-09, CC BY 4.0), by Prokić, Luburić, Slivka, Grujić and Kovačević.
+- Six xlsx files, MD5-verified: three datasets (one per smell) and three per-annotator heuristic files.
+
+| smell | file | snippets | unique_snippet_ids | granularity | projects | annotator_columns | snippets_by_n_annotations | severity_values_individual | final_distribution | final_missing | snippets_without_strict_majority | final_differs_from_strict_majority | n_metrics | duplicate_metric_names |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Data Class | DataSet_Data_Class.xlsx | 231 | 231 | class | 15 | 3 | {2: 202, 3: 29} | [0, 1, 2] | {0: 216, 1: 12, 2: 3} | 0 | 0 | 0 | 31 | none |
+| Feature Envy | DataSet_Feature_Envy.xlsx | 220 | 220 | method | 11 | 3 | {2: 111, 3: 109} | [0, 1, 2, 3] | {0: 184, 1: 28, 2: 8} | 0 | 0 | 0 | 19 | none |
+| Refused Bequest | DataSet_Refused_Bequest.xlsx | 209 | 209 | class | 15 | 3 | {2: 161, 3: 48} | [0, 1, 2] | {0: 173, 1: 35, 2: 1} | 0 | 0 | 0 | 31 | BOvR |
+
+Pairwise exact agreement of the released severity scores (descriptive; uses the annotator columns as released):
+
+| smell | annotator_pair | snippets_both | exact_agreement |
+|---|---|---|---|
+| Data Class | ann1-ann2 | 132 | 0.947 |
+| Data Class | ann1-ann3 | 29 | 0.793 |
+| Data Class | ann2-ann3 | 128 | 0.945 |
+| Feature Envy | ann1-ann2 | 166 | 0.88 |
+| Feature Envy | ann1-ann3 | 109 | 0.817 |
+| Feature Envy | ann2-ann3 | 163 | 0.89 |
+| Refused Bequest | ann1-ann2 | 127 | 0.953 |
+| Refused Bequest | ann1-ann3 | 48 | 0.5 |
+| Refused Bequest | ann2-ann3 | 130 | 0.8 |
+
+Provided metrics:
+
+| smell | metrics |
+|---|---|
+| Data Class | CLOC, CELOC, NMD, NAD, NMD_NAD, WMC, WMC_NO_CASE, LCOM, LCOM3, LCOM4, TCC, ATFD, CNOR, CNOL, CNOC, CNOA, NOPM, NOPF, CMNB, RFC, CBO, DIT, DCC, ATFD_10, NIC, WOC, NOPA, NOPP, WMCNAMM, BUR, BOvR |
+| Feature Envy | CYCLO, CYCLO_SWITCH, MLOC, MELOC, NOP, NOLV, NOTC, MNOL, MNOR, MNOC, MNOA, NONL, NOSL, NOMO, NOPE, NOLE, MMNB, NOUW, AID |
+| Refused Bequest | CLOC, CELOC, NMD, NAD, NMD_NAD, WMC, WMC_NO_CASE, LCOM, LCOM3, LCOM4, TCC, ATFD, CNOR, CNOL, CNOC, CNOA, NOPM, NOPF, CMNB, RFC, CBO, DIT, DCC, ATFD_10, NIC, WOC, NOPA, NOPP, WMCNAMM, BOvR, BOvR |
+
+```
+Data Class: projects = https://github.com/Jackett/Jackett, https://github.com/NickeManarin/ScreenToGif, https://github.com/OpenRA/OpenRA, https://github.com/Radarr/Radarr, https://github.com/Ryujinx/Ryujinx, https://github.com/ShareX/ShareX, https://github.com/Sonarr/Sonarr, https://github.com/Unity-Technologies/ml-agents, https://github.com/duplicati/duplicati, https://github.com/egordorichev/BurningKnight, https://github.com/files-community/Files, https://github.com/jellyfin/jellyfin, https://github.com/mRemoteNG/mRemoteNG, https://github.com/mbdavid/LiteDB, https://github.com/ppy/osu
+Data Class heuristics file Data_Class_Heuristics.xlsx: 231 snippets; heuristics per annotator: No logic in methods., Used by other classes.
+Feature Envy: projects = https://github.com/JamesNK/Newtonsoft.Json, https://github.com/NickeManarin/ScreenToGif, https://github.com/Radarr/Radarr, https://github.com/ShareX/ShareX, https://github.com/Sonarr/Sonarr, https://github.com/Unity-Technologies/ml-agents, https://github.com/duplicati/duplicati, https://github.com/files-community/Files, https://github.com/gitextensions/gitextensions, https://github.com/jellyfin/jellyfin, https://github.com/ppy/osu
+Feature Envy heuristics file Feature_Envy_Heuristics.xlsx: 220 snippets; heuristics per annotator: Function has method chains., Function uses foreign data., Function has few foreign providers., Function does not belong here semantically.
+Refused Bequest: projects = https://github.com/Jackett/Jackett, https://github.com/JamesNK/Newtonsoft.Json, https://github.com/NickeManarin/ScreenToGif, https://github.com/Radarr/Radarr, https://github.com/Ryujinx/Ryujinx, https://github.com/ShareX/ShareX, https://github.com/SixLabors/ImageSharp, https://github.com/Sonarr/Sonarr, https://github.com/Unity-Technologies/ml-agents, https://github.com/duplicati/duplicati, https://github.com/files-community/Files, https://github.com/gitextensions/gitextensions, https://github.com/jellyfin/jellyfin, https://github.com/mRemoteNG/mRemoteNG, https://github.com/ppy/osu
+Refused Bequest heuristics file Refused_Bequest_Heuristics.xlsx: 209 snippets; heuristics per annotator: Few parent members used., Many members overriden., Unnecessary hierarchy.
+```
+
+**Annotation design (from the released columns)**
+
+| smell | rated_by_annotator_1 | rated_by_annotator_2 | rated_by_annotator_3 | snippets_with_2_annotations | of_which_agree | snippets_with_3_annotations |
+|---|---|---|---|---|---|---|
+| Data Class | 132 | 231 | 128 | 202 | 202 | 29 |
+| Feature Envy | 166 | 220 | 163 | 111 | 111 | 109 |
+| Refused Bequest | 127 | 209 | 130 | 161 | 161 | 48 |
+
+**Proposed primary metric per smell (for the PI's decision; not yet used).**
+Metric definitions are from the Clean-CaDET platform's `CaDETMetrics.cs`, linked from the Zenodo record. The detection rules are from Lanza & Marinescu, *Object-Oriented Metrics in Practice* (Springer, 2006), and Marinescu, "Detection strategies" (ICSM 2004).
+
+| smell | proposed primary metric | direction | justification | alternatives |
+|---|---|---|---|---|
+| Data Class | **WOC** (Weight Of Class: functional public methods / all public members) | lower = smellier | The defining condition of the Lanza–Marinescu Data Class strategy is WOC < 1/3: the interface exposes data rather than services. The other conditions (NOPA+NOAM, WMC) are size/complexity guards. | NOPA_NOPP-type counts (NOPA, NOPP); WMCNAMM |
+| Feature Envy | **AID** (Access to Import Data: foreign attributes and methods accessed by the method) | higher = smellier | The Lanza–Marinescu Feature Envy strategy is ATFD > FEW ∧ LAA < 1/3 ∧ FDP ≤ FEW. ATFD is its primary "uses foreign data" condition. LAA and FDP are not provided at method level; AID is the method-level analogue of ATFD in this dataset. | none of LAA/FDP is available; the class-level ATFD is not a method metric |
+| Refused Bequest | **BUR** (Base-class Usage Ratio) | lower = smellier | The Lanza–Marinescu Refused Bequest strategy is (NProtM > FEW ∧ BUR < 1/3) ∨ BOvR < 1/3, plus complexity guards. BUR is the "uses few inherited members" condition. | BOvR (Base-class Overriding Ratio) |
+
+**Issues to decide before B1:**
+1. **Adjudicated annotation.** Every snippet with exactly 2 annotations shows perfect agreement (Data Class 202/202; Feature Envy 111/111; Refused Bequest 161/161). A third annotation exists only where disagreement occurred. The released per-annotator scores therefore over-represent agreement, so a raw alpha would be biased upward and not comparable with DACOS. Options:
+   - (a) alpha on the first two annotations only. This is not possible as released, because the slot of the "first" pair is not identifiable when three exist.
+   - (b) report the raw alpha with this caveat.
+   - (c) report only the share of snippets that needed a third annotator. Annotator 2 rated every snippet; annotators 1 and 3 split the second slot.
+2. **Refused Bequest header.** The Refused Bequest sheet labels two adjacent columns `BOvR`, where the Data Class sheet has `BUR, BOvR` in the same positions. The single class present in both sheets has identical values in the two BUR positions. I propose treating the first column as BUR, but this rests on one shared class and the column order.
+3. **Few positives.** Final severity ≥ 1 occurs in Data Class 15/231; Feature Envy 36/220; Refused Bequest 36/209. RQ2 CIs will be wide, especially for Data Class.
+4. **Severity scale.** Individual scores are 0–3 for Feature Envy and 0–2 for the other two (observed values). Ordinal alpha applies to severity and nominal alpha to presence (severity ≥ 1).
+
+Tables: `tables/external_B0_audit.csv`, `external_B0_metrics.csv`, `external_B0_annotator_pairs.csv`. Log: `logs/external_audit.txt`.
+

@@ -4,8 +4,10 @@ Pre-registered plan: `plan.md`. Plan commits, in order:
 - `1cde51313c96140bae7ca6515df94f21a4ee2ac3`: Phase 0: data audit and pre-registered analysis plan
 - `bd033600ab963246f69698e22f2840dd175fe3b9`: Plan amendment: PI decisions after Phase 0 audit
 - `a723d8e5b96a96c4e958ec10862f0bcc712716d4`: Plan amendment: pre-register Prompt 2 robustness, Tier 2 and Step 3 analyses
+- `4963a18301b024f0e22314ae23c78783b757ff2c`: Plan amendment: pre-register Prompt 3 close-out analyses
+- `86b0c3f6c01de5afcfbc5e7c8a7bbd48c5408f32`: Plan amendment: pre-register Prompt 3B range-restriction analyses and B0
 
-Scope: **Tier 1, Tier 2 and Step 3 (Prompt 2) are complete.** Every planned section below was run; none is outstanding.
+Scope: **Tier 1, Tier 2, Step 3 (Prompt 2), Prompt 3 and Prompt 3B part A are complete.** The external check (Prompt 3B part B) has finished its B0 audit; B1 is waiting for the PI's go-ahead (§8).
 - **Multifaceted Abstraction is reported descriptively only** (agreement, threshold ROC, RQ5 descriptives), because it fails the D8 eligibility rule after the consistency filter. Every model section (RQ4, RQ3 models, Step 3 A–J) covers CM and LPL only.
 - Every section states its **analysis type**: *primary*, *robustness*, *validity check* or *exploratory*. Numbers from different types must not be mixed when the paper is written.
 
@@ -137,7 +139,7 @@ Figure: `figures/audit_answer_runs.pdf` (.png): each smell's checkbox answers ag
 ### 1.8 Source code, features and metric cross-check
 
 - 5,113 of 5,115 annotated `sample` rows have their file in `files.zip`. The 2 missing are /codesplit_java_class/macrozheng_mall/macrozheng_mall/com.macro.mall.portal.service.impl/PortalBrandServiceImpl.code, /codesplit_java_method/macrozheng_mall/macrozheng_mall/com.macro.mall.portal.service/PortalBrandService/productList.code. These snippets have no computed features and drop out of feature-based analyses.
-- Feature extraction (`src/features.py`): paths needed: 95510; computed: 95496; missing from zip: 14; failed: 0.
+- Feature extraction (`src/features.py`): paths needed: 96299; computed: 96285; missing from zip: 14; failed: 0.
 - Lizard 1.17.13 cross-check on 3,491 DACOS method snippets that lizard parsed:
   - cc matches DesigniteJava exactly for 0.592 of snippets (Spearman 0.920).
   - Parameter count matches exactly for 0.957 (Spearman 0.979).
@@ -157,6 +159,8 @@ Figure: `figures/audit_answer_runs.pdf` (.png): each smell's checkbox answers ag
 - Entities left with fewer than 2 usable annotations after the filter are excluded (CM: 415; LPL: 0; MA: 422).
 - Eligibility rule D8: at least 150 entities with ≥ 2 usable annotations and at least 30 unanimous entities in the minority class.
 - **Multifaceted Abstraction does not meet the rule. It is reported descriptively only (RQ1 agreement, RQ2 threshold ROC), and every model section skips it.**
+
+- For MA, reading the answer from `isma` gives alpha 0.020 [-0.035, 0.077] (primary, consistency-filtered) and 0.059 [0.010, 0.113] (unfiltered, R6). Reading it from `is_smell` gives 0.561 [0.520, 0.603] (all annotations, R3).
 
 ## 2 Descriptives
 
@@ -569,7 +573,7 @@ Cell format: estimate [95% bootstrap CI]; n = entities (labelled entities for RQ
 | RQ5 features with BH p < 0.05 (of 6) | CM | 0; n=1860 | 0; n=2275 | 0; n=1470 | n/a | 0; n=2275 | n/a | n/a | n/a |
 | RQ5 features with BH p < 0.05 (of 6) | LPL | 3; n=1694 | 2; n=1694 | 0; n=254 | 3; n=1557 | 3; n=1694 | n/a | n/a | n/a |
 
-Tables: `tables/robustness_summary.csv` (this table), `tables/robustness_long.csv` (numeric). Runtime 98s.
+Tables: `tables/robustness_summary.csv` (this table), `tables/robustness_long.csv` (numeric). Runtime 96s.
 
 ### 4.2 R7 run anatomy (plan.md §4.2)
 
@@ -665,7 +669,250 @@ Tables: `tables/run_anatomy.csv`, `tables/run_colocation.csv`. Figure: `figures/
 | LPL | GB | R4 | 250 | 0.616 → 0.570 | -0.046 [-0.069, -0.023] | 0.232 → 0.153 | -0.079 [-0.124, -0.034] | 0.633 [0.571, 0.695] | 0.267 [0.145, 0.395] |
 | LPL | GB | R6 | 1325 | 0.616 → 0.616 | 0.000 [0.000, 0.000] | 0.232 → 0.232 | 0.000 [0.000, 0.000] | 0.616 [0.591, 0.638] | 0.232 [0.184, 0.278] |
 
-Table: `tables/sensitivity.csv`. Runtime G+I+J 58s.
+Table: `tables/sensitivity.csv`. Runtime G+I+J 54s.
+
+### 4.4 LPL Step 3 without the pc = 3 block (R5; plan.md §5.1)
+
+**Analysis type: robustness (R5 applied to Step 3).** LPL only. plan.md §5.1.
+
+**Method.**
+- The 137 pc = 3 entities with an empty `smells` field are removed from training and test. This leaves 1189 unanimous entities (731 smelly).
+- Everything else is identical to the primary Step 3 run: the same code, grids, nested tuning and seeds. The 25 splits have the same project-to-fold assignment (asserted).
+- In each table the primary column repeats the primary result; the R5 column is new.
+
+**A and B: baselines and five-model comparison** (mean ± SD not shown; cells are repeat-mean [95% CI])
+
+| section | model/baseline | metric | primary | R5 |
+|---|---|---|---|---|
+| A baselines | majority class | macro_F1 | 0.396 [0.386, 0.405] | 0.381 [0.370, 0.391] |
+| A baselines | majority class | MCC | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| A baselines | majority class | ROC_AUC | 0.500 [0.500, 0.500] | 0.500 [0.500, 0.500] |
+| A baselines | majority class | PR_AUC | 0.654 [0.629, 0.680] | 0.615 [0.587, 0.642] |
+| A baselines | DesigniteJava default rule | macro_F1 | 0.393 [0.367, 0.420] | 0.437 [0.410, 0.465] |
+| A baselines | DesigniteJava default rule | MCC | -0.013 [-0.070, 0.044] | 0.031 [-0.024, 0.085] |
+| A baselines | DesigniteJava default rule | ROC_AUC | 0.434 [0.409, 0.459] | 0.514 [0.490, 0.538] |
+| A baselines | DesigniteJava default rule | PR_AUC | 0.628 [0.599, 0.658] | 0.623 [0.594, 0.653] |
+| A baselines | Youden rule (fitted in training fold) | macro_F1 | 0.285 [0.268, 0.301] | 0.388 [0.364, 0.413] |
+| A baselines | Youden rule (fitted in training fold) | MCC | -0.053 [-0.098, -0.008] | -0.019 [-0.073, 0.033] |
+| A baselines | Youden rule (fitted in training fold) | ROC_AUC | 0.434 [0.409, 0.459] | 0.514 [0.490, 0.538] |
+| A baselines | Youden rule (fitted in training fold) | PR_AUC | 0.628 [0.599, 0.658] | 0.623 [0.594, 0.653] |
+| B models | LR | macro_F1 | 0.569 [0.542, 0.596] | 0.609 [0.583, 0.635] |
+| B models | LR | MCC | 0.141 [0.088, 0.194] | 0.219 [0.167, 0.272] |
+| B models | LR | ROC_AUC | 0.590 [0.557, 0.622] | 0.639 [0.606, 0.671] |
+| B models | LR | PR_AUC | 0.710 [0.675, 0.746] | 0.699 [0.663, 0.738] |
+| B models | RF | macro_F1 | 0.614 [0.590, 0.638] | 0.616 [0.589, 0.640] |
+| B models | RF | MCC | 0.230 [0.182, 0.277] | 0.246 [0.194, 0.294] |
+| B models | RF | ROC_AUC | 0.649 [0.619, 0.679] | 0.622 [0.589, 0.654] |
+| B models | RF | PR_AUC | 0.763 [0.734, 0.794] | 0.673 [0.637, 0.711] |
+| B models | XGB | macro_F1 | 0.607 [0.583, 0.630] | 0.606 [0.580, 0.632] |
+| B models | XGB | MCC | 0.216 [0.169, 0.263] | 0.222 [0.170, 0.272] |
+| B models | XGB | ROC_AUC | 0.675 [0.645, 0.704] | 0.628 [0.596, 0.659] |
+| B models | XGB | PR_AUC | 0.796 [0.770, 0.822] | 0.683 [0.646, 0.721] |
+| B models | GB | macro_F1 | 0.616 [0.591, 0.638] | 0.603 [0.577, 0.629] |
+| B models | GB | MCC | 0.232 [0.184, 0.278] | 0.219 [0.169, 0.268] |
+| B models | GB | ROC_AUC | 0.675 [0.646, 0.704] | 0.620 [0.587, 0.652] |
+| B models | GB | PR_AUC | 0.796 [0.770, 0.822] | 0.680 [0.644, 0.719] |
+| B models | SVM | macro_F1 | 0.612 [0.588, 0.637] | 0.619 [0.589, 0.645] |
+| B models | SVM | MCC | 0.229 [0.182, 0.278] | 0.269 [0.213, 0.321] |
+| B models | SVM | ROC_AUC | 0.631 [0.600, 0.662] | 0.642 [0.610, 0.672] |
+| B models | SVM | PR_AUC | 0.727 [0.693, 0.761] | 0.704 [0.668, 0.742] |
+
+**B: Friedman/Nemenyi and best model**
+
+| statistic | primary | R5 |
+|---|---|---|
+| Friedman χ² | 12.882 | 20.453 |
+| Friedman p | 0.0119 | 4.06e-04 |
+| Nemenyi CD | 1.220 | 1.220 |
+| mean rank LR | 3.92 | 3.40 |
+| mean rank RF | 2.50 | 3.00 |
+| mean rank XGB | 3.14 | 3.68 |
+| mean rank GB | 2.80 | 3.10 |
+| mean rank SVM | 2.64 | 1.82 |
+| best model (MCC rule) | GB | SVM |
+| best tree model | GB | RF |
+
+Pairs with |Δ rank| > CD: primary LR vs RF, LR vs SVM; R5 LR vs SVM, XGB vs SVM, GB vs SVM.
+Figure: `figures/model_cd_diagram_LPL_R5.pdf`.
+
+**C1 and C3** (hyperparameters reused from the respective B run; Δ is versus (v) with a paired bootstrap CI)
+
+| model | variant | primary | R5 |
+|---|---|---|---|
+| GB | (i) primary only | MCC 0.206; Δ MCC -0.027 [-0.082, 0.029] | n/a (not the best model of this run) |
+| GB | (v) all features | reference | n/a (not the best model of this run) |
+| GB | DACOS only (= v) | reference | n/a (not the best model of this run) |
+| GB | DACOSX only | MCC -0.013; Δ MCC -0.245 [-0.325, -0.169] | n/a (not the best model of this run) |
+| GB | DACOSX + DACOS | MCC -0.021; Δ MCC -0.253 [-0.300, -0.197] | n/a (not the best model of this run) |
+| GB | DACOSX only, primary metric removed | MCC -0.163; Δ MCC -0.396 [-0.479, -0.314] | n/a (not the best model of this run) |
+| LR | (i) primary only | MCC -0.055; Δ MCC -0.196 [-0.251, -0.142] | MCC -0.024; Δ MCC -0.243 [-0.316, -0.173] |
+| LR | (v) all features | reference | reference |
+| LR | DACOS only (= v) | reference | reference |
+| LR | DACOSX only | MCC -0.056; Δ MCC -0.196 [-0.290, -0.104] | MCC 0.002; Δ MCC -0.217 [-0.299, -0.135] |
+| LR | DACOSX + DACOS | MCC -0.088; Δ MCC -0.229 [-0.282, -0.175] | MCC 0.000; Δ MCC -0.219 [-0.272, -0.167] |
+| LR | DACOSX only, primary metric removed | MCC -0.195; Δ MCC -0.336 [-0.430, -0.248] | MCC -0.182; Δ MCC -0.401 [-0.493, -0.309] |
+| SVM | (i) primary only | n/a (not the best model of this run) | MCC -0.009; Δ MCC -0.278 [-0.339, -0.214] |
+| SVM | (v) all features | n/a (not the best model of this run) | reference |
+| SVM | DACOS only (= v) | n/a (not the best model of this run) | reference |
+| SVM | DACOSX only | n/a (not the best model of this run) | MCC 0.046; Δ MCC -0.223 [-0.296, -0.150] |
+| SVM | DACOSX + DACOS | n/a (not the best model of this run) | MCC 0.004; Δ MCC -0.265 [-0.318, -0.208] |
+| SVM | DACOSX only, primary metric removed | n/a (not the best model of this run) | MCC -0.106; Δ MCC -0.375 [-0.452, -0.293] |
+
+**RQ3 GEE** (annotation level, all features; R5: 3118 annotations, 1557 entities, working correlation 0.495). No R5 VIF exceeds 5.
+
+| feature | primary OR per SD [95% CI] | primary p (BH) | R5 OR per SD [95% CI] | R5 p (BH) | R5 VIF |
+|---|---|---|---|---|---|
+| pc | 0.794 [0.742, 0.849] | 6.54e-11 | 0.969 [0.907, 1.035] | 0.4154 | 1.03 |
+| loc | 1.249 [1.041, 1.497] | 0.0329 | 1.415 [1.143, 1.752] | 0.0044 | 4.76 |
+| statements | 0.938 [0.783, 1.124] | 0.5851 | 0.899 [0.742, 1.089] | 0.4153 | 4.87 |
+| max_nesting | 0.637 [0.560, 0.724] | 3.74e-11 | 0.597 [0.519, 0.688] | 4.02e-12 | 1.99 |
+| comment_ratio | 1.076 [0.975, 1.188] | 0.2179 | 1.101 [0.997, 1.217] | 0.1172 | 1.16 |
+| method_calls | 0.997 [0.845, 1.176] | 0.9675 | 0.983 [0.825, 1.170] | 0.8438 | 3.34 |
+
+```
+=== LPL R5: depth-3 DecisionTreeClassifier(class_weight='balanced', random_state=20261021) on 1189 unanimous entities (731 smelly / 458 benign).
+|--- max_nesting <= 1.500
+|   |--- statements <= 12.500
+|   |   |--- pc <= 4.500
+|   |   |   |--- weights: [273.885, 372.477] class: 1
+|   |   |--- pc >  4.500
+|   |   |   |--- weights: [55.816, 110.605] class: 1
+|   |--- statements >  12.500
+|   |   |--- method_calls <= 15.500
+|   |   |   |--- weights: [29.855, 13.826] class: 0
+|   |   |--- method_calls >  15.500
+|   |   |   |--- weights: [20.769, 29.278] class: 1
+|--- max_nesting >  1.500
+|   |--- loc <= 58.500
+|   |   |--- loc <= 20.500
+|   |   |   |--- weights: [75.286, 32.531] class: 0
+|   |   |--- loc >  20.500
+|   |   |   |--- weights: [132.400, 19.518] class: 0
+|   |--- loc >  58.500
+|   |   |--- method_calls <= 32.500
+|   |   |   |--- weights: [0.000, 6.506] class: 1
+|   |   |--- method_calls >  32.500
+|   |   |   |--- weights: [6.490, 9.759] class: 1
+
+```
+
+**D: LOPO per-project distribution** (best model of each run: primary GB, R5 SVM)
+
+| statistic | primary | R5 |
+|---|---|---|
+| pooled_macro_F1 | 0.634 | 0.620 |
+| pooled_MCC | 0.268 | 0.282 |
+| MCC_median | 0.165 | 0.123 |
+| MCC_q1 | 0.119 | 0.003 |
+| MCC_q3 | 0.330 | 0.370 |
+| MCC_worst | shuzheng_zheng (0.016) | linlinjava_litemall (-0.081) |
+| macro_F1_median | 0.562 | 0.493 |
+| projects_in_distribution | 9 | 8 |
+| projects_flagged | macrozheng_mall [< 20 entities] | Blankj_AndroidUtilCode [single class]; macrozheng_mall [< 20 entities] |
+
+**F: SHAP** (best tree model of each run). Figures: `figures/shap_summary_LPL_R5.pdf`, `figures/shap_dependence_LPL_R5.pdf`.
+
+| feature | primary mean |SHAP| (GB) | primary rank | R5 mean |SHAP| (RF) | R5 rank |
+|---|---|---|---|---|
+| pc | 0.6944 | 1 | 0.0107 | 6 |
+| loc | 0.1806 | 4 | 0.0254 | 3 |
+| statements | 0.1765 | 5 | 0.0395 | 2 |
+| max_nesting | 0.3488 | 2 | 0.0536 | 1 |
+| method_calls | 0.0965 | 7 | 0.0072 | 7 |
+| comment_ratio | 0.1738 | 6 | 0.0206 | 5 |
+| mean_identifier_length | 0.3408 | 3 | 0.0241 | 4 |
+
+**H: learning curve** (best model of each run)
+
+| fraction | primary macro-F1 (±SD) | R5 macro-F1 (±SD) |
+|---|---|---|
+| 0.1 | 0.556 ± 0.011 | 0.492 ± 0.013 |
+| 0.25 | 0.604 ± 0.010 | 0.522 ± 0.020 |
+| 0.5 | 0.611 ± 0.019 | 0.610 ± 0.005 |
+| 0.75 | 0.608 ± 0.010 | 0.623 ± 0.003 |
+| 1.0 | 0.612 ± 0.000 | 0.622 ± 0.000 |
+| gain 75%→100% [95% CI]; plateaued | 0.005 [-0.007, 0.016]; True | -0.001 [-0.004, 0.003]; True |
+
+**E: duplicate groups and label conflicts**
+
+| duplicate type | primary | R5 |
+|---|---|---|
+| exact | 71 groups; 169 entities; 0 groups span >1 project; 22 groups have conflicting labels | 51 groups; 129 entities; 0 groups span >1 project; 22 groups have conflicting labels |
+| near | 160 groups; 462 entities; 6 groups span >1 project; 62 groups have conflicting labels | 131 groups; 399 entities; 6 groups span >1 project; 62 groups have conflicting labels |
+
+Tables: `tables/lpl_r5_*.csv` (side by side), `tables/model_comparison_LPL_R5.csv`, `tables/baselines_LPL_R5.csv`, `tables/ablation_LPL_R5.csv`, `tables/rq3_odds_ratios_LPL_R5.csv`, `tables/rq3_tree_rules_LPL_R5.txt`, `tables/lopo_per_project_LPL_R5.csv`. Runtime 494s.
+
+**Summary.** R5 best model SVM, MCC 0.269 [0.213, 0.321]; primary best model GB, MCC 0.232 [0.184, 0.278].
+
+### 4.5 Specification curves (plan.md §5.3)
+
+**Analysis type: robustness summary (figures; no new tests).** plan.md §5.3.
+
+Each panel plots one headline number per smell under every applicable condition (primary in orange, robustness checks in blue), sorted by estimate, with 95% CIs.
+Reference lines: alpha 0.667, AUC 0.5, MCC difference 0, MCC 0. The B best-model MCC is shown for CM (primary) and LPL (primary and R5).
+
+| spec | smell | condition | analysis | estimate [95% CI] | reference |
+|---|---|---|---|---|---|
+| alpha | CM | primary | primary | 0.804 [0.774, 0.832] | 0.667 |
+| alpha | LPL | primary | primary | 0.540 [0.498, 0.577] | 0.667 |
+| alpha | MA | primary | primary | 0.020 [-0.035, 0.077] | 0.667 |
+| alpha | MA | R1 | robustness | -0.014 [-0.058, 0.031] | 0.667 |
+| alpha | CM | R3 | robustness | 0.630 [0.597, 0.662] | 0.667 |
+| alpha | LPL | R3 | robustness | 0.489 [0.443, 0.530] | 0.667 |
+| alpha | MA | R3 | robustness | 0.561 [0.520, 0.603] | 0.667 |
+| alpha | CM | R4 | robustness | 0.824 [0.792, 0.855] | 0.667 |
+| alpha | LPL | R4 | robustness | 0.960 [0.916, 0.991] | 0.667 |
+| alpha | MA | R4 | robustness | 0.056 [-0.026, 0.141] | 0.667 |
+| alpha | LPL | R5 | robustness | 0.513 [0.466, 0.556] | 0.667 |
+| alpha | CM | R6 | robustness | 0.599 [0.564, 0.635] | 0.667 |
+| alpha | LPL | R6 | robustness | 0.540 [0.498, 0.577] | 0.667 |
+| alpha | MA | R6 | robustness | 0.059 [0.010, 0.113] | 0.667 |
+| alpha | CM | R7c | robustness | 0.804 [0.777, 0.832] | 0.667 |
+| alpha | LPL | R7c | robustness | 0.513 [0.469, 0.554] | 0.667 |
+| alpha | MA | R7c | robustness | -0.050 [-0.107, 0.012] | 0.667 |
+| auc | CM | primary | primary | 0.541 [0.513, 0.568] | 0.5 |
+| auc | LPL | primary | primary | 0.433 [0.409, 0.458] | 0.5 |
+| auc | MA | primary | primary | 0.520 [0.299, 0.727] | 0.5 |
+| auc | CM | R2 | robustness | 0.539 [0.511, 0.566] | 0.5 |
+| auc | LPL | R2 | robustness | 0.495 [0.472, 0.518] | 0.5 |
+| auc | MA | R2 | robustness | 0.525 [0.301, 0.740] | 0.5 |
+| auc | CM | R3 | robustness | 0.547 [0.522, 0.574] | 0.5 |
+| auc | LPL | R3 | robustness | 0.450 [0.425, 0.474] | 0.5 |
+| auc | MA | R3 | robustness | 0.474 [0.434, 0.514] | 0.5 |
+| auc | CM | R4 | robustness | 0.555 [0.524, 0.585] | 0.5 |
+| auc | LPL | R4 | robustness | 0.577 [0.522, 0.628] | 0.5 |
+| auc | MA | R4 | robustness | 0.606 [0.408, 0.779] | 0.5 |
+| auc | LPL | R5 | robustness | 0.514 [0.490, 0.538] | 0.5 |
+| auc | CM | R6 | robustness | 0.541 [0.515, 0.569] | 0.5 |
+| auc | LPL | R6 | robustness | 0.433 [0.409, 0.458] | 0.5 |
+| auc | MA | R6 | robustness | 0.506 [0.296, 0.717] | 0.5 |
+| rq4_LR | CM | primary | primary | -0.024 [-0.072, 0.024] | 0.0 |
+| rq4_LR | LPL | primary | primary | -0.224 [-0.322, -0.127] | 0.0 |
+| rq4_LR | CM | R2 | robustness | -0.014 [-0.060, 0.031] | 0.0 |
+| rq4_LR | LPL | R2 | robustness | -0.112 [-0.183, -0.037] | 0.0 |
+| rq4_LR | CM | R3 | robustness | 0.033 [-0.010, 0.076] | 0.0 |
+| rq4_LR | LPL | R3 | robustness | 0.078 [-0.008, 0.159] | 0.0 |
+| rq4_LR | CM | R4 | robustness | -0.012 [-0.063, 0.037] | 0.0 |
+| rq4_LR | LPL | R4 | robustness | -0.208 [-0.372, -0.062] | 0.0 |
+| rq4_LR | LPL | R5 | robustness | -0.255 [-0.343, -0.160] | 0.0 |
+| rq4_LR | CM | R6 | robustness | -0.011 [-0.058, 0.037] | 0.0 |
+| rq4_LR | LPL | R6 | robustness | -0.224 [-0.322, -0.127] | 0.0 |
+| rq4_RF | CM | primary | primary | 0.025 [-0.036, 0.089] | 0.0 |
+| rq4_RF | LPL | primary | primary | -0.138 [-0.217, -0.062] | 0.0 |
+| rq4_RF | CM | R2 | robustness | 0.052 [-0.007, 0.113] | 0.0 |
+| rq4_RF | LPL | R2 | robustness | -0.061 [-0.127, 0.005] | 0.0 |
+| rq4_RF | CM | R3 | robustness | 0.011 [-0.047, 0.072] | 0.0 |
+| rq4_RF | LPL | R3 | robustness | 0.062 [-0.009, 0.126] | 0.0 |
+| rq4_RF | CM | R4 | robustness | 0.025 [-0.044, 0.100] | 0.0 |
+| rq4_RF | LPL | R4 | robustness | -0.113 [-0.274, 0.045] | 0.0 |
+| rq4_RF | LPL | R5 | robustness | -0.062 [-0.137, 0.017] | 0.0 |
+| rq4_RF | CM | R6 | robustness | 0.039 [-0.019, 0.101] | 0.0 |
+| rq4_RF | LPL | R6 | robustness | -0.138 [-0.217, -0.062] | 0.0 |
+| best_mcc | CM | primary (LR) | primary | 0.095 [0.052, 0.136] | 0.0 |
+| best_mcc | LPL | primary (GB) | primary | 0.232 [0.184, 0.278] | 0.0 |
+| best_mcc | LPL | R5 (SVM) | robustness | 0.269 [0.213, 0.321] | 0.0 |
+
+Table: `tables/spec_curves.csv`. Figures: `figures/spec_curve_alpha.pdf`, `spec_curve_auc.pdf`, `spec_curve_rq4_LR.pdf`, `spec_curve_rq4_RF.pdf`, `spec_curve_best_mcc.pdf` (.png).
 
 ## 5 Strengthening analyses (Step 3; CM and LPL)
 
@@ -742,7 +989,7 @@ Pairs whose average ranks differ by more than the CD: CM: LR vs RF (|Δrank| 1.6
 - All pairwise rank differences are in `tables/model_nemenyi_pairs.csv`.
 - Caveat: the 25 folds come from 5 repeats of the same data, so they are not independent blocks. The test is therefore anti-conservative.
 
-Tables: `tables/model_comparison.csv`, `tables/model_friedman.csv`, `tables/model_nemenyi_pairs.csv`, `tables/model_fold_mcc.csv`. Figure: `figures/model_cd_diagram.pdf` (.png). Runtime 104s.
+Tables: `tables/model_comparison.csv`, `tables/model_friedman.csv`, `tables/model_nemenyi_pairs.csv`, `tables/model_fold_mcc.csv`. Figure: `figures/model_cd_diagram.pdf` (.png). Runtime 102s.
 
 **Summary.** CM: best model LR (MCC 0.095), Friedman p = 3.04e-04; LPL: best model GB (MCC 0.232), Friedman p = 0.0119.
 
@@ -835,7 +1082,7 @@ DACOSX training pool (D4-cleaned, features complete): {'consistent_entries': 831
 | LR | C4 class weighting | weights on (= v) | 0.569 ± 0.011 [0.542, 0.596] | 0.141 ± 0.021 [0.088, 0.194] | reference | reference |
 | LR | C4 class weighting | weights off | 0.528 ± 0.017 [0.503, 0.554] | 0.147 ± 0.017 [0.098, 0.197] | -0.041 [-0.067, -0.014] | 0.006 [-0.043, 0.056] |
 
-Runtime 158s.
+Runtime 156s.
 
 ### 5.4 D Generalisation
 
@@ -947,7 +1194,7 @@ Runtime 158s.
 | CM | LPL | LR | {'clf__C': 0.01} | 1695 | 1205 | 120 | 0.255 [0.234, 0.276] | -0.060 [-0.126, 0.002] | 0.468 [0.429, 0.505] | 0.690 [0.656, 0.727] |
 | LPL | CM | GB | {'learning_rate': 0.1, 'max_depth': 2, 'n_estimators': 100} | 1325 | 1575 | 120 | 0.285 [0.268, 0.302] | 0.051 [0.008, 0.090] | 0.516 [0.486, 0.546] | 0.692 [0.662, 0.723] |
 
-Tables: `tables/lopo_per_project.csv`, `tables/lopo_distribution.csv`, `tables/cross_smell.csv`. Figure: `figures/lopo_distribution.pdf` (.png). Runtime 15s.
+Tables: `tables/lopo_per_project.csv`, `tables/lopo_distribution.csv`, `tables/cross_smell.csv`. Figure: `figures/lopo_distribution.pdf` (.png). Runtime 14s.
 
 **Summary.** CM→LPL (LR): MCC -0.060 [-0.126, 0.002]; LPL→CM (GB): MCC 0.051 [0.008, 0.090].
 
@@ -1169,9 +1416,236 @@ Files: `results/error_analysis/error_rates.csv`, `error_samples.csv`, `error_sam
 
 Section J (sensitivity) is reported in §4.3, because it is a robustness analysis.
 
-## 6 Exploratory
+## 6 Human ceiling (plan.md §5.2)
 
-**Analysis type: exploratory.** Nothing in this section was pre-registered in plan.md.
+**Analysis type: primary (human ceiling).** plan.md §5.2.
+
+**Method.**
+- Population: primary-set entities (R5 set for "LPL R5") with exactly 2 usable annotations, unanimous and split.
+- **Human vs human.** One annotation is the prediction and the other the target, with random roles in each of 2000 designations. MCC, macro-F1 and accuracy are computed over entities and averaged over designations.
+  - Only split entities depend on the designation. Each designation is therefore simulated exactly by binomial draws on the split counts (sufficient statistics), which is equivalent to drawing roles entity by entity.
+- **Model vs one human.**
+  - The best model of the run (CM LR, LPL GB, LPL R5 SVM) uses section-B fold hyperparameters on the 25 splits, trained on unanimous training entities only.
+  - It predicts every held-out entity in the population, ties included.
+  - In designation d it is scored against the same target annotation as the human, using repeat d mod 5. The comparison is paired.
+- **CIs.** Bootstrap over entities (B = 2000); each resample re-draws 2000 designations. The gap and the ratio use the same resamples and draws.
+- **Second ceiling: near-duplicate pairs.**
+  - Pairs of different entities in the same project with identical near-duplicate keys (identifiers → ID, literals → LIT), primary set (R5 set for LPL R5).
+  - One random annotation per entity, random roles, 2000 designations. CI from a bootstrap over near-duplicate groups (clusters).
+
+Population sizes:
+
+| population | entities_with_exactly_2_usable | dropped_missing_features |
+|---|---|---|
+| CM | 1858 | 0 |
+| LPL | 1692 | 1 |
+| LPL R5 | 1555 | 0 |
+
+**Ceiling table**
+
+| population | best_model | metric | entities | unanimous | split | human vs human [95% CI] | model vs one human [95% CI] | gap human − model [95% CI] | ratio model/human MCC [95% CI] |
+|---|---|---|---|---|---|---|---|---|---|
+| CM | LR | MCC | 1858 | 1694 | 164 | 0.806 [0.776, 0.833] | 0.091 [0.053, 0.130] | 0.715 [0.666, 0.760] | 0.113 [0.066, 0.162] |
+| CM | LR | macro_F1 | 1858 | 1694 | 164 | 0.903 [0.888, 0.916] | 0.524 [0.505, 0.544] | 0.379 [0.354, 0.402] |  |
+| CM | LR | accuracy | 1858 | 1694 | 164 | 0.912 [0.899, 0.924] | 0.530 [0.511, 0.550] | 0.381 [0.357, 0.404] |  |
+| LPL | GB | MCC | 1691 | 1325 | 366 | 0.540 [0.498, 0.581] | 0.171 [0.133, 0.210] | 0.369 [0.317, 0.421] | 0.317 [0.248, 0.391] |
+| LPL | GB | macro_F1 | 1691 | 1325 | 366 | 0.770 [0.749, 0.790] | 0.584 [0.565, 0.603] | 0.186 [0.161, 0.212] |  |
+| LPL | GB | accuracy | 1691 | 1325 | 366 | 0.784 [0.763, 0.803] | 0.618 [0.600, 0.636] | 0.166 [0.141, 0.191] |  |
+| LPL R5 | SVM | MCC | 1555 | 1189 | 366 | 0.515 [0.472, 0.558] | 0.201 [0.162, 0.243] | 0.313 [0.257, 0.366] | 0.391 [0.314, 0.478] |
+| LPL R5 | SVM | macro_F1 | 1555 | 1189 | 366 | 0.757 [0.736, 0.779] | 0.576 [0.556, 0.598] | 0.181 [0.153, 0.208] |  |
+| LPL R5 | SVM | accuracy | 1555 | 1189 | 366 | 0.765 [0.745, 0.786] | 0.631 [0.612, 0.650] | 0.134 [0.108, 0.160] |  |
+
+**Second ceiling: human-vs-human agreement between structurally identical snippets of the same project**
+
+| smell | groups | pairs | MCC [95% CI] | macro_F1 [95% CI] | accuracy [95% CI] |
+|---|---|---|---|---|---|
+| CM | 63 | 104 | 0.082 [-0.112, 0.301] | 0.539 [0.441, 0.648] | 0.573 [0.470, 0.687] |
+| LPL | 209 | 1393 | 0.099 [0.039, 0.183] | 0.549 [0.519, 0.591] | 0.625 [0.583, 0.648] |
+| LPL R5 | 180 | 1352 | 0.087 [0.028, 0.158] | 0.543 [0.514, 0.579] | 0.613 [0.563, 0.638] |
+
+Tables: `tables/human_ceiling.csv`, `tables/human_ceiling_neardup.csv`. Figure: `figures/human_ceiling.pdf` (.png). Runtime 481s.
+
+**Summary (MCC).** CM: human 0.806, model 0.091, ratio 0.11; LPL: human 0.540, model 0.171, ratio 0.32; LPL R5: human 0.515, model 0.201, ratio 0.39.
+
+## 7 Range restriction (plan.md §6.1)
+
+**Analysis type: A1–A3 primary (descriptive or tested as stated); A4 exploratory.** plan.md §6.1.
+
+**Snippet universe:** 87,523 method snippets and 8,325 class snippets in the 10 projects, deduplicated by DesigniteJava id. A further 1 class snippets have no `class_metrics` row and are excluded.
+Annotated bands are the observed [min, max] of each primary metric over all annotated entities (§1.5). LPL R5 excludes the pc = 3 entities.
+
+**A1: where the tool rule decides**
+
+| smell/band | metric | annotated_band | universe_snippets | inside_band | share_inside_band | DesigniteJava_rule | flagged | share_flagged | flagged_inside_band | share_of_flagged_inside_band | flagged_above_band | analysis |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CM | cc | 5–14 | 87523 | 2601 | 0.0297 | cc ≥ 8 | 987 | 0.0113 | 808 | 0.8186 | 179 | primary (descriptive) |
+| LPL | pc | 3–10 | 87523 | 4528 | 0.0517 | pc ≥ 5 | 710 | 0.0081 | 702 | 0.9887 | 8 | primary (descriptive) |
+| LPL R5 | pc | 4–10 | 87523 | 1888 | 0.0216 | pc ≥ 5 | 710 | 0.0081 | 702 | 0.9887 | 8 | primary (descriptive) |
+| MA | lcom | 0.402174–1 | 8325 | 1411 | 0.1695 | LCOM ≥ 0.8 & NOF ≥ 7 & NOM ≥ 7 | 12 | 0.0014 | 12 | 1.0 | 0 | primary (descriptive) |
+
+**A2: within-band trend** (unanimous entities; Cochran–Armitage two-sided; logistic regression of label on metric)
+
+| smell | n | n_smelly | CA z (p) | logistic OR per unit [95% CI] (p) |
+|---|---|---|---|---|
+| CM | 1695 | 1129 | 3.15 (0.0016) | 1.105 [1.038, 1.176] (0.0017) |
+| LPL R5 | 1189 | 731 | 0.87 (0.3869) | 1.094 [0.892, 1.341] (0.3879) |
+
+Share smelly by metric value:
+
+| value | CM entities | LPL R5 entities | CM share_smelly | LPL R5 share_smelly |
+|---|---|---|---|---|
+| 4.0 | – | 915.0 | – | 0.607 |
+| 5.0 | 573.0 | 242.0 | 0.625 | 0.632 |
+| 6.0 | 399.0 | 23.0 | 0.674 | 0.826 |
+| 7.0 | 288.0 | 3.0 | 0.684 | 0.333 |
+| 8.0 | 174.0 | 2.0 | 0.649 | 0.5 |
+| 9.0 | 133.0 | 3.0 | 0.729 | 0.333 |
+| 10.0 | 99.0 | 1.0 | 0.687 | 1.0 |
+| 11.0 | 9.0 | – | 1.0 | – |
+| 12.0 | 9.0 | – | 0.889 | – |
+| 13.0 | 8.0 | – | 0.875 | – |
+| 14.0 | 3.0 | – | 1.0 | – |
+
+**A3: SD of each feature, annotated versus universe**
+- An SD ratio near 1 means the feature is not range-restricted in the annotated set.
+- RQ3 ORs come from the primary GEE (LPL R5 from §5.10). MA has no RQ3 model.
+
+| smell | feature | role | SD_annotated | SD_universe | SD_ratio | RQ3 OR per SD [95% CI] |
+|---|---|---|---|---|---|---|
+| CM | cc | primary metric | 1.707 | 1.579 | 1.081 | 1.074 [0.964, 1.197] |
+| CM | loc | secondary | 15.797 | 7.87 | 2.007 | 1.053 [0.907, 1.224] |
+| CM | statements | secondary | 11.097 | 9.559 | 1.161 | 0.995 [0.847, 1.168] |
+| CM | max_nesting | secondary | 1.338 | 0.773 | 1.731 | 1.078 [0.973, 1.195] |
+| CM | comment_ratio | secondary | 0.104 | 0.25 | 0.414 | 1.098 [0.996, 1.210] |
+| CM | method_calls | secondary | 14.132 | 9.243 | 1.529 | 1.190 [1.027, 1.380] |
+| CM | mean_identifier_length | secondary | 2.736 | 3.083 | 0.887 | n/a |
+| LPL | pc | primary metric | 0.915 | 0.97 | 0.944 | 0.794 [0.742, 0.849] |
+| LPL | loc | secondary | 17.58 | 7.87 | 2.234 | 1.249 [1.041, 1.497] |
+| LPL | statements | secondary | 14.815 | 9.559 | 1.55 | 0.938 [0.783, 1.124] |
+| LPL | max_nesting | secondary | 1.278 | 0.773 | 1.653 | 0.637 [0.560, 0.724] |
+| LPL | comment_ratio | secondary | 0.335 | 0.25 | 1.339 | 1.076 [0.975, 1.188] |
+| LPL | method_calls | secondary | 13.964 | 9.243 | 1.511 | 0.997 [0.845, 1.176] |
+| LPL | mean_identifier_length | secondary | 2.495 | 3.083 | 0.809 | n/a |
+| LPL R5 | pc | primary metric | 0.864 | 0.97 | 0.891 | 0.969 [0.907, 1.035] |
+| LPL R5 | loc | secondary | 18.198 | 7.87 | 2.312 | 1.415 [1.143, 1.752] |
+| LPL R5 | statements | secondary | 15.227 | 9.559 | 1.593 | 0.899 [0.742, 1.089] |
+| LPL R5 | max_nesting | secondary | 1.295 | 0.773 | 1.674 | 0.597 [0.519, 0.688] |
+| LPL R5 | comment_ratio | secondary | 0.336 | 0.25 | 1.342 | 1.101 [0.997, 1.217] |
+| LPL R5 | method_calls | secondary | 14.17 | 9.243 | 1.533 | 0.983 [0.825, 1.170] |
+| LPL R5 | mean_identifier_length | secondary | 2.528 | 3.083 | 0.82 | n/a |
+| MA | lcom | primary metric | 0.103 | 0.653 | 0.158 | n/a |
+| MA | loc | secondary | 89.513 | 167.058 | 0.536 | n/a |
+| MA | statements | secondary | 53.801 | 268.241 | 0.201 | n/a |
+| MA | max_nesting | secondary | 1.612 | 1.503 | 1.072 | n/a |
+| MA | comment_ratio | secondary | 0.145 | 0.235 | 0.615 | n/a |
+| MA | method_calls | secondary | 56.578 | 224.084 | 0.252 | n/a |
+| MA | mean_identifier_length | secondary | 2.408 | 2.913 | 0.827 | n/a |
+| MA | nom | secondary | 10.352 | 28.685 | 0.361 | n/a |
+| MA | nof | secondary | 6.987 | 8.295 | 0.842 | n/a |
+
+**A4 (EXPLORATORY): Thorndike Case II correction**
+- r is the point-biserial correlation between the primary metric and the unanimous label. u = SD(universe) / SD(annotated) of the primary metric.
+- Implied AUC = Φ(d/√2), with d = r / √((1 − r²)pq).
+- **Assumptions:**
+  - the relation is linear and homoscedastic across the full metric range;
+  - selection into the annotated set depends on the metric only;
+  - the label/metric relation is binormal.
+- These corrected values are model-based extrapolations, not observed quantities. The observed AUC from RQ2 is shown for comparison.
+- CI: bootstrap over entities (B = 2000) with u fixed.
+
+| smell | n | point_biserial_r | u_SD_universe_over_annotated | corrected r [95% CI] | implied_AUC_uncorrected | implied AUC corrected [95% CI] | observed_AUC_RQ2 |
+|---|---|---|---|---|---|---|---|
+| CM | 1695 | 0.076 | 0.925 | 0.071 [0.028, 0.111] | 0.546 | 0.542 [0.517, 0.567] | 0.541 |
+| LPL | 1326 | -0.121 | 1.06 | -0.128 [-0.182, -0.075] | 0.428 | 0.424 [0.391, 0.455] | 0.433 |
+| LPL R5 | 1189 | 0.025 | 1.122 | 0.028 [-0.035, 0.090] | 0.515 | 0.516 [0.480, 0.552] | 0.514 |
+
+For CM and LPL, u is close to or below 1. The universe distribution is concentrated below the band: 0.968 of methods have cc < 5 and 0.948 have pc < 3. An SD-based correction therefore does not represent restriction to an upper-tail band. A1, the share of snippets and of tool flags inside the band, is the more direct description of the restriction.
+
+Tables: `tables/range_A1_tool_flags.csv`, `range_A2_trend.csv`, `range_A2_share_by_value.csv`, `range_A3_sd_ratios.csv`, `range_A4_thorndike.csv`.
+
+**Summary.** CM: 0.030 of snippets inside the band, 0.819 of DesigniteJava-flagged snippets inside the band; LPL: 0.052 of snippets inside the band, 0.989 of DesigniteJava-flagged snippets inside the band; LPL R5: 0.022 of snippets inside the band, 0.989 of DesigniteJava-flagged snippets inside the band; MA: 0.169 of snippets inside the band, 1.000 of DesigniteJava-flagged snippets inside the band.
+
+## 8 External check: C# dataset (plan.md §6.2)
+
+### 8.1 B0 audit
+
+**Analysis type: descriptive audit (B0).** Nothing beyond counts is computed; B1 waits for the PI's go-ahead.
+
+- Source: Zenodo 10.5281/zenodo.10475432 (v1.0, 2024-01-09, CC BY 4.0), by Prokić, Luburić, Slivka, Grujić and Kovačević.
+- Six xlsx files, MD5-verified: three datasets (one per smell) and three per-annotator heuristic files.
+
+| smell | file | snippets | unique_snippet_ids | granularity | projects | annotator_columns | snippets_by_n_annotations | severity_values_individual | final_distribution | final_missing | snippets_without_strict_majority | final_differs_from_strict_majority | n_metrics | duplicate_metric_names |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Data Class | DataSet_Data_Class.xlsx | 231 | 231 | class | 15 | 3 | {2: 202, 3: 29} | [0, 1, 2] | {0: 216, 1: 12, 2: 3} | 0 | 0 | 0 | 31 | none |
+| Feature Envy | DataSet_Feature_Envy.xlsx | 220 | 220 | method | 11 | 3 | {2: 111, 3: 109} | [0, 1, 2, 3] | {0: 184, 1: 28, 2: 8} | 0 | 0 | 0 | 19 | none |
+| Refused Bequest | DataSet_Refused_Bequest.xlsx | 209 | 209 | class | 15 | 3 | {2: 161, 3: 48} | [0, 1, 2] | {0: 173, 1: 35, 2: 1} | 0 | 0 | 0 | 31 | BOvR |
+
+Pairwise exact agreement of the released severity scores (descriptive; uses the annotator columns as released):
+
+| smell | annotator_pair | snippets_both | exact_agreement |
+|---|---|---|---|
+| Data Class | ann1-ann2 | 132 | 0.947 |
+| Data Class | ann1-ann3 | 29 | 0.793 |
+| Data Class | ann2-ann3 | 128 | 0.945 |
+| Feature Envy | ann1-ann2 | 166 | 0.88 |
+| Feature Envy | ann1-ann3 | 109 | 0.817 |
+| Feature Envy | ann2-ann3 | 163 | 0.89 |
+| Refused Bequest | ann1-ann2 | 127 | 0.953 |
+| Refused Bequest | ann1-ann3 | 48 | 0.5 |
+| Refused Bequest | ann2-ann3 | 130 | 0.8 |
+
+Provided metrics:
+
+| smell | metrics |
+|---|---|
+| Data Class | CLOC, CELOC, NMD, NAD, NMD_NAD, WMC, WMC_NO_CASE, LCOM, LCOM3, LCOM4, TCC, ATFD, CNOR, CNOL, CNOC, CNOA, NOPM, NOPF, CMNB, RFC, CBO, DIT, DCC, ATFD_10, NIC, WOC, NOPA, NOPP, WMCNAMM, BUR, BOvR |
+| Feature Envy | CYCLO, CYCLO_SWITCH, MLOC, MELOC, NOP, NOLV, NOTC, MNOL, MNOR, MNOC, MNOA, NONL, NOSL, NOMO, NOPE, NOLE, MMNB, NOUW, AID |
+| Refused Bequest | CLOC, CELOC, NMD, NAD, NMD_NAD, WMC, WMC_NO_CASE, LCOM, LCOM3, LCOM4, TCC, ATFD, CNOR, CNOL, CNOC, CNOA, NOPM, NOPF, CMNB, RFC, CBO, DIT, DCC, ATFD_10, NIC, WOC, NOPA, NOPP, WMCNAMM, BOvR, BOvR |
+
+```
+Data Class: projects = https://github.com/Jackett/Jackett, https://github.com/NickeManarin/ScreenToGif, https://github.com/OpenRA/OpenRA, https://github.com/Radarr/Radarr, https://github.com/Ryujinx/Ryujinx, https://github.com/ShareX/ShareX, https://github.com/Sonarr/Sonarr, https://github.com/Unity-Technologies/ml-agents, https://github.com/duplicati/duplicati, https://github.com/egordorichev/BurningKnight, https://github.com/files-community/Files, https://github.com/jellyfin/jellyfin, https://github.com/mRemoteNG/mRemoteNG, https://github.com/mbdavid/LiteDB, https://github.com/ppy/osu
+Data Class heuristics file Data_Class_Heuristics.xlsx: 231 snippets; heuristics per annotator: No logic in methods., Used by other classes.
+Feature Envy: projects = https://github.com/JamesNK/Newtonsoft.Json, https://github.com/NickeManarin/ScreenToGif, https://github.com/Radarr/Radarr, https://github.com/ShareX/ShareX, https://github.com/Sonarr/Sonarr, https://github.com/Unity-Technologies/ml-agents, https://github.com/duplicati/duplicati, https://github.com/files-community/Files, https://github.com/gitextensions/gitextensions, https://github.com/jellyfin/jellyfin, https://github.com/ppy/osu
+Feature Envy heuristics file Feature_Envy_Heuristics.xlsx: 220 snippets; heuristics per annotator: Function has method chains., Function uses foreign data., Function has few foreign providers., Function does not belong here semantically.
+Refused Bequest: projects = https://github.com/Jackett/Jackett, https://github.com/JamesNK/Newtonsoft.Json, https://github.com/NickeManarin/ScreenToGif, https://github.com/Radarr/Radarr, https://github.com/Ryujinx/Ryujinx, https://github.com/ShareX/ShareX, https://github.com/SixLabors/ImageSharp, https://github.com/Sonarr/Sonarr, https://github.com/Unity-Technologies/ml-agents, https://github.com/duplicati/duplicati, https://github.com/files-community/Files, https://github.com/gitextensions/gitextensions, https://github.com/jellyfin/jellyfin, https://github.com/mRemoteNG/mRemoteNG, https://github.com/ppy/osu
+Refused Bequest heuristics file Refused_Bequest_Heuristics.xlsx: 209 snippets; heuristics per annotator: Few parent members used., Many members overriden., Unnecessary hierarchy.
+```
+
+**Annotation design (from the released columns)**
+
+| smell | rated_by_annotator_1 | rated_by_annotator_2 | rated_by_annotator_3 | snippets_with_2_annotations | of_which_agree | snippets_with_3_annotations |
+|---|---|---|---|---|---|---|
+| Data Class | 132 | 231 | 128 | 202 | 202 | 29 |
+| Feature Envy | 166 | 220 | 163 | 111 | 111 | 109 |
+| Refused Bequest | 127 | 209 | 130 | 161 | 161 | 48 |
+
+**Proposed primary metric per smell (for the PI's decision; not yet used).**
+Metric definitions are from the Clean-CaDET platform's `CaDETMetrics.cs`, linked from the Zenodo record. The detection rules are from Lanza & Marinescu, *Object-Oriented Metrics in Practice* (Springer, 2006), and Marinescu, "Detection strategies" (ICSM 2004).
+
+| smell | proposed primary metric | direction | justification | alternatives |
+|---|---|---|---|---|
+| Data Class | **WOC** (Weight Of Class: functional public methods / all public members) | lower = smellier | The defining condition of the Lanza–Marinescu Data Class strategy is WOC < 1/3: the interface exposes data rather than services. The other conditions (NOPA+NOAM, WMC) are size/complexity guards. | NOPA_NOPP-type counts (NOPA, NOPP); WMCNAMM |
+| Feature Envy | **AID** (Access to Import Data: foreign attributes and methods accessed by the method) | higher = smellier | The Lanza–Marinescu Feature Envy strategy is ATFD > FEW ∧ LAA < 1/3 ∧ FDP ≤ FEW. ATFD is its primary "uses foreign data" condition. LAA and FDP are not provided at method level; AID is the method-level analogue of ATFD in this dataset. | none of LAA/FDP is available; the class-level ATFD is not a method metric |
+| Refused Bequest | **BUR** (Base-class Usage Ratio) | lower = smellier | The Lanza–Marinescu Refused Bequest strategy is (NProtM > FEW ∧ BUR < 1/3) ∨ BOvR < 1/3, plus complexity guards. BUR is the "uses few inherited members" condition. | BOvR (Base-class Overriding Ratio) |
+
+**Issues to decide before B1:**
+1. **Adjudicated annotation.** Every snippet with exactly 2 annotations shows perfect agreement (Data Class 202/202; Feature Envy 111/111; Refused Bequest 161/161). A third annotation exists only where disagreement occurred. The released per-annotator scores therefore over-represent agreement, so a raw alpha would be biased upward and not comparable with DACOS. Options:
+   - (a) alpha on the first two annotations only. This is not possible as released, because the slot of the "first" pair is not identifiable when three exist.
+   - (b) report the raw alpha with this caveat.
+   - (c) report only the share of snippets that needed a third annotator. Annotator 2 rated every snippet; annotators 1 and 3 split the second slot.
+2. **Refused Bequest header.** The Refused Bequest sheet labels two adjacent columns `BOvR`, where the Data Class sheet has `BUR, BOvR` in the same positions. The single class present in both sheets has identical values in the two BUR positions. I propose treating the first column as BUR, but this rests on one shared class and the column order.
+3. **Few positives.** Final severity ≥ 1 occurs in Data Class 15/231; Feature Envy 36/220; Refused Bequest 36/209. RQ2 CIs will be wide, especially for Data Class.
+4. **Severity scale.** Individual scores are 0–3 for Feature Envy and 0–2 for the other two (observed values). Ordinal alpha applies to severity and nominal alpha to presence (severity ≥ 1).
+
+Tables: `tables/external_B0_audit.csv`, `external_B0_metrics.csv`, `external_B0_annotator_pairs.csv`. Log: `logs/external_audit.txt`.
+
+### 8.2 B1
+
+Not run. B1 waits for the PI's go-ahead and for decisions on the issues listed in §8.1.
+
+## 9 Exploratory
+
+**Analysis type: exploratory.** Not part of the pre-registered primary or robustness analyses; A4 in §7 is also exploratory.
 
 **DACOSX in-distribution performance** (sanity check; not in plan.md).
 - Setting: GroupKFold(5) by project within DACOSX, with the same models and features as RQ4.
@@ -1186,7 +1660,20 @@ Section J (sensitivity) is reported in §4.3, because it is a robustness analysi
 
 Table: `tables/exploratory_dacosx_in_distribution.csv`.
 
-## 7 Deviations from plan.md and known limitations
+**CM C3 "DACOSX + DACOS" collapse under equal source weight** (exploratory; not in plan.md §4).
+
+Method:
+- CM best model (LR) with section-B fold hyperparameters on the 25 splits, tested on held-out DACOS unanimous entities.
+- Class-balanced weights are computed within each source, then rescaled so that DACOSX and DACOS contribute equal total weight. The model's own class weighting is switched off, so the weights are not applied twice.
+
+| model | variant | macro_F1 | MCC | predicted_smelly_share |
+|---|---|---|---|---|
+| LR | as in C3 (pooled class weights) | 0.400 ± 0.000 [0.392, 0.408] | 0.000 ± 0.000 [0.000, 0.000] | 1.0 |
+| LR | equal source weight (class-balanced within source) | 0.508 ± 0.004 [0.485, 0.530] | 0.077 ± 0.009 [0.030, 0.123] | 0.43 |
+
+The collapse does not persist under equal source weighting: MCC 0.077 [0.030, 0.123] with predicted-smelly share 0.430, versus MCC 0.000 and share 1.000 with pooled weights. Table: `tables/exploratory_cm_c3_reweight.csv`. Runtime 97s.
+
+## 10 Deviations from plan.md and known limitations
 
 **Deviations from plan.md**
 
@@ -1204,6 +1691,13 @@ Table: `tables/exploratory_dacosx_in_distribution.csv`.
 12. **XGBoost runtime library.** No system OpenMP is installed, so xgboost loads scikit-learn's bundled `libomp` via `DYLD_LIBRARY_PATH`, which `run_all.sh` sets.
 13. **R3 applies no consistency filter.** The filter is defined on the checkbox, so it does not apply when `is_smell` is the answer column (plan.md §4.1).
 14. **RQ5 robustness BH family.** In robustness runs, the BH family is that variant's CM and LPL tests.
+15. **R5 ablation models.** In the R5 rerun (§4.4), C1/C3 use the R5 best model (SVM) and LR, as pre-registered. The primary best model (GB) was not rerun under R5, so side-by-side cells for models that were not the best model of a run show "n/a".
+16. **SHAP output shape.** shap 0.46 returns a 3-D array (n, features, classes) for scikit-learn forests. The "smelly" slice is used. This affects only the R5 SHAP (best tree model RF); the primary best tree model is GB.
+17. **Human-ceiling designations are simulated through sufficient statistics.** Only split entities depend on the random role assignment, so each designation is drawn as binomial counts. This is exactly equivalent to entity-level role draws; a brute-force check agreed to 1e-4.
+18. **Near-duplicate ceiling.** Designations are drawn as multinomial cell counts per pair type (pairs sharing the two entities' yes-rates). This is equivalent to per-pair draws.
+19. **Feature extraction now covers every sample path** (the §6.1 snippet universe). The values for the previously computed 95,496 paths are verified identical, so no earlier table changes.
+20. **Paper figures** (`results/paper_figures/`) are re-drawn from the committed tables at IEEE sizes. They contain no new analysis.
+21. **External dataset.** `openpyxl` 3.1.5 is pinned to read the xlsx files. B0 only reads and counts. The Refused Bequest header assumption (first `BOvR` column = BUR) is a proposal awaiting the PI's decision and is not used in any result.
 
 **Known limitations**
 
@@ -1230,9 +1724,15 @@ Table: `tables/exploratory_dacosx_in_distribution.csv`.
 - **Class weighting and calibration.** Balanced class weights move predicted probabilities towards 0.5. The calibration results describe the weighted models as trained.
 - **CM learning curve is non-monotone.** macro-F1 lies between 0.506 and 0.530 at every training fraction. The pre-registered plateau rule classifies it as not plateaued.
 - **Feature selection is unstable across folds** (mean pairwise Jaccard 0.19 for CM, 0.57 for LPL), so the full feature set is kept.
+- **Two human ceilings disagree strongly.**
+  - Within an entity, two annotations agree at MCC 0.806 (CM) and 0.540 (LPL).
+  - Between structurally identical snippets of the same project, agreement is MCC 0.082 (CM) and 0.099 (LPL).
+  - The data cannot distinguish genuine context differences between near-duplicates from same-annotator or same-session effects within an entity. Annotator ids and timestamps are absent.
+- **Range restriction is a property of the design.** The annotated band holds 3.0% (CM) and 5.2% (LPL) of all methods but 81.9% and 98.9% of DesigniteJava flags. The SD-based Thorndike correction (A4, exploratory) cannot represent this upper-tail restriction.
+- **External dataset annotation is adjudicated.** Every snippet with exactly two annotations agrees, and a third annotation exists only after disagreement. Raw agreement on the released scores would therefore be biased upward relative to DACOS.
 - **Data-integrity cross-check with lizard 1.17.13.** Cyclomatic complexity matches DesigniteJava exactly for 59% of method snippets (Spearman 0.92); parameter count matches for 96%.
 
-## 8 Reproducibility notes
+## 11 Reproducibility notes
 
 - Regenerate everything with `bash run_all.sh` from `paper3/`. It downloads the data if absent, verifies the MD5s and rebuilds every table, figure and this file.
 - Python 3.9.6 (Darwin arm64). Pinned packages (full list in `requirements.txt`): krippendorff==0.8.1, lizard==1.17.13, matplotlib==3.9.4, numpy==1.26.4, pandas==2.2.3, scikit-learn==1.5.2, scipy==1.13.1, shap==0.46.0, statsmodels==0.14.4, xgboost==2.1.4.
@@ -1241,56 +1741,81 @@ Table: `tables/exploratory_dacosx_in_distribution.csv`.
 - Determinism check: a full `run_all.sh` regeneration from freshly converted databases (with the model cache cleared) reproduced every committed CSV table byte for byte, including all Step 1–3 tables produced in earlier, separate runs. `rq4_predictions.csv.gz` differs only in its gzip header timestamp; its decompressed content is identical.
 - Parallelism: Step 3 parallelises over outer folds with `joblib`. Each fold's model is single-threaded and seeded (RF/GB/XGB `n_jobs=1`, `random_state = 20261021 + repeat`), so results do not depend on scheduling.
 - xgboost uses scikit-learn's bundled `libomp` (`DYLD_LIBRARY_PATH` set by `run_all.sh`), because no system OpenMP runtime is installed.
-- Code commit at report build: `34ee83bbff77266d56b64feeb0d0a06c2e5f69fb`; the working tree may contain uncommitted changes at build time.
-- Runtime of the last `run_all.sh` (seconds), total 577s:
+- Code commit at report build: `314a5f1294df7578963ad10a62020466310221a5`; the working tree may contain uncommitted changes at build time.
+- Runtime of the last `run_all.sh` (seconds), total 1654s:
 
 | step | seconds |
 |---|---|
-| convert_main | 3 |
-| convert_extended | 4 |
+| convert_main | 4 |
+| convert_extended | 3 |
 | audit | 3 |
-| features | 21 |
-| dataset_audit | 5 |
+| features | 22 |
+| dataset_audit | 4 |
 | rq1 | 2 |
 | rq2 | 6 |
-| rq4 | 25 |
+| rq4 | 23 |
 | rq3 | 5 |
 | rq5 | 11 |
-| robustness | 100 |
+| robustness | 97 |
 | run_anatomy | 4 |
-| step3_A_B | 107 |
-| step3_C | 160 |
+| step3_A_B | 104 |
+| step3_C | 158 |
 | step3_E | 31 |
-| step3_D | 17 |
+| step3_D | 16 |
 | step3_F_H | 13 |
-| step3_G_I_J | 60 |
-| build_report | 0 |
+| step3_G_I_J | 56 |
+| step3_R5 | 498 |
+| human_ceiling | 483 |
+| extras | 100 |
+| range_restrict | 6 |
+| external_B0 | 1 |
+| build_report | 1 |
+| paper_figures | 3 |
 
 - Logs: `results/logs/` (one log per step, plus `audit.txt`, `features.log`, `lizard_crosscheck.csv` and `runtime.tsv`).
 
-## 9 Completion status
+## 12 Completion status
 
-All sections requested in Prompt 2 were completed: Step 1 (R3–R7), Step 2 (RQ3, RQ5, R1, R2, R3–R6 on RQ3/RQ5) and Step 3 A–J. No section was skipped for time.
+- Complete: Prompt 2 (Step 1 R3–R7; Step 2 RQ3, RQ5, R1, R2, R3–R6 on RQ3/RQ5; Step 3 A–J), Prompt 3 sections 1–4, and Prompt 3B part A (range restriction).
+- Prompt 3B part B: B0 audit complete; **B1 not run** (waiting for go-ahead). No section was skipped for time.
 
-## 10 Headline numbers
+## 13 Headline numbers
 
 | # | number | value [95% CI] | analysis type | table |
 |---|---|---|---|---|
 | 1 | Krippendorff's alpha, CM | 0.804 [0.774, 0.832] | primary | `tables/rq1_agreement.csv` |
 | 2 | Krippendorff's alpha, LPL | 0.540 [0.498, 0.577] | primary | `tables/rq1_agreement.csv` |
-| 3 | Krippendorff's alpha, MA | 0.020 [-0.035, 0.077]; percent agreement 0.786 | primary | `tables/rq1_agreement.csv` |
+| 3 | Krippendorff's alpha, MA | 0.020 [-0.035, 0.077] (percent agreement 0.786) | primary | `tables/rq1_agreement.csv` |
 | 4 | Krippendorff's alpha, CM, without the consistency filter | 0.599 [0.564, 0.635] | robustness R6 | `tables/robustness_long.csv` |
 | 5 | Primary-metric ROC-AUC, CM | 0.541 [0.513, 0.568] (one-sided MWU p = 0.0021) | primary | `tables/rq2_threshold_validity.csv` |
 | 6 | Primary-metric ROC-AUC, LPL | 0.433 [0.409, 0.458] (one-sided MWU p = 1) | primary | `tables/rq2_threshold_validity.csv` |
 | 7 | Primary-metric ROC-AUC, LPL, without the pc = 3 block | 0.514 [0.490, 0.538] | robustness R5 | `tables/robustness_long.csv` |
-| 8 | Youden cut-off for CM versus DesigniteJava default | cc ≥ 6 [6, 9] vs cc ≥ 8 | primary | `tables/rq2_threshold_validity.csv` |
+| 8 | Youden cut-off for CM (cc ≥ c) versus DesigniteJava default cc ≥ 8 | 6 [6, 9] (cut-off value; DesigniteJava default 8) | primary | `tables/rq2_threshold_validity.csv` |
 | 9 | RQ4 transfer MCC − GroupKFold MCC, LPL, LR | -0.224 [-0.322, -0.127] | primary | `tables/rq4_paired_differences.csv` |
 | 10 | RQ4 transfer MCC − GroupKFold MCC, LPL, LR, `is_smell` labels | 0.078 [-0.008, 0.159] | robustness R3 | `tables/robustness_long.csv` |
 | 11 | RQ3 GEE OR per SD of cc, CM | 1.074 [0.964, 1.197] (BH p = 0.29) | primary | `tables/rq3_odds_ratios.csv` |
-| 12 | RQ3 GEE OR per SD of pc, LPL (primary; without the pc = 3 block) | 0.794 [0.742, 0.849]; R5: 0.969 [0.907, 1.035] | primary; robustness R5 | `tables/rq3_odds_ratios.csv`, `tables/robustness_long.csv` |
-| 13 | Best model MCC, CM (LR, 5×5 grouped CV) | 0.095 ± 0.006 [0.052, 0.136] | primary | `tables/model_comparison.csv` |
-| 14 | Best model MCC, LPL (GB, 5×5 grouped CV) | 0.232 ± 0.014 [0.184, 0.278] | primary | `tables/model_comparison.csv` |
+| 12 | RQ3 GEE OR per SD of pc, LPL | 0.794 [0.742, 0.849] (R5: 0.969 [0.907, 1.035] (robustness_long.csv)) | primary | `tables/rq3_odds_ratios.csv` |
+| 13 | Best model MCC, CM (LR, 5×5 grouped CV) | 0.095 [0.052, 0.136] (SD over repeats 0.006) | primary | `tables/model_comparison.csv` |
+| 14 | Best model MCC, LPL (GB, 5×5 grouped CV) | 0.232 [0.184, 0.278] (SD over repeats 0.014) | primary | `tables/model_comparison.csv` |
 | 15 | Δ MCC, LPL GB, training on DACOSX only versus DACOS | -0.245 [-0.325, -0.169] | primary (ablation C3) | `tables/ablation_LPL.csv` |
+| 16 | Best model MCC, LPL R5 (SVM, 5×5 grouped CV) [R5 value of row 14] | 0.269 [0.213, 0.321] (SD over repeats 0.022) | robustness R5 | `tables/model_comparison_LPL_R5.csv` |
+| 17 | Δ MCC, LPL R5 SVM, training on DACOSX only versus DACOS [R5 value of row 15] | -0.223 [-0.296, -0.150] | robustness R5 | `tables/ablation_LPL_R5.csv` |
+| 18 | Human-vs-human MCC, CM | 0.806 [0.776, 0.833] | primary (human ceiling) | `tables/human_ceiling.csv` |
+| 19 | Best model vs one human MCC, CM (LR) | 0.091 [0.053, 0.130] | primary (human ceiling) | `tables/human_ceiling.csv` |
+| 20 | Model/human MCC ratio, CM | 0.113 [0.066, 0.162] | primary (human ceiling) | `tables/human_ceiling.csv` |
+| 21 | Human-vs-human MCC, LPL | 0.540 [0.498, 0.581] | primary (human ceiling) | `tables/human_ceiling.csv` |
+| 22 | Best model vs one human MCC, LPL (GB) | 0.171 [0.133, 0.210] | primary (human ceiling) | `tables/human_ceiling.csv` |
+| 23 | Model/human MCC ratio, LPL | 0.317 [0.248, 0.391] | primary (human ceiling) | `tables/human_ceiling.csv` |
+| 24 | Human-vs-human MCC, LPL R5 | 0.515 [0.472, 0.558] | primary (human ceiling) | `tables/human_ceiling.csv` |
+| 25 | Best model vs one human MCC, LPL R5 (SVM) | 0.201 [0.162, 0.243] | primary (human ceiling) | `tables/human_ceiling.csv` |
+| 26 | Model/human MCC ratio, LPL R5 | 0.391 [0.314, 0.478] | primary (human ceiling) | `tables/human_ceiling.csv` |
+| 27 | Human-vs-human MCC between same-project near-duplicates, CM | 0.082 [-0.112, 0.301] (104 pairs in 63 groups) | primary (second ceiling) | `tables/human_ceiling_neardup.csv` |
+| 28 | Human-vs-human MCC between same-project near-duplicates, LPL | 0.099 [0.039, 0.183] (1393 pairs in 209 groups) | primary (second ceiling) | `tables/human_ceiling_neardup.csv` |
+| 29 | Human-vs-human MCC between same-project near-duplicates, LPL R5 | 0.087 [0.028, 0.158] (1352 pairs in 180 groups) | primary (second ceiling) | `tables/human_ceiling_neardup.csv` |
+| 30 | Share of DesigniteJava-flagged snippets inside the annotated band, CM | 0.819 (808/987 flags; band holds 0.030 of all snippets) | primary (range restriction, descriptive) | `tables/range_A1_tool_flags.csv` |
+| 31 | Share of DesigniteJava-flagged snippets inside the annotated band, LPL | 0.989 (702/710 flags; band holds 0.052 of all snippets) | primary (range restriction, descriptive) | `tables/range_A1_tool_flags.csv` |
+| 32 | Within-band logistic OR per unit of the primary metric, CM | 1.105 [1.038, 1.176] (Cochran–Armitage z = 3.15, p = 0.0016) | primary (range restriction) | `tables/range_A2_trend.csv` |
+| 33 | Within-band logistic OR per unit of the primary metric, LPL R5 | 1.094 [0.892, 1.341] (Cochran–Armitage z = 0.87, p = 0.39) | primary (range restriction) | `tables/range_A2_trend.csv` |
 
-All values are read programmatically from the listed tables when this file is built.
+Rows 1–15 are the Prompt 2 headline numbers; rows 16 onward were added in Prompt 3 and 3B. All values are read programmatically from the listed tables when this file is built, and the same rows are written to `results/paper_numbers.json`.
 

@@ -1,0 +1,23 @@
+- For MA, reading the answer from `isma` gives alpha 0.020 [-0.035, 0.077] (primary, consistency-filtered) and 0.059 [0.010, 0.113] (unfiltered, R6). Reading it from `is_smell` gives 0.561 [0.520, 0.603] (all annotations, R3).
+ .0 |
+| rq4_RF | LPL | R5 | robustness | -0.062 [-0.137, 0.017] | 0.0 |
+| rq4_RF | CM | R6 | robustness | 0.039 [-0.019, 0.101] | 0.0 |
+| rq4_RF | LPL | R6 | robustness | -0.138 [-0.217, -0.062] | 0.0 |
+| best_mcc | CM | primary (LR) | primary | 0.095 [0.052, 0.136] | 0.0 |
+| best_mcc | LPL | primary (GB) | primary | 0.232 [0.184, 0.278] | 0.0 |
+| best_mcc | LPL | R5 (SVM) | robustness | 0.269 [0.213, 0.321] | 0.0 |
+
+Table: `tables/spec_curves.csv`. Figures: `figures/spec_curve_alpha.pdf`, `spec_curve_auc.pdf`, `spec_curve_rq4_LR.pdf`, `spec_curve_rq4_RF.pdf`, `spec_curve_best_mcc.pdf` (.png).
+ **CM C3 "DACOSX + DACOS" collapse under equal source weight** (exploratory; not in plan.md §4).
+
+Method:
+- CM best model (LR) with section-B fold hyperparameters on the 25 splits, tested on held-out DACOS unanimous entities.
+- Class-balanced weights are computed within each source, then rescaled so that DACOSX and DACOS contribute equal total weight. The model's own class weighting is switched off, so the weights are not applied twice.
+
+| model | variant | macro_F1 | MCC | predicted_smelly_share |
+|---|---|---|---|---|
+| LR | as in C3 (pooled class weights) | 0.400 ± 0.000 [0.392, 0.408] | 0.000 ± 0.000 [0.000, 0.000] | 1.0 |
+| LR | equal source weight (class-balanced within source) | 0.508 ± 0.004 [0.485, 0.530] | 0.077 ± 0.009 [0.030, 0.123] | 0.43 |
+
+The collapse does not persist under equal source weighting: MCC 0.077 [0.030, 0.123] with predicted-smelly share 0.430, versus MCC 0.000 and share 1.000 with pooled weights. Table: `tables/exploratory_cm_c3_reweight.csv`. Runtime 97s.
+

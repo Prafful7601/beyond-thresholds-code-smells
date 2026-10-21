@@ -106,6 +106,6 @@
 | CM | LPL | LR | {'clf__C': 0.01} | 1695 | 1205 | 120 | 0.255 [0.234, 0.276] | -0.060 [-0.126, 0.002] | 0.468 [0.429, 0.505] | 0.690 [0.656, 0.727] |
 | LPL | CM | GB | {'learning_rate': 0.1, 'max_depth': 2, 'n_estimators': 100} | 1325 | 1575 | 120 | 0.285 [0.268, 0.302] | 0.051 [0.008, 0.090] | 0.516 [0.486, 0.546] | 0.692 [0.662, 0.723] |
 
-Tables: `tables/lopo_per_project.csv`, `tables/lopo_distribution.csv`, `tables/cross_smell.csv`. Figure: `figures/lopo_distribution.pdf` (.png). Runtime 15s.
+Tables: `tables/lopo_per_project.csv`, `tables/lopo_distribution.csv`, `tables/cross_smell.csv`. Figure: `figures/lopo_distribution.pdf` (.png). Runtime 14s.
 
 **Summary.** CM→LPL (LR): MCC -0.060 [-0.126, 0.002]; LPL→CM (GB): MCC 0.051 [0.008, 0.090].

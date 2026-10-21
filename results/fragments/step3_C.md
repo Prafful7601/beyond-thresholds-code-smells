@@ -85,4 +85,4 @@ DACOSX training pool (D4-cleaned, features complete): {'consistent_entries': 831
 | LR | C4 class weighting | weights on (= v) | 0.569 ± 0.011 [0.542, 0.596] | 0.141 ± 0.021 [0.088, 0.194] | reference | reference |
 | LR | C4 class weighting | weights off | 0.528 ± 0.017 [0.503, 0.554] | 0.147 ± 0.017 [0.098, 0.197] | -0.041 [-0.067, -0.014] | 0.006 [-0.043, 0.056] |
 
-Runtime 158s.
+Runtime 156s.

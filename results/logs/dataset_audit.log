@@ -117,7 +117,7 @@ Figure: `figures/audit_answer_runs.pdf` (.png): each smell's checkbox answers ag
 ### 1.8 Source code, features and metric cross-check
 
 - 5,113 of 5,115 annotated `sample` rows have their file in `files.zip`. The 2 missing are /codesplit_java_class/macrozheng_mall/macrozheng_mall/com.macro.mall.portal.service.impl/PortalBrandServiceImpl.code, /codesplit_java_method/macrozheng_mall/macrozheng_mall/com.macro.mall.portal.service/PortalBrandService/productList.code. These snippets have no computed features and drop out of feature-based analyses.
-- Feature extraction (`src/features.py`): paths needed: 95510; computed: 95496; missing from zip: 14; failed: 0.
+- Feature extraction (`src/features.py`): paths needed: 96299; computed: 96285; missing from zip: 14; failed: 0.
 - Lizard 1.17.13 cross-check on 3,491 DACOS method snippets that lizard parsed:
   - cc matches DesigniteJava exactly for 0.592 of snippets (Spearman 0.920).
   - Parameter count matches exactly for 0.957 (Spearman 0.979).

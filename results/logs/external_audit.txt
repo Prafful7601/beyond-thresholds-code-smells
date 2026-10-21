@@ -1,0 +1,27 @@
+             smell                          file  snippets  unique_snippet_ids granularity  projects  annotator_columns snippets_by_n_annotations severity_values_individual     final_distribution  final_missing  snippets_without_strict_majority  final_differs_from_strict_majority  n_metrics duplicate_metric_names
+0       Data Class       DataSet_Data_Class.xlsx       231                 231       class        15                  3           {2: 202, 3: 29}                  [0, 1, 2]  {0: 216, 1: 12, 2: 3}              0                                 0                                   0         31                   none
+1     Feature Envy     DataSet_Feature_Envy.xlsx       220                 220      method        11                  3          {2: 111, 3: 109}               [0, 1, 2, 3]  {0: 184, 1: 28, 2: 8}              0                                 0                                   0         19                   none
+2  Refused Bequest  DataSet_Refused_Bequest.xlsx       209                 209       class        15                  3           {2: 161, 3: 48}                  [0, 1, 2]  {0: 173, 1: 35, 2: 1}              0                                 0                                   0         31                   BOvR
+
+             smell                                                                                                                                                                                            metrics
+0       Data Class   CLOC, CELOC, NMD, NAD, NMD_NAD, WMC, WMC_NO_CASE, LCOM, LCOM3, LCOM4, TCC, ATFD, CNOR, CNOL, CNOC, CNOA, NOPM, NOPF, CMNB, RFC, CBO, DIT, DCC, ATFD_10, NIC, WOC, NOPA, NOPP, WMCNAMM, BUR, BOvR
+1     Feature Envy                                                                           CYCLO, CYCLO_SWITCH, MLOC, MELOC, NOP, NOLV, NOTC, MNOL, MNOR, MNOC, MNOA, NONL, NOSL, NOMO, NOPE, NOLE, MMNB, NOUW, AID
+2  Refused Bequest  CLOC, CELOC, NMD, NAD, NMD_NAD, WMC, WMC_NO_CASE, LCOM, LCOM3, LCOM4, TCC, ATFD, CNOR, CNOL, CNOC, CNOA, NOPM, NOPF, CMNB, RFC, CBO, DIT, DCC, ATFD_10, NIC, WOC, NOPA, NOPP, WMCNAMM, BOvR, BOvR
+
+             smell annotator_pair  snippets_both  exact_agreement
+0       Data Class      ann1-ann2            132         0.946970
+1       Data Class      ann1-ann3             29         0.793103
+2       Data Class      ann2-ann3            128         0.945312
+3     Feature Envy      ann1-ann2            166         0.879518
+4     Feature Envy      ann1-ann3            109         0.816514
+5     Feature Envy      ann2-ann3            163         0.889571
+6  Refused Bequest      ann1-ann2            127         0.952756
+7  Refused Bequest      ann1-ann3             48         0.500000
+8  Refused Bequest      ann2-ann3            130         0.800000
+
+Data Class: projects = https://github.com/Jackett/Jackett, https://github.com/NickeManarin/ScreenToGif, https://github.com/OpenRA/OpenRA, https://github.com/Radarr/Radarr, https://github.com/Ryujinx/Ryujinx, https://github.com/ShareX/ShareX, https://github.com/Sonarr/Sonarr, https://github.com/Unity-Technologies/ml-agents, https://github.com/duplicati/duplicati, https://github.com/egordorichev/BurningKnight, https://github.com/files-community/Files, https://github.com/jellyfin/jellyfin, https://github.com/mRemoteNG/mRemoteNG, https://github.com/mbdavid/LiteDB, https://github.com/ppy/osu
+Data Class heuristics file Data_Class_Heuristics.xlsx: 231 snippets; heuristics per annotator: No logic in methods., Used by other classes.
+Feature Envy: projects = https://github.com/JamesNK/Newtonsoft.Json, https://github.com/NickeManarin/ScreenToGif, https://github.com/Radarr/Radarr, https://github.com/ShareX/ShareX, https://github.com/Sonarr/Sonarr, https://github.com/Unity-Technologies/ml-agents, https://github.com/duplicati/duplicati, https://github.com/files-community/Files, https://github.com/gitextensions/gitextensions, https://github.com/jellyfin/jellyfin, https://github.com/ppy/osu
+Feature Envy heuristics file Feature_Envy_Heuristics.xlsx: 220 snippets; heuristics per annotator: Function has method chains., Function uses foreign data., Function has few foreign providers., Function does not belong here semantically.
+Refused Bequest: projects = https://github.com/Jackett/Jackett, https://github.com/JamesNK/Newtonsoft.Json, https://github.com/NickeManarin/ScreenToGif, https://github.com/Radarr/Radarr, https://github.com/Ryujinx/Ryujinx, https://github.com/ShareX/ShareX, https://github.com/SixLabors/ImageSharp, https://github.com/Sonarr/Sonarr, https://github.com/Unity-Technologies/ml-agents, https://github.com/duplicati/duplicati, https://github.com/files-community/Files, https://github.com/gitextensions/gitextensions, https://github.com/jellyfin/jellyfin, https://github.com/mRemoteNG/mRemoteNG, https://github.com/ppy/osu
+Refused Bequest heuristics file Refused_Bequest_Heuristics.xlsx: 209 snippets; heuristics per annotator: Few parent members used., Many members overriden., Unnecessary hierarchy.

@@ -1,0 +1,95 @@
+**Analysis type: A1–A3 primary (descriptive or tested as stated); A4 exploratory.** plan.md §6.1.
+
+**Snippet universe:** 87,523 method snippets and 8,325 class snippets in the 10 projects, deduplicated by DesigniteJava id. A further 1 class snippets have no `class_metrics` row and are excluded.
+Annotated bands are the observed [min, max] of each primary metric over all annotated entities (§1.5). LPL R5 excludes the pc = 3 entities.
+
+**A1: where the tool rule decides**
+
+| smell/band | metric | annotated_band | universe_snippets | inside_band | share_inside_band | DesigniteJava_rule | flagged | share_flagged | flagged_inside_band | share_of_flagged_inside_band | flagged_above_band | analysis |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CM | cc | 5–14 | 87523 | 2601 | 0.0297 | cc ≥ 8 | 987 | 0.0113 | 808 | 0.8186 | 179 | primary (descriptive) |
+| LPL | pc | 3–10 | 87523 | 4528 | 0.0517 | pc ≥ 5 | 710 | 0.0081 | 702 | 0.9887 | 8 | primary (descriptive) |
+| LPL R5 | pc | 4–10 | 87523 | 1888 | 0.0216 | pc ≥ 5 | 710 | 0.0081 | 702 | 0.9887 | 8 | primary (descriptive) |
+| MA | lcom | 0.402174–1 | 8325 | 1411 | 0.1695 | LCOM ≥ 0.8 & NOF ≥ 7 & NOM ≥ 7 | 12 | 0.0014 | 12 | 1.0 | 0 | primary (descriptive) |
+
+**A2: within-band trend** (unanimous entities; Cochran–Armitage two-sided; logistic regression of label on metric)
+
+| smell | n | n_smelly | CA z (p) | logistic OR per unit [95% CI] (p) |
+|---|---|---|---|---|
+| CM | 1695 | 1129 | 3.15 (0.0016) | 1.105 [1.038, 1.176] (0.0017) |
+| LPL R5 | 1189 | 731 | 0.87 (0.3869) | 1.094 [0.892, 1.341] (0.3879) |
+
+Share smelly by metric value:
+
+| value | CM entities | LPL R5 entities | CM share_smelly | LPL R5 share_smelly |
+|---|---|---|---|---|
+| 4.0 | – | 915.0 | – | 0.607 |
+| 5.0 | 573.0 | 242.0 | 0.625 | 0.632 |
+| 6.0 | 399.0 | 23.0 | 0.674 | 0.826 |
+| 7.0 | 288.0 | 3.0 | 0.684 | 0.333 |
+| 8.0 | 174.0 | 2.0 | 0.649 | 0.5 |
+| 9.0 | 133.0 | 3.0 | 0.729 | 0.333 |
+| 10.0 | 99.0 | 1.0 | 0.687 | 1.0 |
+| 11.0 | 9.0 | – | 1.0 | – |
+| 12.0 | 9.0 | – | 0.889 | – |
+| 13.0 | 8.0 | – | 0.875 | – |
+| 14.0 | 3.0 | – | 1.0 | – |
+
+**A3: SD of each feature, annotated versus universe**
+- An SD ratio near 1 means the feature is not range-restricted in the annotated set.
+- RQ3 ORs come from the primary GEE (LPL R5 from §5.10). MA has no RQ3 model.
+
+| smell | feature | role | SD_annotated | SD_universe | SD_ratio | RQ3 OR per SD [95% CI] |
+|---|---|---|---|---|---|---|
+| CM | cc | primary metric | 1.707 | 1.579 | 1.081 | 1.074 [0.964, 1.197] |
+| CM | loc | secondary | 15.797 | 7.87 | 2.007 | 1.053 [0.907, 1.224] |
+| CM | statements | secondary | 11.097 | 9.559 | 1.161 | 0.995 [0.847, 1.168] |
+| CM | max_nesting | secondary | 1.338 | 0.773 | 1.731 | 1.078 [0.973, 1.195] |
+| CM | comment_ratio | secondary | 0.104 | 0.25 | 0.414 | 1.098 [0.996, 1.210] |
+| CM | method_calls | secondary | 14.132 | 9.243 | 1.529 | 1.190 [1.027, 1.380] |
+| CM | mean_identifier_length | secondary | 2.736 | 3.083 | 0.887 | n/a |
+| LPL | pc | primary metric | 0.915 | 0.97 | 0.944 | 0.794 [0.742, 0.849] |
+| LPL | loc | secondary | 17.58 | 7.87 | 2.234 | 1.249 [1.041, 1.497] |
+| LPL | statements | secondary | 14.815 | 9.559 | 1.55 | 0.938 [0.783, 1.124] |
+| LPL | max_nesting | secondary | 1.278 | 0.773 | 1.653 | 0.637 [0.560, 0.724] |
+| LPL | comment_ratio | secondary | 0.335 | 0.25 | 1.339 | 1.076 [0.975, 1.188] |
+| LPL | method_calls | secondary | 13.964 | 9.243 | 1.511 | 0.997 [0.845, 1.176] |
+| LPL | mean_identifier_length | secondary | 2.495 | 3.083 | 0.809 | n/a |
+| LPL R5 | pc | primary metric | 0.864 | 0.97 | 0.891 | 0.969 [0.907, 1.035] |
+| LPL R5 | loc | secondary | 18.198 | 7.87 | 2.312 | 1.415 [1.143, 1.752] |
+| LPL R5 | statements | secondary | 15.227 | 9.559 | 1.593 | 0.899 [0.742, 1.089] |
+| LPL R5 | max_nesting | secondary | 1.295 | 0.773 | 1.674 | 0.597 [0.519, 0.688] |
+| LPL R5 | comment_ratio | secondary | 0.336 | 0.25 | 1.342 | 1.101 [0.997, 1.217] |
+| LPL R5 | method_calls | secondary | 14.17 | 9.243 | 1.533 | 0.983 [0.825, 1.170] |
+| LPL R5 | mean_identifier_length | secondary | 2.528 | 3.083 | 0.82 | n/a |
+| MA | lcom | primary metric | 0.103 | 0.653 | 0.158 | n/a |
+| MA | loc | secondary | 89.513 | 167.058 | 0.536 | n/a |
+| MA | statements | secondary | 53.801 | 268.241 | 0.201 | n/a |
+| MA | max_nesting | secondary | 1.612 | 1.503 | 1.072 | n/a |
+| MA | comment_ratio | secondary | 0.145 | 0.235 | 0.615 | n/a |
+| MA | method_calls | secondary | 56.578 | 224.084 | 0.252 | n/a |
+| MA | mean_identifier_length | secondary | 2.408 | 2.913 | 0.827 | n/a |
+| MA | nom | secondary | 10.352 | 28.685 | 0.361 | n/a |
+| MA | nof | secondary | 6.987 | 8.295 | 0.842 | n/a |
+
+**A4 (EXPLORATORY): Thorndike Case II correction**
+- r is the point-biserial correlation between the primary metric and the unanimous label. u = SD(universe) / SD(annotated) of the primary metric.
+- Implied AUC = Φ(d/√2), with d = r / √((1 − r²)pq).
+- **Assumptions:**
+  - the relation is linear and homoscedastic across the full metric range;
+  - selection into the annotated set depends on the metric only;
+  - the label/metric relation is binormal.
+- These corrected values are model-based extrapolations, not observed quantities. The observed AUC from RQ2 is shown for comparison.
+- CI: bootstrap over entities (B = 2000) with u fixed.
+
+| smell | n | point_biserial_r | u_SD_universe_over_annotated | corrected r [95% CI] | implied_AUC_uncorrected | implied AUC corrected [95% CI] | observed_AUC_RQ2 |
+|---|---|---|---|---|---|---|---|
+| CM | 1695 | 0.076 | 0.925 | 0.071 [0.028, 0.111] | 0.546 | 0.542 [0.517, 0.567] | 0.541 |
+| LPL | 1326 | -0.121 | 1.06 | -0.128 [-0.182, -0.075] | 0.428 | 0.424 [0.391, 0.455] | 0.433 |
+| LPL R5 | 1189 | 0.025 | 1.122 | 0.028 [-0.035, 0.090] | 0.515 | 0.516 [0.480, 0.552] | 0.514 |
+
+For CM and LPL, u is close to or below 1. The universe distribution is concentrated below the band: 0.968 of methods have cc < 5 and 0.948 have pc < 3. An SD-based correction therefore does not represent restriction to an upper-tail band. A1, the share of snippets and of tool flags inside the band, is the more direct description of the restriction.
+
+Tables: `tables/range_A1_tool_flags.csv`, `range_A2_trend.csv`, `range_A2_share_by_value.csv`, `range_A3_sd_ratios.csv`, `range_A4_thorndike.csv`.
+
+**Summary.** CM: 0.030 of snippets inside the band, 0.819 of DesigniteJava-flagged snippets inside the band; LPL: 0.052 of snippets inside the band, 0.989 of DesigniteJava-flagged snippets inside the band; LPL R5: 0.022 of snippets inside the band, 0.989 of DesigniteJava-flagged snippets inside the band; MA: 0.169 of snippets inside the band, 1.000 of DesigniteJava-flagged snippets inside the band.

@@ -4,10 +4,10 @@ CM XGB 36s 0.035
 CM GB 51s 0.044
 CM SVM 56s 0.067
 LPL LR 62s 0.141
-LPL RF 82s 0.23
-LPL XGB 87s 0.216
-LPL GB 98s 0.232
-LPL SVM 102s 0.229
+LPL RF 81s 0.23
+LPL XGB 85s 0.216
+LPL GB 97s 0.232
+LPL SVM 100s 0.229
 **Analysis type: primary.** These baselines are reported alongside every model in sections B–J.
 - Splits: the same 25 project-grouped splits as section B (5 repeats × 5 folds; projects shuffled with seed 20261021 + r and assigned round-robin).
 - Majority class: the training fold's majority label is predicted for everyone. With a constant score, ROC-AUC = 0.5, PR-AUC = prevalence and MCC = 0.
@@ -77,7 +77,7 @@ Pairs whose average ranks differ by more than the CD: CM: LR vs RF (|Δrank| 1.6
 - All pairwise rank differences are in `tables/model_nemenyi_pairs.csv`.
 - Caveat: the 25 folds come from 5 repeats of the same data, so they are not independent blocks. The test is therefore anti-conservative.
 
-Tables: `tables/model_comparison.csv`, `tables/model_friedman.csv`, `tables/model_nemenyi_pairs.csv`, `tables/model_fold_mcc.csv`. Figure: `figures/model_cd_diagram.pdf` (.png). Runtime 104s.
+Tables: `tables/model_comparison.csv`, `tables/model_friedman.csv`, `tables/model_nemenyi_pairs.csv`, `tables/model_fold_mcc.csv`. Figure: `figures/model_cd_diagram.pdf` (.png). Runtime 102s.
 
 **Summary.** CM: best model LR (MCC 0.095), Friedman p = 3.04e-04; LPL: best model GB (MCC 0.232), Friedman p = 0.0119.
 

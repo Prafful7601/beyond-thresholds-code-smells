@@ -1,0 +1,1 @@
+- For MA, reading the answer from `isma` gives alpha 0.020 [-0.035, 0.077] (primary, consistency-filtered) and 0.059 [0.010, 0.113] (unfiltered, R6). Reading it from `is_smell` gives 0.561 [0.520, 0.603] (all annotations, R3).

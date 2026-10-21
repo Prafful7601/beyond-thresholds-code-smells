@@ -14,6 +14,13 @@
 12. **XGBoost runtime library.** No system OpenMP is installed, so xgboost loads scikit-learn's bundled `libomp` via `DYLD_LIBRARY_PATH`, which `run_all.sh` sets.
 13. **R3 applies no consistency filter.** The filter is defined on the checkbox, so it does not apply when `is_smell` is the answer column (plan.md §4.1).
 14. **RQ5 robustness BH family.** In robustness runs, the BH family is that variant's CM and LPL tests.
+15. **R5 ablation models.** In the R5 rerun (§4.4), C1/C3 use the R5 best model (SVM) and LR, as pre-registered. The primary best model (GB) was not rerun under R5, so side-by-side cells for models that were not the best model of a run show "n/a".
+16. **SHAP output shape.** shap 0.46 returns a 3-D array (n, features, classes) for scikit-learn forests. The "smelly" slice is used. This affects only the R5 SHAP (best tree model RF); the primary best tree model is GB.
+17. **Human-ceiling designations are simulated through sufficient statistics.** Only split entities depend on the random role assignment, so each designation is drawn as binomial counts. This is exactly equivalent to entity-level role draws; a brute-force check agreed to 1e-4.
+18. **Near-duplicate ceiling.** Designations are drawn as multinomial cell counts per pair type (pairs sharing the two entities' yes-rates). This is equivalent to per-pair draws.
+19. **Feature extraction now covers every sample path** (the §6.1 snippet universe). The values for the previously computed 95,496 paths are verified identical, so no earlier table changes.
+20. **Paper figures** (`results/paper_figures/`) are re-drawn from the committed tables at IEEE sizes. They contain no new analysis.
+21. **External dataset.** `openpyxl` 3.1.5 is pinned to read the xlsx files. B0 only reads and counts. The Refused Bequest header assumption (first `BOvR` column = BUR) is a proposal awaiting the PI's decision and is not used in any result.
 
 **Known limitations**
 
@@ -40,4 +47,10 @@
 - **Class weighting and calibration.** Balanced class weights move predicted probabilities towards 0.5. The calibration results describe the weighted models as trained.
 - **CM learning curve is non-monotone.** macro-F1 lies between 0.506 and 0.530 at every training fraction. The pre-registered plateau rule classifies it as not plateaued.
 - **Feature selection is unstable across folds** (mean pairwise Jaccard 0.19 for CM, 0.57 for LPL), so the full feature set is kept.
+- **Two human ceilings disagree strongly.**
+  - Within an entity, two annotations agree at MCC 0.806 (CM) and 0.540 (LPL).
+  - Between structurally identical snippets of the same project, agreement is MCC 0.082 (CM) and 0.099 (LPL).
+  - The data cannot distinguish genuine context differences between near-duplicates from same-annotator or same-session effects within an entity. Annotator ids and timestamps are absent.
+- **Range restriction is a property of the design.** The annotated band holds 3.0% (CM) and 5.2% (LPL) of all methods but 81.9% and 98.9% of DesigniteJava flags. The SD-based Thorndike correction (A4, exploratory) cannot represent this upper-tail restriction.
+- **External dataset annotation is adjudicated.** Every snippet with exactly two annotations agrees, and a third annotation exists only after disagreement. Raw agreement on the released scores would therefore be biased upward relative to DACOS.
 - **Data-integrity cross-check with lizard 1.17.13.** Cyclomatic complexity matches DesigniteJava exactly for 59% of method snippets (Spearman 0.92); parameter count matches for 96%.
