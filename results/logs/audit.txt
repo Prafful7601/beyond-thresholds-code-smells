@@ -1,0 +1,514 @@
+
+====================================================================================================
+1. SCHEMAS AND ROW COUNTS
+====================================================================================================
+DACOSMain.annotation  rows=10267
+    id                     INTEGER
+    iscm                   INTEGER
+    isim                   INTEGER
+    islp                   INTEGER
+    isma                   INTEGER
+    is_smell               INTEGER
+    sample_id              INTEGER
+DACOSMain.class_metrics  rows=14458
+    id                     INTEGER
+    dit                    TEXT
+    fanin                  TEXT
+    fanout                 TEXT
+    lcom                   TEXT
+    loc                    TEXT
+    nc                     TEXT
+    nof                    TEXT
+    nom                    TEXT
+    nopf                   TEXT
+    nopm                   TEXT
+    wmc                    TEXT
+    package_name           TEXT
+    project_name           TEXT
+    type_name              TEXT
+DACOSMain.method_metrics  rows=110982
+    id                     INTEGER
+    cc                     TEXT
+    loc                    TEXT
+    pc                     TEXT
+    method_name            TEXT
+    package_name           TEXT
+    project_name           TEXT
+    type_name              TEXT
+DACOSMain.sample  rows=99387
+    id                     INTEGER
+    designite_id           INTEGER
+    has_smell              INTEGER
+    is_class               INTEGER
+    path_to_file           TEXT
+    project_name           TEXT
+    sample_constraints     INTEGER
+    smells                 TEXT
+DACOSMain.smell  rows=0
+    id                     INTEGER
+    description            TEXT
+    is_design_smell        INTEGER
+    name                   TEXT
+DACOSExtended.class_metrics  rows=14458
+    id                     INTEGER
+    dit                    TEXT
+    fanin                  TEXT
+    fanout                 TEXT
+    lcom                   TEXT
+    loc                    TEXT
+    nc                     TEXT
+    nof                    TEXT
+    nom                    TEXT
+    nopf                   TEXT
+    nopm                   TEXT
+    wmc                    TEXT
+    package_name           TEXT
+    project_name           TEXT
+    type_name              TEXT
+DACOSExtended.entry  rows=207605
+    id                     INTEGER
+    sampleId               INTEGER
+    positiveAnnotations    INTEGER
+    negativeAnnotations    INTEGER
+    smellPresented         INTEGER
+DACOSExtended.method_metrics  rows=110982
+    id                     INTEGER
+    cc                     TEXT
+    loc                    TEXT
+    pc                     TEXT
+    method_name            TEXT
+    package_name           TEXT
+    project_name           TEXT
+    type_name              TEXT
+DACOSExtended.repository  rows=0
+    id                     INTEGER
+    dp_id                  TEXT
+    repo_name              TEXT
+    repo_path              TEXT
+    stars                  INTEGER
+DACOSExtended.sample  rows=99387
+    id                     INTEGER
+    designite_id           INTEGER
+    has_smell              INTEGER
+    is_class               INTEGER
+    path_to_file           TEXT
+    project_name           TEXT
+    sample_constraints     INTEGER
+    smells                 TEXT
+DACOSExtended.smell  rows=0
+    id                     INTEGER
+    description            TEXT
+    is_design_smell        INTEGER
+    name                   TEXT
+
+====================================================================================================
+1b. Are the tables shared between the two dumps identical?
+====================================================================================================
+sample          identical=True
+method_metrics  identical=True
+class_metrics   identical=True
+
+====================================================================================================
+2. VALUE DOMAINS
+====================================================================================================
+annotation flag columns value counts:
+    iscm {0: 7254, 1: 3013}
+    isim {0: 10267}
+    islp {0: 7982, 1: 2285}
+    isma {0: 7772, 1: 2495}
+    is_smell {0: 3967, 1: 6300}
+sample.smells value counts (all samples): {'': 94199, '1': 2199, '2': 1445, '3': 1341, '1,2': 203}
+sample.has_smell x is_class:
+is_class       0      1
+has_smell              
+0          83676  10523
+1           3847   1341
+annotation.sample_id null: 0  orphan (not in sample): 0
+duplicate annotation ids: 0
+non-numeric metric values: method 0  class 0
+
+designite_id -> metrics join (all samples):
+   is_class=0: samples=87523, designite_id found in method_metrics=87523
+   is_class=1: samples=11864, designite_id found in class_metrics=11413
+   method samples whose path (package/type/method) matches joined method_metrics row: 87492 / 87523
+   class samples whose path (package/type) matches joined class_metrics row: 11408 / 11413
+
+====================================================================================================
+3. ANNOTATIONS: flag pattern by the sample's smells field
+====================================================================================================
+ is_class smells  iscm  isim  islp  isma  is_smell    n
+        0            0     0     1     0         1  274
+        0      1     0     0     0     0         0 1233
+        0      1     0     0     1     0         0   98
+        0      1     0     0     1     0         1   83
+        0      1     1     0     0     0         0  378
+        0      1     1     0     0     0         1 2373
+        0    1,2     0     0     0     0         0   95
+        0    1,2     0     0     1     0         1   33
+        0    1,2     1     0     0     0         0   38
+        0    1,2     1     0     0     0         1  205
+        0    1,2     1     0     1     0         1   19
+        0      2     0     0     0     0         0  950
+        0      2     0     0     1     0         1 1778
+        1      3     0     0     0     0         0  210
+        1      3     0     0     0     0         1    5
+        1      3     0     0     0     1         0  965
+        1      3     0     0     0     1         1 1530
+
+Discordance between the per-smell checkbox and is_smell, by annotation-id bin of 1000:
+          n  cm_disc  lp_disc  ma_disc  lp_ticked_on_CM_only  empty_smells
+bin                                                                       
+0       491        4        0      299                     5             0
+1000    753        2        0      285                     2             0
+2000    531        3        0      198                     4             0
+3000    869        2        0       30                    12             0
+4000    709        0        0      103                     0             0
+5000    873        0        0       30                     3             0
+6000    912        0        0       14                    17             0
+7000    974        0        0        0                    21             0
+8000    988        0        0        0                    20             0
+9000    998      426        0       11                    13             0
+10000  1000       95        0        0                    83           210
+11000  1000        0        0        0                     0            64
+12000   169        0        0        0                     1             0
+
+====================================================================================================
+4. COUNTS PER SMELL (smell assigned from sample.smells: 1=CM, 2=LPL, 3=MA; '' = none recorded)
+====================================================================================================
+distinct annotated snippets: 5115   annotations: 10267
+
+snippets by smells field:
+        snippets  annotations
+smells                       
+             137          274
+1           2080         4165
+1,2          195          390
+2           1362         2728
+3           1341         2710
+
+                                smell  snippets  annotations
+               CM (smells contains 1)      2275         4555
+              LPL (smells contains 2)      1557         3118
+LPL incl. empty-smells method samples      1694         3392
+                     MA (smells == 3)      1341         2710
+Paper Table II: CM 2197/4349, LPL 1634/3221, MA 1361/2697, total 5192/10267
+
+Annotations per snippet distribution:
+n_ann
+2     5106
+3        4
+5        2
+10       1
+11       1
+12       1
+by smells field:
+n_ann     2   3   5   10  11  12
+smells                          
+         137   0   0   0   0   0
+1       2077   2   1   0   0   0
+1,2      195   0   0   0   0   0
+2       1360   1   1   0   0   0
+3       1337   1   0   1   1   1
+
+sample.sample_constraints (tool's served/annotated counter) vs actual annotation count:
+n_ann    2   3   5   10  11  12
+sc                             
+0       137   0   0   0   0   0
+1      1659   0   0   0   0   0
+2      2782   0   0   0   0   0
+3       512   0   0   0   0   0
+4         5   0   0   0   0   0
+5         3   0   0   0   0   0
+6         2   1   0   0   0   0
+7         0   3   0   0   0   0
+9         0   0   2   0   0   0
+14        0   0   0   1   0   0
+15        0   0   0   0   1   0
+16        0   0   0   0   0   1
+45        1   0   0   0   0   0
+48        1   0   0   0   0   0
+54        1   0   0   0   0   0
+55        1   0   0   0   0   0
+59        1   0   0   0   0   0
+67        1   0   0   0   0   0
+
+====================================================================================================
+5. ANNOTATOR IDENTITY
+====================================================================================================
+annotation columns: ['id', 'iscm', 'isim', 'islp', 'isma', 'is_smell', 'sample_id']
+No user / annotator / timestamp column exists in the dumped annotation table.
+contributors.txt lists 16 names (annotators with >50 samples); paper reports 86 annotators.
+
+====================================================================================================
+6. STORED METRICS OF ANNOTATED SNIPPETS (DesigniteJava values from the dump)
+====================================================================================================
+method snippets joined: 3774  class snippets joined: 1341
+smells=''   n= 137  cc[min,max]=[1,4] cc value counts={1: 94, 2: 24, 3: 10, 4: 9}
+                 pc[min,max]=[3,3] pc value counts={3: 137}
+smells='1'  n=2080  cc[min,max]=[5,14] cc value counts={5: 735, 6: 495, 7: 326, 8: 201, 9: 156, 10: 121, 11: 13, 12: 20, 13: 8, 14: 5}
+                 pc[min,max]=[0,15] pc value counts={0: 374, 1: 835, 2: 598, 3: 235, 6: 15, 7: 10, 8: 3, 9: 4, 10: 5, 15: 1}
+smells='1,2' n= 195  cc[min,max]=[5,13] cc value counts={5: 52, 6: 40, 7: 45, 8: 24, 9: 18, 10: 12, 11: 3, 13: 1}
+                 pc[min,max]=[4,10] pc value counts={4: 127, 5: 50, 6: 7, 7: 6, 9: 4, 10: 1}
+smells='2'  n=1362  cc[min,max]=[1,75] cc value counts={1: 1000, 2: 153, 3: 95, 4: 67, 11: 6, 12: 6, 13: 7, 14: 5, 15: 5, 16: 1, 17: 3, 19: 2, 21: 1, 22: 1, 23: 1, 25: 3, 27: 2, 31: 1, 32: 1, 33: 1, 75: 1}
+                 pc[min,max]=[4,10] pc value counts={4: 988, 5: 269, 6: 75, 7: 9, 8: 4, 9: 14, 10: 3}
+MA snippets: lcom[min,max]=[0.402,1.000]  quantiles={0.0: 0.402, 0.1: 0.455, 0.25: 0.5, 0.5: 0.6, 0.75: 0.667, 0.9: 0.75, 1.0: 1.0}
+Paper Table I ranges: CM cc 4-7, LPL pc 3-6, MA LCOM 0.4-0.8
+
+All (not only annotated) samples flagged in sample.smells, metric ranges:
+smells='1'   n=  2199 cc in [5,14] pc in [0,15]
+smells='2'   n=  1445 cc in [1,75] pc in [4,10]
+smells='1,2' n=   203 cc in [5,13] pc in [4,10]
+smells=''    n= 83676 cc in [1,54] pc in [0,14]
+class smells='3'  n=  1341 lcom in [0.402174,1]
+class smells=''   n= 10072 lcom in [-1,1]
+
+====================================================================================================
+7. DACOSX (entry table)
+====================================================================================================
+smellPresented  label      
+1               MA present      1218
+2               LPL present      223
+3               CM present       465
+4               MA absent      18456
+5               LPL absent     93219
+6               CM absent      94024
+positiveAnnotations/negativeAnnotations value counts: {0: 207605} {0: 207605}
+duplicate (sampleId, smellPresented): 0
+sampleId found in sample table: 207605 / 207605
+DACOSX sampleIds that are also annotated in DACOS: 6253
+CM present   n=   428  is_class=0  cc in [11,75]  pc in [0,10]
+CM absent    n= 83181  is_class=0  cc in [1,3]  pc in [0,14]
+LPL present  n=   172  is_class=0  cc in [1,37]  pc in [7,15]
+LPL absent   n= 82987  is_class=0  cc in [1,54]  pc in [0,2]
+MA present   n=   645  is_class=1  lcom in [0.807107,1]
+MA absent    n=  9269  is_class=1  lcom in [-1,0.395349]
+Granularity-consistent DACOSX (CM/LPL on methods, MA on classes):
+label
+CM absent      83181
+CM present       428
+LPL absent     82987
+LPL present      172
+MA absent       9269
+MA present       645
+  CM: DACOSX same-smell entries whose snippet is also annotated for CM in DACOS: 50 (present 50, absent 0)
+  LPL: DACOSX same-smell entries whose snippet is also annotated for LPL in DACOS: 41 (present 41, absent 0)
+  MA: DACOSX same-smell entries whose snippet is also annotated for MA in DACOS: 66 (present 66, absent 0)
+Coverage of method samples by stored cc (CM) / pc (LPL): counts in DACOS band (smells field), DACOSX present, DACOSX absent
+cm_band False                    True           
+cm_x        - X_absent X_present     - X_present
+cc                                              
+1           0    74320         0     0         0
+2           0     6143         0     0         0
+3           0     2718         0     0         0
+4        1562        0         0     0         0
+5           0        0         0   841         0
+6           0        0         0   566         0
+7           0        0         0   386         0
+8           0        0         0   235         0
+9           0        0         0   182         0
+10          0        0         0   142         0
+11          0        0        63     0        16
+12          0        0        50     0        20
+13          0        0        44     0         9
+14          0        0        42     0         5
+15          0        0        25     0         0
+16          0        0        28     0         0
+17          0        0        17     0         0
+18          0        0         7     0         0
+19          0        0        12     0         0
+20          0        0        90     0         0
+lp_band False                                      True                 
+lp_x        -       X_absent       X_present           -       X_present
+annot   False True     False True      False True  False True      True 
+pc                                                                      
+0           0     0    30562   374         0     0     0     0         0
+1           0     0    40039   835         0     0     0     0         0
+2           0     0    10579   598         0     0     0     0         0
+3        2268   372        0     0         0     0     0     0         0
+4           0     0        0     0         0     0    71  1115         0
+5           0     0        0     0         0     0    20   319         0
+6         102    15        0     0         0     0     0    82         0
+7           0     0        0     0        56    10     0     0        15
+8           0     0        0     0        22     3     0     0         4
+9           0     0        0     0        13     4     0     0        18
+10          0     0        0     0        10     5     0     0         4
+11          0     0        0     0         3     0     0     0         0
+12          0     0        0     0         3     0     0     0         0
+14          0     0        0     0         1     0     0     0         0
+15          0     0        0     0         0     1     0     0         0
+smells                                   3          
+ma_x             - X_absent X_present    - X_present
+lbin                                                
+(-1.01, -0.5]    0     4030         0    0         0
+(-0.5, 0.0]      0     3643         0    0         0
+(0.0, 0.2]       0      669         0    0         0
+(0.2, 0.4]     202      927         0    0         0
+(0.401, 0.6]     0        0         0  748         0
+(0.6, 0.8]      22        0         0  527         0
+(0.807, 1.0]     0        0       579    0        66
+class samples with designite_id not found in class_metrics: 451
+smellPresented x is_class:
+is_class            0      1
+smellPresented              
+1                 573    645
+2                 172     51
+3                 428     37
+4                9187   9269
+5               82987  10232
+6               83181  10843
+Paper Table II DacosX: CM 94489, LPL 93442, MA 19674, total 207605
+
+====================================================================================================
+8. SOURCE CODE MAPPING (Files.zip)
+====================================================================================================
+files in zip: 104880
+all samples with file in zip: 99373 / 99387
+annotated snippets with file in zip: 5113 / 5115
+DACOSX samples with file in zip: 98261 / 98275
+examples missing: ['/codesplit_java_class/macrozheng_mall/macrozheng_mall/com.macro.mall.portal.service.impl/PortalBrandServiceImpl.code', '/codesplit_java_method/macrozheng_mall/macrozheng_mall/com.macro.mall.portal.service/PortalBrandService/productList.code']
+example annotated snippet: /codesplit_java_class/Blankj_AndroidUtilCode/Blankj_AndroidUtilCode/com.blankj.utildebug.debug.tool.clearCache/ClearCacheDebug.code
+/** 
+ * <pre> author: blankj blog  : http://blankj.com time  : 2019/09/04 desc  : </pre>
+ */
+public class ClearCacheDebug extends AbsToolDebug {
+  private ThreadUtils.SimpleTask<Long> clearCacheTask;
+  @Override public void onAppCreate(  Context context){
+  }
+  @Override public int getIcon(){
+    return R.drawable.du_ic_debug_clear_cache;
+  }
+  @Override public int getName(){
+    return R.string.du_clear_cache;
+  }
+  @Override public void onClick(  View view){
+    clearCache();
+  }
+  private void clearCache(){
+    DebugMenu.getInstance().dismiss();
+    if (clearCacheTask != null && !clearCache
+annotated class files in which every method body appears empty (bodies stripped by CodeSplitJava): 0 / 1340
+--- method example: /codesplit_java_method/Blankj_AndroidUtilCode/Blankj_AndroidUtilCode/com.blankj.utildebug.debug.tool.clearCache/ClearCacheDebug/createClearCacheTask.code
+private ThreadUtils.SimpleTask<Long> createClearCacheTask(){
+  return new ThreadUtils.SimpleTask<Long>(){
+    @Override public Long doInBackground() throws Throwable {
+      try {
+        long len=0;
+        File appDataDir=new File(PathUtils.getInternalAppDataPath());
+        if (appDataDir.exists()) {
+          String[] names=appDataDir.list();
+          for (          String name : names) {
+   
+--- method example: /codesplit_java_method/Blankj_AndroidUtilCode/Blankj_AndroidUtilCode/com.blankj.subutil.util/Status/batteryStatus2String.code
+public static String batteryStatus2String(@BatteryStatus int status){
+  if (status == BatteryStatus.DISCHARGING) {
+    return "discharging";
+  }
+  if (status == BatteryStatus.CHARGING) {
+    return "charging";
+  }
+  if (status == BatteryStatus.NOT_CHARGING) {
+    return "not_charging";
+  }
+  if (status == BatteryStatus.FULL) {
+    return "full";
+  }
+  return "unknown";
+}
+
+--- method example: /codesplit_java_method/Blankj_AndroidUtilCode/Blankj_AndroidUtilCode/com.blankj.subutil.util/LunarUtils/solar2Lunar.code
+/** 
+ * 公历转农历
+ * @param solar 公历
+ * @return 阴历
+ */
+public static Lunar solar2Lunar(final Solar solar){
+  Lunar lunar=new Lunar();
+  int index=solar.solarYear - SOLAR_1_1[0];
+  int data=(solar.solarYear << 9) | (solar.solarMonth << 5) | (solar.solarDay);
+  int solar11=0;
+  if (SOLAR_1_1[index] > data) {
+    index--;
+  }
+  solar11=SOLAR_1_1[index];
+  int y=getBitInt(solar11,12,9);
+  int m=getBitInt(
+
+====================================================================================================
+9. PROJECT / REPOSITORY IDENTITY
+====================================================================================================
+distinct project_name in sample: 10
+annotated snippets per project:
+smells                            1  1,2     2     3   All
+project_name                                              
+Blankj_AndroidUtilCode    122   159   21   102    96   500
+MovingBlocks_Terasology     0   321   34   205   480  1040
+MyCATApache_Mycat-Server    0   527   48   161   184   920
+alibaba_arthas              0   250   17   127   136   530
+igniterealtime_Smack        0   303   41   173   232   749
+kevin-wayne_algs4           0   250   16    36     6   308
+lettuce-io_lettuce-core     0   176    3   361    62   602
+linlinjava_litemall         0    67   10   119    77   273
+macrozheng_mall            15    18    3    37    34   107
+shuzheng_zheng              0     9    2    41    34    86
+All                       137  2080  195  1362  1341  5115
+distinct source files (class file, i.e. package/Type) among annotated snippets: 2944
+path project == sample.project_name for all samples: True
+repository table rows (extended dump): 0
+smell table rows (both dumps): 0 0
+
+====================================================================================================
+10. DUPLICATE SAMPLE ROWS (same designite entity imported twice)
+====================================================================================================
+annotated sample rows: 5115  distinct (is_class, designite_id) entities: 4783
+is_class  smells  n_rows
+0                 1          137
+          1       1         2080
+          1,2     1          195
+          2       1         1362
+1         3       1          677
+                  2          332
+annotations per entity after pooling duplicate rows:
+2     4442
+3        4
+4      332
+5        2
+10       1
+11       1
+12       1
+
+====================================================================================================
+11. CONSTANT-ANSWER RUNS (annotations ordered by annotation id, within smell)
+====================================================================================================
+CM / iscm       n= 4555 yes-rate=0.661  runs>=40 (first_id, last_id, length, value): [(787, 1364, 63, 1), (2008, 2090, 40, 1), (3854, 4234, 69, 1), (4605, 5066, 50, 1), (9225, 9396, 170, 1), (9397, 9469, 73, 0), (9470, 9715, 246, 1), (9932, 11111, 133, 0)]  annotations in runs: 844
+LPL / islp      n= 3392 yes-rate=0.620  runs>=40 (first_id, last_id, length, value): [(941, 1261, 55, 1), (3068, 4724, 305, 0), (9254, 9709, 41, 0), (9927, 11063, 1054, 1), (11067, 12114, 296, 0)]  annotations in runs: 1751
+MA / isma       n= 2710 yes-rate=0.921  runs>=40 (first_id, last_id, length, value): [(6, 4859, 1474, 1), (9786, 9926, 141, 1)]  annotations in runs: 1615
+CM / is_smell   n= 4555 yes-rate=0.596  runs>=40 (first_id, last_id, length, value): [(787, 1392, 69, 1), (2008, 2090, 40, 1), (3854, 4234, 69, 1), (4605, 5066, 50, 1), (9224, 9715, 490, 0), (9932, 10756, 105, 1)]  annotations in runs: 823
+LPL / is_smell  n= 3392 yes-rate=0.681  runs>=40 (first_id, last_id, length, value): [(941, 1261, 55, 1), (3482, 3546, 43, 0), (3550, 3592, 40, 0), (9254, 9709, 41, 0), (9927, 11063, 1054, 1), (11234, 11490, 109, 0)]  annotations in runs: 1342
+MA / is_smell   n= 2710 yes-rate=0.566  runs>=40 (first_id, last_id, length, value): [(6, 3596, 785, 0), (4084, 4169, 46, 1), (9780, 9919, 140, 1)]  annotations in runs: 971
+yes-rate by annotation-id bin of 500:
+  bin   n  CM_n  CM_iscm  CM_is_smell  LPL_n  LPL_islp  MA_n  MA_isma  MA_is_smell
+    0 235    49     0.53         0.61     36      0.81   157     1.00         0.00
+  500 256    72     0.61         0.61     45      0.49   142     1.00         0.00
+ 1000 331    73     0.86         0.88    115      0.90   152     1.00         0.00
+ 1500 422   154     0.70         0.71    143      0.64   133     1.00         0.00
+ 2000 244   107     0.77         0.77     27      0.44   115     1.00         0.00
+ 2500 287   130     0.82         0.85     80      0.70    83     1.00         0.00
+ 3000 486   293     0.45         0.45    220      0.06     0      NaN          NaN
+ 3500 383   100     0.71         0.71     83      0.00   213     1.00         0.86
+ 4000 361    71     0.90         0.90     18      0.00   280     1.00         0.80
+ 4500 348    55     0.98         0.98     28      0.46   271     0.97         0.80
+ 5000 435    58     0.81         0.81     26      0.58   360     0.80         0.77
+ 5500 438    83     0.72         0.72     13      0.54   347     0.79         0.73
+ 6000 448   159     0.60         0.60     53      0.64   246     0.77         0.71
+ 6500 464   333     0.68         0.68    163      0.57     0      NaN          NaN
+ 7000 479   359     0.65         0.65    159      0.50     0      NaN          NaN
+ 7500 495   243     0.62         0.62    272      0.61     0      NaN          NaN
+ 8000 490   271     0.68         0.68    227      0.64     0      NaN          NaN
+ 8500 498   341     0.63         0.63    194      0.54     0      NaN          NaN
+ 9000 498   422     0.68         0.21     98      0.54     0      NaN          NaN
+ 9500 500   226     0.96         0.04     98      0.74   211     0.98         0.97
+10000 500    73     0.00         1.00    439      1.00     0      NaN          NaN
+10500 500    22     0.00         1.00    478      1.00     0      NaN          NaN
+11000 500   281     0.58         0.58    238      0.27     0      NaN          NaN
+11500 500   444     0.68         0.68    100      0.00     0      NaN          NaN
+12000 169   136     0.58         0.58     39      0.28     0      NaN          NaN
