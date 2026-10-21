@@ -1,0 +1,10 @@
+smell,annotator_pair,snippets_both,exact_agreement
+Data Class,ann1-ann2,132,0.946969696969697
+Data Class,ann1-ann3,29,0.7931034482758621
+Data Class,ann2-ann3,128,0.9453125
+Feature Envy,ann1-ann2,166,0.8795180722891566
+Feature Envy,ann1-ann3,109,0.8165137614678899
+Feature Envy,ann2-ann3,163,0.8895705521472392
+Refused Bequest,ann1-ann2,127,0.952755905511811
+Refused Bequest,ann1-ann3,48,0.5
+Refused Bequest,ann2-ann3,130,0.8

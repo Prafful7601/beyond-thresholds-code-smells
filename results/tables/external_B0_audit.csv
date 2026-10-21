@@ -1,0 +1,4 @@
+smell,file,snippets,unique_snippet_ids,granularity,projects,annotator_columns,snippets_by_n_annotations,severity_values_individual,final_distribution,final_missing,snippets_without_strict_majority,final_differs_from_strict_majority,n_metrics,duplicate_metric_names
+Data Class,DataSet_Data_Class.xlsx,231,231,class,15,3,"{2: 202, 3: 29}","[0, 1, 2]","{0: 216, 1: 12, 2: 3}",0,0,0,31,none
+Feature Envy,DataSet_Feature_Envy.xlsx,220,220,method,11,3,"{2: 111, 3: 109}","[0, 1, 2, 3]","{0: 184, 1: 28, 2: 8}",0,0,0,19,none
+Refused Bequest,DataSet_Refused_Bequest.xlsx,209,209,class,15,3,"{2: 161, 3: 48}","[0, 1, 2]","{0: 173, 1: 35, 2: 1}",0,0,0,31,BOvR
