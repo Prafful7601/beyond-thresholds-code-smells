@@ -1,0 +1,3 @@
+smell,model,refit_params,spearman_rho,p,n_features
+CM,GB,"{'learning_rate': 0.05, 'max_depth': 3, 'n_estimators': 300}",0.3214285714285715,0.4820720382996776,7
+LPL,GB,"{'learning_rate': 0.1, 'max_depth': 2, 'n_estimators': 300}",0.5714285714285715,0.1802019889115274,7
