@@ -30,6 +30,23 @@ for entry in "${FILES[@]}"; do
   [ "$got" = "$sum" ] || { echo "MD5 mismatch for $f: $got != $sum"; exit 1; }
 done
 
+# 1b. external C# dataset (Zenodo record 10475432, Prokić et al. 2024), checksum-verified; used for the B0 audit only
+mkdir -p data/external/csharp
+declare -a XFILES=("DataSet_Data_Class.xlsx:7e6446de483b4166202ccae1f2d76311"
+                   "DataSet_Feature_Envy.xlsx:94e29c01288472a5232b34a02be46262"
+                   "DataSet_Refused_Bequest.xlsx:11330c613e921003450f3c62d384d57f"
+                   "Data_Class_Heuristics.xlsx:c719dbcbecedb10908fdfa508e718c8c"
+                   "Feature_Envy_Heuristics.xlsx:0f8cf3d1b3df28f8ec2c1a4e4622c48a"
+                   "Refused_Bequest_Heuristics.xlsx:ef740b048a1a2a76df3ef2c5cef3185f")
+for entry in "${XFILES[@]}"; do
+  f="${entry%%:*}"; sum="${entry##*:}"
+  if [ ! -f "data/external/csharp/$f" ]; then
+    curl -sL -o "data/external/csharp/$f" "https://zenodo.org/api/records/10475432/files/$f/content"
+  fi
+  got=$( (md5 -q "data/external/csharp/$f" 2>/dev/null) || md5sum "data/external/csharp/$f" | cut -d' ' -f1)
+  [ "$got" = "$sum" ] || { echo "MD5 mismatch for $f: $got != $sum"; exit 1; }
+done
+
 : > "$LOGS/runtime.tsv"
 step () {
   local name="$1"; shift
@@ -57,6 +74,12 @@ step step3_E          "$PY" -I src/step3_e.py
 step step3_D          "$PY" -I src/step3_d.py
 step step3_F_H        "$PY" -I src/step3_fh.py
 step step3_G_I_J      "$PY" -I src/step3_gij.py
+step step3_R5         "$PY" -I src/step3_r5.py
+step human_ceiling    "$PY" -I src/human_ceiling.py
+step extras           "$PY" -I src/extras.py
+step range_restrict   "$PY" -I src/range_restriction.py
+step external_B0      "$PY" -I src/external_audit.py
 cp src/s6_deviations.md results/fragments/s6_deviations.md
 step build_report     "$PY" -I src/build_report.py
+step paper_figures    "$PY" -I src/paper_figures.py
 echo "done: results/results.md"

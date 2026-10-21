@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use this replication package, please cite it as below, and cite the DACOS dataset it analyses."
+type: software
+title: "Metric Thresholds Versus Human Judgment on Borderline Code Smells: A Robustness-First Audit of the DACOS Benchmark"
+version: "1.0"
+date-released: "2026-10-21"
+license: MIT
+authors:
+  # TODO: fill in the author list before release
+  - family-names: "TO BE FILLED IN"
+    given-names: "TO BE FILLED IN"
+references:
+  - type: dataset
+    title: "DACOS - Dataset"
+    authors:
+      - family-names: "Nandani"
+        given-names: "Himesh"
+      - family-names: "Saad"
+        given-names: "Mootez"
+      - family-names: "Sharma"
+        given-names: "Tushar"
+    doi: "10.5281/zenodo.7570428"
+    license: CC-BY-4.0
+  - type: dataset
+    title: "C# Dataset of Data Class, Feature Envy and Refused Bequest code smells"
+    authors:
+      - family-names: "Prokić"
+        given-names: "Simona"
+      - family-names: "Luburić"
+        given-names: "Nikola"
+      - family-names: "Slivka"
+        given-names: "Jelena"
+      - family-names: "Grujić"
+        given-names: "Katarina-Glorija"
+      - family-names: "Kovačević"
+        given-names: "Aleksandar"
+    doi: "10.5281/zenodo.10475432"
+    license: CC-BY-4.0

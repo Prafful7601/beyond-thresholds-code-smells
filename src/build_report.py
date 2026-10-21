@@ -40,7 +40,7 @@ def main():
         h_short, h_full, msg = c.split(" ", 2)
         w(f"- `{h_full}`: {msg}")
     w("")
-    w("Scope: **Tier 1, Tier 2 and Step 3 (Prompt 2) are complete.** Every planned section below was run; none is outstanding.")
+    w("Scope: **Tier 1, Tier 2, Step 3 (Prompt 2), Prompt 3 and Prompt 3B part A are complete.** The external check (Prompt 3B part B) has finished its B0 audit; B1 is waiting for the PI's go-ahead (§8).")
     w(f"- **{', '.join(SMELL_NAME[s] for s in inel)} is reported descriptively only** (agreement, threshold ROC, RQ5 descriptives), "
       "because it fails the D8 eligibility rule after the consistency filter. Every model section (RQ4, RQ3 models, Step 3 A–J) covers CM and LPL only.")
     w("- Every section states its **analysis type**: *primary*, *robustness*, *validity check* or *exploratory*. "
@@ -53,6 +53,7 @@ def main():
     w("## 1 Dataset audit: data loading and integrity checks\n")
     w("**Analysis type: descriptive audit of the published data.**\n")
     w(frag("s1_audit"))
+    w(frag("audit_ma_note"))
     w("## 2 Descriptives\n")
     w(frag("s2_descriptives"))
     w("## 3 Research questions\n")
@@ -76,6 +77,10 @@ def main():
     w(frag("run_anatomy"))
     w("### 4.3 J Sensitivity of the best model to training labels (R4, R6)\n")
     w(frag("step3_J"))
+    w("### 4.4 LPL Step 3 without the pc = 3 block (R5; plan.md §5.1)\n")
+    w(frag("step3_R5"))
+    w("### 4.5 Specification curves (plan.md §5.3)\n")
+    w(frag("spec_curves"))
     w("## 5 Strengthening analyses (Step 3; CM and LPL)\n")
     for key, title in (("A", "A Baselines"), ("B", "B Model comparison"), ("C", "C Ablation study"),
                        ("D", "D Generalisation"), ("E", "E Leakage and validity checks"),
@@ -84,12 +89,22 @@ def main():
         w(f"### 5.{'ABCDEFGHI'.index(key) + 1} {title}\n")
         w(frag(f"step3_{key}"))
     w("Section J (sensitivity) is reported in §4.3, because it is a robustness analysis.\n")
-    w("## 6 Exploratory\n")
-    w("**Analysis type: exploratory.** Nothing in this section was pre-registered in plan.md.\n")
+    w("## 6 Human ceiling (plan.md §5.2)\n")
+    w(frag("human_ceiling"))
+    w("## 7 Range restriction (plan.md §6.1)\n")
+    w(frag("range_restriction"))
+    w("## 8 External check: C# dataset (plan.md §6.2)\n")
+    w("### 8.1 B0 audit\n")
+    w(frag("external_B0"))
+    w("### 8.2 B1\n")
+    w("Not run. B1 waits for the PI's go-ahead and for decisions on the issues listed in §8.1.\n")
+    w("## 9 Exploratory\n")
+    w("**Analysis type: exploratory.** Not part of the pre-registered primary or robustness analyses; A4 in §7 is also exploratory.\n")
     w(frag("exploratory_dacosx"))
-    w("## 7 Deviations from plan.md and known limitations\n")
+    w(frag("exploratory_cm_reweight"))
+    w("## 10 Deviations from plan.md and known limitations\n")
     w(frag("s6_deviations"))
-    w("## 8 Reproducibility notes\n")
+    w("## 11 Reproducibility notes\n")
     w("- Regenerate everything with `bash run_all.sh` from `paper3/`. It downloads the data if absent, verifies the MD5s and rebuilds every table, figure and this file.")
     w(f"- Python {platform.python_version()} ({platform.system()} {platform.machine()}). Pinned packages (full list in `requirements.txt`): {', '.join(keep)}.")
     w(f"- Seeds: every bootstrap and model uses seed {SEED} (`numpy.random.default_rng`, `random_state`). Bootstrap B = {B}.")
@@ -106,67 +121,110 @@ def main():
     w("")
     w("- Logs: `results/logs/` (one log per step, plus `audit.txt`, `features.log`, `lizard_crosscheck.csv` and `runtime.tsv`).")
     w("")
-    w("## 9 Completion status\n")
-    w("All sections requested in Prompt 2 were completed: Step 1 (R3–R7), Step 2 (RQ3, RQ5, R1, R2, R3–R6 on RQ3/RQ5) and Step 3 A–J. No section was skipped for time.\n")
-    w("## 10 Headline numbers\n")
+    w("## 12 Completion status\n")
+    w("- Complete: Prompt 2 (Step 1 R3–R7; Step 2 RQ3, RQ5, R1, R2, R3–R6 on RQ3/RQ5; Step 3 A–J), Prompt 3 sections 1–4, and Prompt 3B part A (range restriction).")
+    w("- Prompt 3B part B: B0 audit complete; **B1 not run** (waiting for go-ahead). No section was skipped for time.\n")
+    w("## 13 Headline numbers\n")
     w(headline_block())
     open(os.path.join(ROOT, "results/results.md"), "w").write("\n".join(md) + "\n")
 
 
-def headline_block():
+def headline_rows():
     T = os.path.join(ROOT, "results/tables")
     rd = lambda n: pd.read_csv(os.path.join(T, n))  # noqa: E731
-    f3 = lambda e, l, h: f"{e:.3f} [{l:.3f}, {h:.3f}]"  # noqa: E731
     rows = []
+
+    def add(name, est, lo, hi, kind, table, note="", fmt3=True):
+        rows.append({"number": name, "estimate": None if est is None else float(est), "ci_lo": None if lo is None or pd.isna(lo) else float(lo),
+                     "ci_hi": None if hi is None or pd.isna(hi) else float(hi), "note": note, "analysis_type": kind, "source_table": table})
     a = rd("rq1_agreement.csv").set_index("smell")
     rob = rd("robustness_long.csv")
-
-    def rb(check, smell, head):
-        x = rob[(rob.check == check) & (rob.smell == smell) & (rob.headline == head)].iloc[0]
-        return x
+    rb = lambda c, s_, h: rob[(rob.check == c) & (rob.smell == s_) & (rob.headline == h)].iloc[0]  # noqa: E731
     for s_ in ("CM", "LPL", "MA"):
         r = a.loc[s_]
-        extra = f"; percent agreement {r.pct_agreement:.3f}" if s_ == "MA" else ""
-        rows.append((f"Krippendorff's alpha, {s_}", f3(r.kripp_alpha, r.alpha_lo, r.alpha_hi) + extra, "primary", "rq1_agreement.csv"))
+        add(f"Krippendorff's alpha, {s_}", r.kripp_alpha, r.alpha_lo, r.alpha_hi, "primary", "rq1_agreement.csv",
+            f"percent agreement {r.pct_agreement:.3f}" if s_ == "MA" else "")
     x = rb("R6", "CM", "RQ1 Krippendorff alpha")
-    rows.append(("Krippendorff's alpha, CM, without the consistency filter", f3(x.estimate, x.lo, x.hi), "robustness R6", "robustness_long.csv"))
+    add("Krippendorff's alpha, CM, without the consistency filter", x.estimate, x.lo, x.hi, "robustness R6", "robustness_long.csv")
     q = rd("rq2_threshold_validity.csv").set_index("smell")
     for s_ in ("CM", "LPL"):
         r = q.loc[s_]
-        rows.append((f"Primary-metric ROC-AUC, {s_}", f3(r.auc, r.auc_lo, r.auc_hi) + f" (one-sided MWU p = {r.mwu_p_one_sided:.2g})",
-                     "primary", "rq2_threshold_validity.csv"))
+        add(f"Primary-metric ROC-AUC, {s_}", r.auc, r.auc_lo, r.auc_hi, "primary", "rq2_threshold_validity.csv",
+            f"one-sided MWU p = {r.mwu_p_one_sided:.2g}")
     x = rb("R5", "LPL", "RQ2 ROC-AUC (primary metric)")
-    rows.append(("Primary-metric ROC-AUC, LPL, without the pc = 3 block", f3(x.estimate, x.lo, x.hi), "robustness R5", "robustness_long.csv"))
+    add("Primary-metric ROC-AUC, LPL, without the pc = 3 block", x.estimate, x.lo, x.hi, "robustness R5", "robustness_long.csv")
     r = q.loc["CM"]
-    rows.append(("Youden cut-off for CM versus DesigniteJava default", f"cc ≥ {r.youden_cut:g} [{r.youden_cut_lo:g}, {r.youden_cut_hi:g}] vs cc ≥ 8",
-                 "primary", "rq2_threshold_validity.csv"))
+    add("Youden cut-off for CM (cc ≥ c) versus DesigniteJava default cc ≥ 8", r.youden_cut, r.youden_cut_lo, r.youden_cut_hi,
+        "primary", "rq2_threshold_validity.csv", "cut-off value; DesigniteJava default 8")
     d = rd("rq4_paired_differences.csv")
     r = d[(d.smell == "LPL") & (d.model == "LR") & d.primary_H4_test].iloc[0]
-    rows.append(("RQ4 transfer MCC − GroupKFold MCC, LPL, LR", f3(r.difference, r.lo, r.hi), "primary", "rq4_paired_differences.csv"))
+    add("RQ4 transfer MCC − GroupKFold MCC, LPL, LR", r.difference, r.lo, r.hi, "primary", "rq4_paired_differences.csv")
     x = rb("R3", "LPL", "RQ4 MCC transfer − GroupKFold (LR)")
-    rows.append(("RQ4 transfer MCC − GroupKFold MCC, LPL, LR, `is_smell` labels", f3(x.estimate, x.lo, x.hi), "robustness R3", "robustness_long.csv"))
+    add("RQ4 transfer MCC − GroupKFold MCC, LPL, LR, `is_smell` labels", x.estimate, x.lo, x.hi, "robustness R3", "robustness_long.csv")
     o = rd("rq3_odds_ratios.csv")
     o = o[o.model == "full"]
     r = o[(o.smell == "CM") & (o.feature == "cc")].iloc[0]
-    rows.append(("RQ3 GEE OR per SD of cc, CM", f3(r.OR_per_SD, r.OR_lo, r.OR_hi) + f" (BH p = {r.p_BH_within_smell_model:.2g})", "primary", "rq3_odds_ratios.csv"))
+    add("RQ3 GEE OR per SD of cc, CM", r.OR_per_SD, r.OR_lo, r.OR_hi, "primary", "rq3_odds_ratios.csv", f"BH p = {r.p_BH_within_smell_model:.2g}")
     r = o[(o.smell == "LPL") & (o.feature == "pc")].iloc[0]
     x = rb("R5", "LPL", "RQ3 GEE OR per SD of primary metric")
-    rows.append(("RQ3 GEE OR per SD of pc, LPL (primary; without the pc = 3 block)",
-                 f3(r.OR_per_SD, r.OR_lo, r.OR_hi) + "; R5: " + f3(x.estimate, x.lo, x.hi), "primary; robustness R5",
-                 "rq3_odds_ratios.csv; robustness_long.csv"))
+    add("RQ3 GEE OR per SD of pc, LPL", r.OR_per_SD, r.OR_lo, r.OR_hi, "primary", "rq3_odds_ratios.csv",
+        f"R5: {x.estimate:.3f} [{x.lo:.3f}, {x.hi:.3f}] (robustness_long.csv)")
     m = rd("model_comparison.csv")
     for s_ in ("CM", "LPL"):
         r = m[(m.smell == s_) & m.best_model].iloc[0]
-        rows.append((f"Best model MCC, {s_} ({r.model}, 5×5 grouped CV)", f"{r.MCC:.3f} ± {r.MCC_sd:.3f} [{r.MCC_lo:.3f}, {r.MCC_hi:.3f}]",
-                     "primary", "model_comparison.csv"))
+        add(f"Best model MCC, {s_} ({r.model}, 5×5 grouped CV)", r.MCC, r.MCC_lo, r.MCC_hi, "primary", "model_comparison.csv", f"SD over repeats {r.MCC_sd:.3f}")
     ab = rd("ablation_LPL.csv")
     r = ab[(ab.model == ab.model.iloc[0]) & (ab.variant == "DACOSX only")].iloc[0]
-    rows.append((f"Δ MCC, LPL {r.model}, training on DACOSX only versus DACOS", f3(r.d_MCC, r.d_MCC_lo, r.d_MCC_hi), "primary (ablation C3)", "ablation_LPL.csv"))
+    add(f"Δ MCC, LPL {r.model}, training on DACOSX only versus DACOS", r.d_MCC, r.d_MCC_lo, r.d_MCC_hi, "primary (ablation C3)", "ablation_LPL.csv")
+    # ---- Prompt 3 / 3B additions
+    m5 = rd("model_comparison_LPL_R5.csv")
+    r = m5[m5.best_model].iloc[0]
+    add(f"Best model MCC, LPL R5 ({r.model}, 5×5 grouped CV) [R5 value of row 14]", r.MCC, r.MCC_lo, r.MCC_hi, "robustness R5",
+        "model_comparison_LPL_R5.csv", f"SD over repeats {r.MCC_sd:.3f}")
+    a5 = rd("ablation_LPL_R5.csv")
+    r = a5[(a5.model == m5[m5.best_model].model.iloc[0]) & (a5.variant == "DACOSX only")].iloc[0]
+    add(f"Δ MCC, LPL R5 {r.model}, training on DACOSX only versus DACOS [R5 value of row 15]", r.d_MCC, r.d_MCC_lo, r.d_MCC_hi,
+        "robustness R5", "ablation_LPL_R5.csv")
+    hc = rd("human_ceiling.csv")
+    hc = hc[hc.metric == "MCC"]
+    for r in hc.itertuples():
+        add(f"Human-vs-human MCC, {r.population}", r.human_vs_human, r.human_lo, r.human_hi, "primary (human ceiling)", "human_ceiling.csv")
+        add(f"Best model vs one human MCC, {r.population} ({r.best_model})", r.model_vs_single_human, r.model_lo, r.model_hi,
+            "primary (human ceiling)", "human_ceiling.csv")
+        add(f"Model/human MCC ratio, {r.population}", r.ratio_model_over_human, r.ratio_lo, r.ratio_hi, "primary (human ceiling)", "human_ceiling.csv")
+    nd = rd("human_ceiling_neardup.csv")
+    for r in nd.itertuples():
+        add(f"Human-vs-human MCC between same-project near-duplicates, {r.smell}", r.MCC, r.MCC_lo, r.MCC_hi,
+            "primary (second ceiling)", "human_ceiling_neardup.csv", f"{r.pairs} pairs in {r.groups} groups")
+    a1 = rd("range_A1_tool_flags.csv")
+    for r in a1[a1["smell/band"].isin(["CM", "LPL"])].itertuples():
+        add(f"Share of DesigniteJava-flagged snippets inside the annotated band, {r[1]}", r.share_of_flagged_inside_band, None, None,
+            "primary (range restriction, descriptive)", "range_A1_tool_flags.csv", f"{r.flagged_inside_band}/{r.flagged} flags; band holds {r.share_inside_band:.3f} of all snippets")
+    a2 = rd("range_A2_trend.csv")
+    for r in a2.itertuples():
+        add(f"Within-band logistic OR per unit of the primary metric, {r.smell}", r.logit_OR_per_unit, r.OR_lo, r.OR_hi,
+            "primary (range restriction)", "range_A2_trend.csv", f"Cochran–Armitage z = {r.CA_z:.2f}, p = {r.CA_p:.2g}")
+    return rows
+
+
+def headline_block():
+    rows = headline_rows()
     out = ["| # | number | value [95% CI] | analysis type | table |", "|---|---|---|---|---|"]
-    for i, (n, v, t, tb) in enumerate(rows, 1):
-        out.append(f"| {i} | {n} | {v} | {t} | `tables/{tb.replace('; ', '`, `tables/')}` |")
-    return "\n".join(out) + "\n\nAll values are read programmatically from the listed tables when this file is built.\n"
-
-
-if __name__ == "__main__":
-    main()
+    for i, r in enumerate(rows, 1):
+        if r["estimate"] is None:
+            v = "n/a"
+        elif r["ci_lo"] is None:
+            v = f"{r['estimate']:.3f}"
+        else:
+            d = 0 if r["number"].startswith("Youden") else 3
+            v = f"{r['estimate']:.{d}f} [{r['ci_lo']:.{d}f}, {r['ci_hi']:.{d}f}]"
+        if r["note"]:
+            v += f" ({r['note']})"
+        out.append(f"| {i} | {r['number']} | {v} | {r['analysis_type']} | `tables/{r['source_table']}` |")
+    import json
+    with open(os.path.join(ROOT, "results/paper_numbers.json"), "w") as f:
+        json.dump([{"id": i, **r, "ci_level": 0.95 if r["ci_lo"] is not None else None} for i, r in enumerate(rows, 1)],
+                  f, indent=2, ensure_ascii=False)
+    return ("\n".join(out) + "\n\nRows 1–15 are the Prompt 2 headline numbers; rows 16 onward were added in Prompt 3 and 3B. "
+            "All values are read programmatically from the listed tables when this file is built, and the same rows are written to "
+            "`results/paper_numbers.json`.\n")

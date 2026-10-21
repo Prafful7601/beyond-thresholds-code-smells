@@ -1,7 +1,5 @@
 .venv/
-data/raw/
-data/db/
+data/
 __pycache__/
+*.pyc
 .DS_Store
-data/features/
-data/cache/
