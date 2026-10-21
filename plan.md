@@ -132,10 +132,45 @@ Per-annotator counts and yes-rates **cannot be computed**, because the annotatio
 - R3 *(added after the audit; pending confirmation)*: `is_smell` used as the answer instead of the smell-specific checkbox.
 - R4 *(added after the audit; pending confirmation)*: annotations inside constant-answer runs are excluded. A run is a maximal sequence of at least 40 consecutive identical answers within a smell, ordered by annotation id. The rule is fixed now and the runs are listed in the audit log, section 11. Labels are recomputed from the remaining annotations.
 
-## 3. Decisions pending confirmation (Phase 0 → Tier 1)
-- D1: primary answer = smell-specific checkbox (§1.1).
-- D2: the 137 pc = 3 snippets with an empty `smells` field are included in LPL (§1.2).
-- D3: duplicate MA sample rows are pooled into one entity (§1.3).
-- D4: cross-granularity DACOSX entries are excluded, and the 157 overlapping DACOSX entries are removed (§1.7).
-- D5: R3 and R4 are added as planned robustness checks.
-- D6: grouped CV groups by project (10 groups) as instructed, not by source file.
+## 3. Decisions (confirmed by PI after Phase 0; this section supersedes earlier sections where they conflict)
+
+**Approved as recommended**
+- D1: The answer is the smell-specific checkbox (§1.1). The `is_smell` version is robustness check R3.
+- D2: The 137 LPL snippets with pc = 3 and an empty `smells` field are included. Robustness check **R5** repeats the analysis without them.
+- D3: Duplicate MA sample rows are pooled into one entity.
+  - Check performed before this commit: the 332 duplicated classes carry 1,328 annotation rows with distinct ids, answered at different times (each copy has 2 annotations).
+  - The (`isma`, `is_smell`) sequences of the two copies are identical for 155 of 332 classes. They are independent answers, not copied rows, so the annotations are pooled (n = 4).
+- D4: Wrong-granularity DACOSX entries (30,923) and the 157 DACOS/DACOSX same-smell overlaps are dropped before any training.
+- D5: R3 and R4 are planned robustness checks.
+  - R4 rule (fixed): runs are maximal sequences of ≥ 40 identical checkbox answers within a smell, ordered by annotation id, computed on the unfiltered checkbox stream.
+- D6: In-DACOS CV is `GroupKFold(5)` by `project_name`. **Leave-one-project-out (LOPO)** CV is reported alongside it.
+
+**Changes**
+- D7 **Internal-consistency filter (primary analysis, all smells).**
+  - An annotation is excluded when its smell's checkbox = 1 but `is_smell` = 0, because it contradicts itself.
+  - Checkbox = 0 with `is_smell` = 1 is kept, since another box may have been ticked.
+  - Reported first: a per-smell cross-tab of checkbox × `is_smell`, the number excluded, and how many excluded rows fall inside R4 runs.
+  - Robustness check **R6** reruns the headline results without the filter.
+- D7a: After filtering, an entity's labels use only its usable annotations. Entities with < 2 usable annotations are excluded from agreement and label analyses, and are counted.
+- D8 **Eligibility rule.** After filtering, a smell is reported as **descriptive only** (RQ1 agreement and RQ2 threshold ROC) and skips all model sections (RQ4, RQ3 models, Prompt-2 models) if either holds:
+  - fewer than 150 entities have ≥ 2 usable annotations, or
+  - fewer than 30 unanimous entities fall in its minority class.
+  This is stated explicitly in results.md.
+- D9: results.md opens with a factual "Dataset audit" section. It includes a figure of answer value against annotation id per smell.
+- D10: RQ2 compares against the DesigniteJava defaults as the primary reference. The positions of the paper's Table I ranges relative to the observed annotated ranges are reported descriptively only.
+
+**Consequences accepted**
+- D11: With 2 annotations per entity, majority = unanimous and every split is a tie.
+  - RQ2, RQ4 and all model sections use **unanimous** entities.
+  - RQ5 and the annotation-level RQ3 GEE use **all** entities (with ≥ 2 usable annotations).
+- D12: RQ1 drops all per-annotator analyses because no annotator ids exist. Krippendorff's alpha and the vote-split distribution are kept.
+  - Limitation recorded: the same annotator may have rated a snippet twice, and this cannot be checked.
+- D13: R1 (≥ 3 annotations) is run for MA only, noting that it consists mostly of pooled duplicates.
+- D14: DACOSX training keeps the full absent class, with inverse-frequency class weights (`class_weight='balanced'`) and no subsampling.
+
+**Robustness scope (Tier 2).** R1–R6 each repeat the headline results: RQ1 alpha, RQ2 AUC, Youden cut-off and P/R/F1, and RQ4.
+
+**Pre-registered adjustments to Prompt 2.** The full text of Prompt 2 had not been received when this was committed; these are recorded as instructed.
+- C2: "majority vote" and "unanimous-only" are the same training set. Three label variants are kept: unanimous only; ties counted as smelly; soft labels (0, 0.5, 1) used as sample weights.
+- J: annotator removal is impossible. It is replaced by R4 (run exclusion) and R6 (no consistency filter), applied to the B headline.
+- I: each error is tagged as unanimous or split, and flagged as inside or outside an R4 run.
