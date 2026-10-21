@@ -32,6 +32,17 @@ DACOSX_CODES = {"CM": (3, 6), "LPL": (2, 5), "MA": (1, 4)}  # (present, absent)
 METHOD_FEATS = ["loc", "statements", "max_nesting", "comment_ratio", "method_calls"]
 CLASS_FEATS = ["loc", "statements", "max_nesting", "comment_ratio", "method_calls", "nom", "nof"]
 RUN_MIN = 40
+GROUPS = {"primary": None, "size": ["loc", "statements"], "structure": ["max_nesting", "method_calls"],
+          "readability": ["comment_ratio", "mean_identifier_length"]}
+
+
+def full_features(smell):
+    """Step 3 full feature set (plan.md §4.4)."""
+    return [PRIMARY[smell], "loc", "statements", "max_nesting", "method_calls", "comment_ratio", "mean_identifier_length"]
+
+
+def group_features(smell, group):
+    return [PRIMARY[smell]] if group == "primary" else list(GROUPS[group])
 
 
 def feature_cols(smell):
@@ -225,7 +236,8 @@ def attach_metrics(E):
 def load_features():
     p = os.path.join(FEAT_DIR, "features.csv.gz")
     f = pd.read_csv(p)
-    return f[["path", "statements", "max_nesting", "comment_ratio", "method_calls"]]
+    cols = ["path", "statements", "max_nesting", "comment_ratio", "method_calls", "mean_identifier_length"]
+    return f[[c for c in cols if c in f.columns]]
 
 
 # ---------------------------------------------------------------- statistics helpers

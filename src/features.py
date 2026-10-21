@@ -141,7 +141,9 @@ def compute(src, is_class):
                 continue
             calls += 1
     calls += len(re.findall(r"\bnew\s+[\w$.]+\s*<", code))
-    return statements, max_nesting, comment_ratio, calls
+    idents = [t for t in toks if re.match(r"[A-Za-z_$]", t) and t not in KEYWORDS]
+    mean_id_len = float(np.mean([len(t) for t in idents])) if idents else np.nan
+    return statements, max_nesting, comment_ratio, calls, mean_id_len
 
 
 def main():
@@ -164,7 +166,8 @@ def main():
             rows.append((path, is_class) + compute(src, bool(is_class)))
         except Exception:
             failed += 1
-    f = pd.DataFrame(rows, columns=["path", "is_class", "statements", "max_nesting", "comment_ratio", "method_calls"])
+    f = pd.DataFrame(rows, columns=["path", "is_class", "statements", "max_nesting", "comment_ratio", "method_calls",
+                                    "mean_identifier_length"])
     f.to_csv(os.path.join(FEAT_DIR, "features.csv.gz"), index=False)
     msg = (f"paths needed: {len(need)}; computed: {len(f)}; missing from zip: {missing}; failed: {failed}; "
            f"runtime {time.time() - t0:.1f}s\n")
