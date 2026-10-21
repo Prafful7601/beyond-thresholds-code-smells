@@ -334,3 +334,50 @@ The same statistics over the whole smell stream are given as a reference.
 - Also reported, unpaired: each variant evaluated on its own labels.
 
 **Priority if time runs short:** Step 1 → Step 2 → A, B, C, E → D, F, H → G, I, J. Unfinished sections are listed in results.md.
+
+## 5. Prompt 3: close-out analyses (added before any of them was run)
+
+All earlier rules apply. Tags: **R5 Step 3 = robustness**, **human ceiling = primary**, **spec curves = robustness summary (figure)**, **CM C3 reweighting = exploratory**.
+
+### 5.1 LPL Step 3 without the pc = 3 block (robustness R5)
+- Data: primary-set LPL entities minus the 137 pc = 3 entities with an empty `smells` field, removed from both training and test. Unanimous entities are used for the models.
+- Protocol: identical to §4.4. `project_splits` is applied to the R5 entity table; it has the same 10 projects, so the project-to-fold assignment is identical to the primary run. The grids, nested tuning, seeds and metrics are also identical.
+- Re-run on R5:
+  - A baselines.
+  - B, all five models, with Friedman/Nemenyi. The R5 best model and R5 best tree model follow the §4.4 rule.
+  - C1 (i) primary only and (v) all features; all four C3 training sources. Both use the R5 best model and LR, with hyperparameters reused from R5 B (§4.5 C rule).
+  - RQ3 GEE (full OR table for every feature, VIF rule) on R5 entities with ≥ 2 usable annotations, plus the depth-3 tree on R5 unanimous entities.
+  - D: LOPO per-project distribution for the R5 best model (nested).
+  - F: SHAP (refit rule as §4.5 F) for the R5 best tree model.
+  - H: learning curve for the R5 best model.
+  - E: near-duplicate group and label-conflict counts.
+- Presentation: every LPL Step 3 table appears with a primary column and an R5 column side by side.
+- Headline block: separate R5 rows for headline 14 (LPL best-model MCC) and headline 15 (Δ MCC of DACOSX-only versus DACOS training, for the R5 best model).
+
+### 5.2 Human ceiling (primary)
+- **Population:** primary-set entities with exactly 2 usable annotations, unanimous and split, for CM, LPL and LPL-R5.
+- **Human vs human.** In each of 2,000 designations (seed 20261021), one of the entity's two annotations is randomly the "prediction" and the other the "target". MCC, macro-F1 and accuracy are computed over entities.
+  - Reported: the mean over designations.
+  - CI: bootstrap over entities (B = 2000). Each bootstrap sample re-draws 2,000 designations and takes their mean.
+- **Model vs single human.**
+  - Predictions come from the best model (R5 best model for LPL-R5), using section-B fold hyperparameters on the 25 splits, trained on unanimous training entities only.
+  - Every held-out entity in the population is predicted, ties included.
+  - The target in designation d is the same randomly chosen annotation used as the human target, so the comparison is paired. The model repeat used is d mod 5.
+- **Gap and ratio.**
+  - Gap: human − model per metric, with a paired bootstrap CI (same entity resamples and designations).
+  - Ratio: model MCC / human MCC, with a bootstrap CI.
+- **Second ceiling: near-duplicates.**
+  - Pairs of different entities in the same project with the same near-duplicate key (§4.5 E), primary set.
+  - Each designation takes one random annotation from each entity of a pair, with a random prediction/target role.
+  - Human-vs-human MCC is the mean over 2,000 designations. The CI is a bootstrap over near-duplicate groups (clusters).
+
+### 5.3 Figures and small additions
+- **Specification curves.** For RQ1 alpha, RQ2 AUC, the RQ4 MCC difference (LR, RF) and the B best-model MCC (LPL primary vs R5; CM primary only), per smell:
+  - estimate and 95% CI under every applicable condition (primary, R1–R7c), sorted by estimate;
+  - reference lines at alpha 0.667, AUC 0.5, MCC difference 0 and MCC 0;
+  - saved as `figures/spec_curve_<headline>.pdf/png`. These are drawn only from existing numbers, so there is no new test.
+- **Dataset audit sentence.** For MA, alpha is reported with the answer read from `isma` (primary and unfiltered R6) and from `is_smell` (R3).
+- **EXPLORATORY: CM C3 "DACOSX + DACOS" with equal source weight.**
+  - Class weights are balanced within each source. Then each source's weights are rescaled so that both sources sum to the same total.
+  - Model: CM best model (LR), with B fold hyperparameters, on the 25 splits.
+  - Question: whether the MCC = 0 collapse remains. It is answered from the MCC and the predicted-positive share.
