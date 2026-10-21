@@ -247,12 +247,14 @@ def boot_indices(n, b=B):
     return [r_.integers(0, n, n) for _ in range(b)]
 
 
-def boot_repeat_mean(res, b=B, idxs=None):
+def boot_repeat_mean(res, b=B, idxs=None, keys=None):
     y, S, P = res["y"], res["S"], res["P"]
     idxs = idxs if idxs is not None else boot_indices(len(y), b)
-    out = {k: np.empty(len(idxs)) for k in METRICS}
+    keys = list(METRICS) if keys is None else list(keys)
+    out = {k: np.empty(len(idxs)) for k in keys}
     for j, i in enumerate(idxs):
-        for k, f in METRICS.items():
+        for k in keys:
+            f = METRICS[k]
             out[k][j] = np.mean([f(y[i], S[r][i], P[r][i]) for r in range(N_REPEATS)])
     return out
 
@@ -261,7 +263,7 @@ def paired_delta(res_a, res_b, metrics=("macro_F1", "MCC"), b=B):
     """Repeat-mean metric difference a - b on the same entities, with paired bootstrap CI."""
     assert (res_a["entity"] == res_b["entity"]).all()
     idxs = boot_indices(len(res_a["y"]), b)
-    ba, bb = boot_repeat_mean(res_a, b, idxs), boot_repeat_mean(res_b, b, idxs)
+    ba, bb = boot_repeat_mean(res_a, b, idxs, metrics), boot_repeat_mean(res_b, b, idxs, metrics)
     sa, sb = summarise_point(res_a), summarise_point(res_b)
     out = {}
     for k in metrics:
