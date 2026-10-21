@@ -116,9 +116,10 @@ def main():
     def cell(r):
         if not np.isfinite(r.estimate):
             return f"n/a ({r.get('note', '')})"
-        d = 0 if "cut-off" in r.headline and r.smell != "MA" else 3
+        d = 0 if ("cut-off" in r.headline and r.smell != "MA") or "features with BH" in r.headline else 3
         ci = f" [{fmt(r.lo, d)}, {fmt(r.hi, d)}]" if np.isfinite(r.lo) else ""
-        return f"{fmt(r.estimate, d)}{ci}; n={int(r.n)}"
+        note = f"; {r.note}" if isinstance(r.get("note"), str) and "split" in r.get("note") else ""
+        return f"{fmt(r.estimate, d)}{ci}; n={int(r.n)}{note}"
     R["cell"] = [cell(r) for _, r in R.iterrows()]
     order = list(dict.fromkeys(R.headline))
     W = R.pivot_table(index=["headline", "smell"], columns="check", values="cell", aggfunc="first")

@@ -1,0 +1,13 @@
+smell,model,feature,VIF
+CM,full,cc,1.3789851829826671
+CM,full,loc,2.416121540135936
+CM,full,statements,3.1013439638829268
+CM,full,max_nesting,1.2604045718616583
+CM,full,comment_ratio,1.131780561878775
+CM,full,method_calls,2.3210774127815426
+LPL,full,pc,1.029680104563565
+LPL,full,loc,4.316317108450439
+LPL,full,statements,4.868660756842931
+LPL,full,max_nesting,1.959689530906076
+LPL,full,comment_ratio,1.1466064318591154
+LPL,full,method_calls,3.253351066493335

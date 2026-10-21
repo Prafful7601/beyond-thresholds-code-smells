@@ -170,6 +170,21 @@ def variant_entities(L, variant, smells=None):
     return E
 
 
+def variant_annotations(L, variant):
+    """Annotation rows (answer column per variant) restricted to the variant's included entities."""
+    if variant in ("primary", "R1", "R2", "R5", "R7c"):
+        A = L[~L.inconsistent]
+    elif variant == "R3":
+        A = L.assign(answer=L.is_smell.astype(int))
+    elif variant == "R4":
+        A = L[~L.inconsistent & ~L.in_run]
+    else:
+        A = L
+    E = variant_entities(L, variant)
+    keep = set(zip(E.smell, E.entity))
+    return A[[(s, e) in keep for s, e in zip(A.smell, A.entity)]], E
+
+
 def variant_applies(variant, smell, quantity):
     """quantity in {'alpha', 'auc', 'youden', 'rq4', 'rq3', 'rq5'}"""
     if quantity in ("rq4", "rq3") and smell == "MA":

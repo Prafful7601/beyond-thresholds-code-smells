@@ -1,0 +1,40 @@
+=== CM (Complex Method): depth-3 DecisionTreeClassifier(class_weight='balanced', random_state=20261021) on 1695 unanimous entities (1129 smelly / 566 benign), unstandardised features.
+Leaf weights are class-weighted sample counts [benign, smelly].
+|--- method_calls <= 20.500
+|   |--- statements <= 17.500
+|   |   |--- max_nesting <= 3.500
+|   |   |   |--- weights: [377.332, 276.995] class: 0
+|   |   |--- max_nesting >  3.500
+|   |   |   |--- weights: [62.889, 64.557] class: 1
+|   |--- statements >  17.500
+|   |   |--- comment_ratio <= 0.172
+|   |   |   |--- weights: [190.163, 171.151] class: 0
+|   |   |--- comment_ratio >  0.172
+|   |   |   |--- weights: [26.952, 40.536] class: 1
+|--- method_calls >  20.500
+|   |--- loc <= 27.500
+|   |   |--- statements <= 16.500
+|   |   |   |--- weights: [10.481, 21.769] class: 1
+|   |   |--- statements >  16.500
+|   |   |   |--- weights: [49.413, 36.032] class: 0
+|   |--- loc >  27.500
+|   |   |--- cc <= 10.500
+|   |   |   |--- weights: [128.772, 221.446] class: 1
+|   |   |--- cc >  10.500
+|   |   |   |--- weights: [1.497, 15.013] class: 1
+
+=== LPL (Long Parameter List): depth-3 DecisionTreeClassifier(class_weight='balanced', random_state=20261021) on 1325 unanimous entities (867 smelly / 458 benign), unstandardised features.
+Leaf weights are class-weighted sample counts [benign, smelly].
+|--- pc <= 3.500
+|   |--- weights: [0.000, 103.922] class: 1
+|--- pc >  3.500
+|   |--- max_nesting <= 1.500
+|   |   |--- statements <= 12.500
+|   |   |   |--- weights: [367.413, 453.893] class: 1
+|   |   |--- statements >  12.500
+|   |   |   |--- weights: [56.414, 40.499] class: 0
+|   |--- max_nesting >  1.500
+|   |   |--- loc <= 63.000
+|   |   |   |--- weights: [234.334, 51.197] class: 0
+|   |   |--- loc >  63.000
+|   |   |   |--- weights: [4.340, 12.990] class: 1
