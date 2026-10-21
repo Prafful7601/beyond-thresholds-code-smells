@@ -69,6 +69,20 @@ def find_runs(values, min_len=RUN_MIN):
     return mask
 
 
+def run_ids(values, min_len=RUN_MIN):
+    """Run index (0, 1, ...) for elements in a maximal run of >= min_len identical values, else -1."""
+    v = np.asarray(values)
+    out = np.full(len(v), -1)
+    s, k = 0, 0
+    for i in range(1, len(v) + 1):
+        if i == len(v) or v[i] != v[s]:
+            if i - s >= min_len:
+                out[s:i] = k
+                k += 1
+            s = i
+    return out
+
+
 def annotation_long():
     """One row per (annotation, smell) for every smell the snippet was offered for (plan §1.2, §3)."""
     ann, smp, mm, cm, _ = load_tables()
@@ -89,11 +103,13 @@ def annotation_long():
     # D5/R4 runs on the unfiltered checkbox stream, ordered by annotation id, within smell
     L = L.sort_values(["smell", "id"]).reset_index(drop=True)
     L["in_run"] = False
+    L["run_id"] = ""
     for smell in SMELLS:
         m = L.smell == smell
         L.loc[m, "in_run"] = find_runs(L.loc[m, "answer"].values)
+        L.loc[m, "run_id"] = [f"{smell}-{k}" if k >= 0 else "" for k in run_ids(L.loc[m, "answer"].values)]
     keep = ["id", "sample_id", "smell", "entity", "designite_id", "is_class", "project_name", "path_to_file",
-            "answer", "is_smell", "inconsistent", "in_run", "pc3_empty", "smells"]
+            "answer", "is_smell", "inconsistent", "in_run", "run_id", "pc3_empty", "smells"]
     return L[keep].rename(columns={"id": "ann_id"})
 
 
@@ -110,6 +126,65 @@ def entity_labels(L, answer_col="answer", min_ann=2, ties_as=None):
     if ties_as == "smelly":
         g.loc[g.label == "tie", "target"] = 1
     return g
+
+
+VARIANTS = ["primary", "R1", "R2", "R3", "R4", "R5", "R6", "R7c"]
+VARIANT_DESC = {
+    "primary": "checkbox answer, consistency-filtered",
+    "R1": "entities with >= 3 usable annotations (MA only)",
+    "R2": "ties counted as smelly",
+    "R3": "is_smell as answer, all annotations",
+    "R4": "annotations inside runs removed",
+    "R5": "LPL pc = 3 entities removed",
+    "R6": "no consistency filter",
+    "R7c": "entities with >= 2 annotations in the same run removed",
+}
+
+
+def variant_entities(L, variant, smells=None):
+    """Entity label table for a plan.md §4.1 variant. Returns None where the variant does not apply."""
+    A = L if smells is None else L[L.smell.isin(smells)]
+    min_ann, ties_as = 2, None
+    if variant in ("primary", "R1", "R2", "R5", "R7c"):
+        A = A[~A.inconsistent]
+    elif variant == "R3":
+        A = A.assign(answer=A.is_smell.astype(int))
+    elif variant == "R4":
+        A = A[~A.inconsistent & ~A.in_run]
+    elif variant == "R6":
+        pass
+    else:
+        raise ValueError(variant)
+    if variant == "R1":
+        min_ann = 3
+    if variant == "R2":
+        ties_as = "smelly"
+    if variant == "R5":
+        A = A[~A.pc3_empty.astype(bool)]
+    E = entity_labels(A, min_ann=min_ann, ties_as=ties_as)
+    if variant == "R7c":
+        co = A[A.run_id != ""].groupby(["smell", "entity", "run_id"]).size()
+        co = co[co >= 2].reset_index()[["smell", "entity"]].drop_duplicates()
+        key = set(zip(co.smell, co.entity))
+        E = E[[(s, e) not in key for s, e in zip(E.smell, E.entity)]]
+    return E
+
+
+def variant_applies(variant, smell, quantity):
+    """quantity in {'alpha', 'auc', 'youden', 'rq4', 'rq3', 'rq5'}"""
+    if quantity in ("rq4", "rq3") and smell == "MA":
+        return False  # D8: MA is descriptive only, never modelled
+    if variant == "R1":
+        return smell == "MA" and quantity in ("alpha", "auc", "youden")
+    if variant == "R2":
+        return quantity in ("auc", "youden", "rq4")
+    if variant == "R5":
+        return smell == "LPL"
+    if variant == "R7c":
+        return quantity == "alpha"
+    if quantity in ("rq4", "rq3", "rq5") and smell == "MA":
+        return False
+    return True
 
 
 def primary_filter(L):
