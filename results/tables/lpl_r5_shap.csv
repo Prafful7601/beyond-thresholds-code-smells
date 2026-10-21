@@ -1,0 +1,8 @@
+feature,primary mean |SHAP| (GB),primary rank,R5 mean |SHAP| (RF),R5 rank
+pc,0.6944,1,0.0107,6
+loc,0.1806,4,0.0254,3
+statements,0.1765,5,0.0395,2
+max_nesting,0.3488,2,0.0536,1
+method_calls,0.0965,7,0.0072,7
+comment_ratio,0.1738,6,0.0206,5
+mean_identifier_length,0.3408,3,0.0241,4

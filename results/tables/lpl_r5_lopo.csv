@@ -1,0 +1,10 @@
+statistic,primary,R5
+pooled_macro_F1,0.634,0.620
+pooled_MCC,0.268,0.282
+MCC_median,0.165,0.123
+MCC_q1,0.119,0.003
+MCC_q3,0.330,0.370
+MCC_worst,shuzheng_zheng (0.016),linlinjava_litemall (-0.081)
+macro_F1_median,0.562,0.493
+projects_in_distribution,9,8
+projects_flagged,macrozheng_mall [< 20 entities],Blankj_AndroidUtilCode [single class]; macrozheng_mall [< 20 entities]

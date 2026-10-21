@@ -1,0 +1,11 @@
+statistic,primary,R5
+Friedman χ²,12.882,20.453
+Friedman p,0.0119,4.06e-04
+Nemenyi CD,1.220,1.220
+mean rank LR,3.92,3.40
+mean rank RF,2.50,3.00
+mean rank XGB,3.14,3.68
+mean rank GB,2.80,3.10
+mean rank SVM,2.64,1.82
+best model (MCC rule),GB,SVM
+best tree model,GB,RF

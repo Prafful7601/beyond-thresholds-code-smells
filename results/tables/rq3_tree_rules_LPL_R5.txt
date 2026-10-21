@@ -1,0 +1,23 @@
+=== LPL R5: depth-3 DecisionTreeClassifier(class_weight='balanced', random_state=20261021) on 1189 unanimous entities (731 smelly / 458 benign).
+|--- max_nesting <= 1.500
+|   |--- statements <= 12.500
+|   |   |--- pc <= 4.500
+|   |   |   |--- weights: [273.885, 372.477] class: 1
+|   |   |--- pc >  4.500
+|   |   |   |--- weights: [55.816, 110.605] class: 1
+|   |--- statements >  12.500
+|   |   |--- method_calls <= 15.500
+|   |   |   |--- weights: [29.855, 13.826] class: 0
+|   |   |--- method_calls >  15.500
+|   |   |   |--- weights: [20.769, 29.278] class: 1
+|--- max_nesting >  1.500
+|   |--- loc <= 58.500
+|   |   |--- loc <= 20.500
+|   |   |   |--- weights: [75.286, 32.531] class: 0
+|   |   |--- loc >  20.500
+|   |   |   |--- weights: [132.400, 19.518] class: 0
+|   |--- loc >  58.500
+|   |   |--- method_calls <= 32.500
+|   |   |   |--- weights: [0.000, 6.506] class: 1
+|   |   |--- method_calls >  32.500
+|   |   |   |--- weights: [6.490, 9.759] class: 1

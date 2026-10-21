@@ -65,6 +65,8 @@ def main():
         ex = shap.TreeExplainer(model)
         sv = ex.shap_values(D[feats].values)
         sv = sv[1] if isinstance(sv, list) else sv
+    if sv.ndim == 3:  # shap >= 0.45 returns (n, features, classes) for sklearn forests
+        sv = sv[:, :, 1]
         mean_abs = np.abs(sv).mean(axis=0)
         # permutation importance on repeat-0 held-out folds (fold parameters from section B)
         r0 = [(r, k, tp) for r, k, tp in splits if r == 0]

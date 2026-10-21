@@ -1,0 +1,19 @@
+model,variant,primary,R5
+GB,(i) primary only,"MCC 0.206; Δ MCC -0.027 [-0.082, 0.029]",n/a (not the best model of this run)
+GB,(v) all features,reference,n/a (not the best model of this run)
+GB,DACOS only (= v),reference,n/a (not the best model of this run)
+GB,DACOSX only,"MCC -0.013; Δ MCC -0.245 [-0.325, -0.169]",n/a (not the best model of this run)
+GB,DACOSX + DACOS,"MCC -0.021; Δ MCC -0.253 [-0.300, -0.197]",n/a (not the best model of this run)
+GB,"DACOSX only, primary metric removed","MCC -0.163; Δ MCC -0.396 [-0.479, -0.314]",n/a (not the best model of this run)
+LR,(i) primary only,"MCC -0.055; Δ MCC -0.196 [-0.251, -0.142]","MCC -0.024; Δ MCC -0.243 [-0.316, -0.173]"
+LR,(v) all features,reference,reference
+LR,DACOS only (= v),reference,reference
+LR,DACOSX only,"MCC -0.056; Δ MCC -0.196 [-0.290, -0.104]","MCC 0.002; Δ MCC -0.217 [-0.299, -0.135]"
+LR,DACOSX + DACOS,"MCC -0.088; Δ MCC -0.229 [-0.282, -0.175]","MCC 0.000; Δ MCC -0.219 [-0.272, -0.167]"
+LR,"DACOSX only, primary metric removed","MCC -0.195; Δ MCC -0.336 [-0.430, -0.248]","MCC -0.182; Δ MCC -0.401 [-0.493, -0.309]"
+SVM,(i) primary only,n/a (not the best model of this run),"MCC -0.009; Δ MCC -0.278 [-0.339, -0.214]"
+SVM,(v) all features,n/a (not the best model of this run),reference
+SVM,DACOS only (= v),n/a (not the best model of this run),reference
+SVM,DACOSX only,n/a (not the best model of this run),"MCC 0.046; Δ MCC -0.223 [-0.296, -0.150]"
+SVM,DACOSX + DACOS,n/a (not the best model of this run),"MCC 0.004; Δ MCC -0.265 [-0.318, -0.208]"
+SVM,"DACOSX only, primary metric removed",n/a (not the best model of this run),"MCC -0.106; Δ MCC -0.375 [-0.452, -0.293]"
