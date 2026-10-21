@@ -1,0 +1,83 @@
+CM LR 8s 0.095
+CM RF 31s 0.029
+CM XGB 36s 0.035
+CM GB 51s 0.044
+CM SVM 56s 0.067
+LPL LR 62s 0.141
+LPL RF 82s 0.23
+LPL XGB 87s 0.216
+LPL GB 98s 0.232
+LPL SVM 102s 0.229
+**Analysis type: primary.** These baselines are reported alongside every model in sections B–J.
+- Splits: the same 25 project-grouped splits as section B (5 repeats × 5 folds; projects shuffled with seed 20261021 + r and assigned round-robin).
+- Majority class: the training fold's majority label is predicted for everyone. With a constant score, ROC-AUC = 0.5, PR-AUC = prevalence and MCC = 0.
+- DesigniteJava rule: smelly if metric ≥ default (cc ≥ 8, pc ≥ 5). The score is the metric itself.
+- Youden rule: smelly if metric ≥ c, with c chosen on the training fold only. The per-fold cut-offs are in `tables/baselines.csv`.
+- Metrics: mean ± SD over the 5 repeats of pooled out-of-fold metrics. The CI is a bootstrap over entities (B = 2000) of the repeat-mean.
+
+| smell | baseline | n | macro-F1 mean ± SD [95% CI] | MCC mean ± SD [95% CI] | ROC-AUC mean ± SD [95% CI] | PR-AUC mean ± SD [95% CI] |
+|---|---|---|---|---|---|---|
+| CM | majority class | 1695 | 0.400 ± 0.000 [0.392, 0.408] | 0.000 ± 0.000 [0.000, 0.000] | 0.500 ± 0.000 [0.500, 0.500] | 0.666 ± 0.000 [0.644, 0.689] |
+| CM | DesigniteJava default rule | 1695 | 0.434 ± 0.000 [0.410, 0.456] | 0.044 ± 0.000 [-0.003, 0.090] | 0.541 ± 0.000 [0.513, 0.568] | 0.696 ± 0.000 [0.670, 0.725] |
+| CM | Youden rule (fitted in training fold) | 1695 | 0.506 ± 0.018 [0.484, 0.527] | 0.032 ± 0.031 [-0.012, 0.074] | 0.541 ± 0.000 [0.513, 0.568] | 0.696 ± 0.000 [0.670, 0.725] |
+| LPL | majority class | 1325 | 0.396 ± 0.000 [0.386, 0.405] | 0.000 ± 0.000 [0.000, 0.000] | 0.500 ± 0.000 [0.500, 0.500] | 0.654 ± 0.000 [0.629, 0.680] |
+| LPL | DesigniteJava default rule | 1325 | 0.393 ± 0.000 [0.367, 0.420] | -0.013 ± 0.000 [-0.070, 0.044] | 0.434 ± 0.000 [0.409, 0.459] | 0.628 ± 0.000 [0.599, 0.658] |
+| LPL | Youden rule (fitted in training fold) | 1325 | 0.285 ± 0.029 [0.268, 0.301] | -0.053 ± 0.022 [-0.098, -0.008] | 0.434 ± 0.000 [0.409, 0.459] | 0.628 ± 0.000 [0.599, 0.658] |
+
+Table: `tables/baselines.csv`.
+
+**Analysis type: primary.**
+
+**Algorithms and rationale**
+- **LR**: linear, interpretable baseline; the same family as Tier 1 RQ4.
+- **RF**: bagged trees; captures thresholds and interactions with little tuning; Tier 1 comparison model.
+- **XGB**: regularised gradient boosting; a strong default for small tabular data.
+- **GB**: scikit-learn gradient boosting; a boosting check that does not depend on the XGBoost implementation.
+- **SVM**: RBF-kernel margin classifier; smooth non-linear boundaries, unlike tree splits.
+
+**Protocol** (plan.md §4.4)
+- Unanimous entities of the primary set with complete features (CM 1695, LPL 1325).
+- Full feature set: cc|pc, loc, statements, max_nesting, method_calls, comment_ratio, mean_identifier_length.
+- Outer CV: 5 × 5 grouped CV by project.
+- Inner tuning: `GridSearchCV(GroupKFold(3) by project, scoring = MCC)` on the training fold only.
+- Class imbalance: inverse-frequency class weights only (`class_weight='balanced'`; XGB `scale_pos_weight`; GB balanced sample weights).
+  - No SMOTE or other synthetic oversampling: it would fabricate borderline neighbours, which is exactly the region this study examines.
+- Fixed grids:
+  - LR: `{'clf__C': [0.01, 0.1, 1, 10]}`
+  - RF: `{'max_depth': [None, 5, 10], 'min_samples_leaf': [1, 5, 20]}`
+  - XGB: `{'n_estimators': [100, 300], 'max_depth': [2, 4, 6], 'learning_rate': [0.05, 0.1]}`
+  - GB: `{'n_estimators': [100, 300], 'max_depth': [2, 3], 'learning_rate': [0.05, 0.1]}`
+  - SVM: `{'clf__C': [0.1, 1, 10], 'clf__gamma': ['scale', 0.01, 0.1]}`
+- RF uses 300 trees and XGB `n_jobs=1`. Every model uses `random_state = 20261021 + repeat`.
+- Best model = highest mean MCC.
+
+**Results**
+
+| smell | model | n | macro-F1 mean ± SD [95% CI] | MCC mean ± SD [95% CI] | ROC-AUC mean ± SD [95% CI] | PR-AUC mean ± SD [95% CI] | best |
+|---|---|---|---|---|---|---|---|
+| CM | LR | 1695 | 0.525 ± 0.010 [0.502, 0.545] | 0.095 ± 0.006 [0.052, 0.136] | 0.557 ± 0.008 [0.529, 0.583] | 0.709 ± 0.008 [0.679, 0.741] | best (MCC) |
+| CM | RF | 1695 | 0.510 ± 0.004 [0.490, 0.529] | 0.029 ± 0.004 [-0.013, 0.068] | 0.523 ± 0.002 [0.497, 0.547] | 0.682 ± 0.004 [0.655, 0.711] |  |
+| CM | XGB | 1695 | 0.504 ± 0.009 [0.482, 0.522] | 0.035 ± 0.022 [-0.006, 0.073] | 0.524 ± 0.010 [0.498, 0.547] | 0.691 ± 0.010 [0.662, 0.720] |  |
+| CM | GB | 1695 | 0.505 ± 0.008 [0.484, 0.523] | 0.044 ± 0.021 [0.003, 0.081] | 0.527 ± 0.009 [0.502, 0.552] | 0.696 ± 0.008 [0.668, 0.725] | best tree |
+| CM | SVM | 1695 | 0.494 ± 0.020 [0.471, 0.514] | 0.067 ± 0.016 [0.024, 0.107] | 0.542 ± 0.008 [0.515, 0.569] | 0.699 ± 0.009 [0.670, 0.729] |  |
+| LPL | LR | 1325 | 0.569 ± 0.011 [0.542, 0.596] | 0.141 ± 0.021 [0.088, 0.194] | 0.590 ± 0.009 [0.557, 0.622] | 0.710 ± 0.004 [0.675, 0.746] |  |
+| LPL | RF | 1325 | 0.614 ± 0.013 [0.590, 0.638] | 0.230 ± 0.026 [0.182, 0.277] | 0.649 ± 0.014 [0.619, 0.679] | 0.763 ± 0.021 [0.734, 0.794] |  |
+| LPL | XGB | 1325 | 0.607 ± 0.010 [0.583, 0.630] | 0.216 ± 0.018 [0.169, 0.263] | 0.675 ± 0.006 [0.645, 0.704] | 0.796 ± 0.005 [0.770, 0.822] |  |
+| LPL | GB | 1325 | 0.616 ± 0.007 [0.591, 0.638] | 0.232 ± 0.014 [0.184, 0.278] | 0.675 ± 0.008 [0.646, 0.704] | 0.796 ± 0.005 [0.770, 0.822] | best (MCC) |
+| LPL | SVM | 1325 | 0.612 ± 0.002 [0.588, 0.637] | 0.229 ± 0.008 [0.182, 0.278] | 0.631 ± 0.006 [0.600, 0.662] | 0.727 ± 0.010 [0.693, 0.761] |  |
+
+**Friedman test over 25 folds (fold-level MCC) and Nemenyi average ranks** (rank 1 = best). The Nemenyi CD uses q₀.₀₅ = 2.728 (k = 5).
+
+| smell | blocks | k | friedman_chi2 | p | nemenyi_CD | avg_rank_LR | avg_rank_RF | avg_rank_XGB | avg_rank_GB | avg_rank_SVM |
+|---|---|---|---|---|---|---|---|---|---|---|
+| CM | 25 | 5 | 21.088 | 3.04e-04 | 1.22 | 1.96 | 3.56 | 3.76 | 3.08 | 2.64 |
+| LPL | 25 | 5 | 12.882 | 0.0119 | 1.22 | 3.92 | 2.5 | 3.14 | 2.8 | 2.64 |
+
+Pairs whose average ranks differ by more than the CD: CM: LR vs RF (|Δrank| 1.60 > CD 1.22); CM: LR vs XGB (|Δrank| 1.80 > CD 1.22); LPL: LR vs RF (|Δrank| 1.42 > CD 1.22); LPL: LR vs SVM (|Δrank| 1.28 > CD 1.22).
+- All pairwise rank differences are in `tables/model_nemenyi_pairs.csv`.
+- Caveat: the 25 folds come from 5 repeats of the same data, so they are not independent blocks. The test is therefore anti-conservative.
+
+Tables: `tables/model_comparison.csv`, `tables/model_friedman.csv`, `tables/model_nemenyi_pairs.csv`, `tables/model_fold_mcc.csv`. Figure: `figures/model_cd_diagram.pdf` (.png). Runtime 104s.
+
+**Summary.** CM: best model LR (MCC 0.095), Friedman p = 3.04e-04; LPL: best model GB (MCC 0.232), Friedman p = 0.0119.
+

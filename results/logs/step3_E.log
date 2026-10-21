@@ -1,0 +1,68 @@
+CM 10s
+LPL 28s
+**Analysis type: validity check** (not a primary or robustness result).
+
+**Method.**
+- Duplicate keys are computed from each snippet's text in `files.zip`:
+  - exact: comments removed, whitespace collapsed;
+  - near: additionally, every non-keyword identifier becomes `ID` and every literal becomes `LIT`.
+- Data: primary unanimous entities. Splits: the 25 section-B splits.
+- Deduplication keeps the entity with the lowest DesigniteJava id in each near-duplicate group. The B headline (best model and LR, full nested protocol) is then rerun.
+  - Δ compares the deduplicated run with the original out-of-fold predictions on the same retained entities, using a paired bootstrap.
+- Train-serve skew: two-sample KS, DACOS unanimous entities versus the D4-cleaned DACOSX pool.
+
+**Checks**
+
+| check | smell | value | detail |
+|---|---|---|---|
+| exact duplicate groups (size ≥ 2) | CM | 22 | 46 entities; 0 groups span >1 project; 8 groups have conflicting labels |
+| near duplicate groups (size ≥ 2) | CM | 56 | 126 entities; 0 groups span >1 project; 27 groups have conflicting labels |
+| exact duplicate groups (size ≥ 2) | LPL | 71 | 169 entities; 0 groups span >1 project; 22 groups have conflicting labels |
+| near duplicate groups (size ≥ 2) | LPL | 160 | 462 entities; 6 groups span >1 project; 62 groups have conflicting labels |
+| test entities with a exact duplicate in the training fold (sum over 25 splits) | CM | 0 | of 8475 test-entity slots; max 0 in one split |
+| test entities with a near duplicate in the training fold (sum over 25 splits) | CM | 0 | of 8475 test-entity slots; max 0 in one split |
+| test entities with a exact duplicate in the training fold (sum over 25 splits) | LPL | 0 | of 6625 test-entity slots; max 0 in one split |
+| test entities with a near duplicate in the training fold (sum over 25 splits) | LPL | 69 | of 6625 test-entity slots; max 8 in one split |
+| entity_overlap (sum over 25 splits) | CM | 0 | must be 0 |
+| file_overlap (sum over 25 splits) | CM | 0 | must be 0 |
+| project_overlap (sum over 25 splits) | CM | 0 | must be 0 |
+| dacosx_train_projects_in_test (C3) (sum over 25 splits) | CM | 0 | must be 0 |
+| entity_overlap (sum over 25 splits) | LPL | 0 | must be 0 |
+| file_overlap (sum over 25 splits) | LPL | 0 | must be 0 |
+| project_overlap (sum over 25 splits) | LPL | 0 | must be 0 |
+| dacosx_train_projects_in_test (C3) (sum over 25 splits) | LPL | 0 | must be 0 |
+
+All entity, file and project overlap checks are 0 in every split.
+
+**B headline after near-duplicate removal**
+
+| smell | model | n original → deduplicated | macro-F1 original | macro-F1 dedup [95% CI] | MCC original | MCC dedup [95% CI] | Δ macro-F1 on retained [95% CI] | Δ MCC on retained [95% CI] |
+|---|---|---|---|---|---|---|---|---|
+| CM | LR | 1695 → 1625 | 0.525 | 0.516 [0.494, 0.539] | 0.095 | 0.081 [0.036, 0.126] | -0.006 [-0.010, -0.002] | -0.009 [-0.016, -0.002] |
+| LPL | GB | 1325 → 1023 | 0.616 | 0.633 [0.606, 0.660] | 0.232 | 0.267 [0.212, 0.320] | 0.008 [-0.005, 0.022] | 0.014 [-0.013, 0.040] |
+| LPL | LR | 1325 → 1023 | 0.569 | 0.588 [0.558, 0.616] | 0.141 | 0.179 [0.121, 0.236] | 0.017 [0.006, 0.027] | 0.025 [0.005, 0.046] |
+
+**Train-serve skew (DACOS versus DACOSX)**
+
+| smell | feature | DACOS_n | DACOSX_n | DACOS_median | DACOSX_median | KS_D | KS_p | computed_identically |
+|---|---|---|---|---|---|---|---|---|
+| CM | cc | 1695 | 83549 | 6.0 | 1.0 | 0.995 | 0.00e+00 | yes: stored DesigniteJava value from the same tables |
+| CM | loc | 1695 | 83549 | 24.0 | 4.0 | 0.811 | 0.00e+00 | yes: stored DesigniteJava value from the same tables |
+| CM | statements | 1695 | 83549 | 18.0 | 2.0 | 0.897 | 0.00e+00 | yes: same lexer (src/features.py) on the same files.zip snippet type |
+| CM | max_nesting | 1695 | 83549 | 3.0 | 0.0 | 0.83 | 0.00e+00 | yes: same lexer (src/features.py) on the same files.zip snippet type |
+| CM | method_calls | 1695 | 83549 | 14.0 | 1.0 | 0.728 | 0.00e+00 | yes: same lexer (src/features.py) on the same files.zip snippet type |
+| CM | comment_ratio | 1695 | 83549 | 0.0 | 0.0 | 0.183 | 3.20e-49 | yes: same lexer (src/features.py) on the same files.zip snippet type |
+| CM | mean_identifier_length | 1695 | 83549 | 8.05 | 9.182 | 0.223 | 2.43e-73 | yes: same lexer (src/features.py) on the same files.zip snippet type |
+| LPL | pc | 1325 | 83110 | 4.0 | 1.0 | 0.998 | 0.00e+00 | yes: stored DesigniteJava value from the same tables |
+| LPL | loc | 1325 | 83110 | 5.0 | 4.0 | 0.306 | 9.71e-109 | yes: stored DesigniteJava value from the same tables |
+| LPL | statements | 1325 | 83110 | 5.0 | 2.0 | 0.386 | 4.48e-175 | yes: same lexer (src/features.py) on the same files.zip snippet type |
+| LPL | max_nesting | 1325 | 83110 | 0.0 | 0.0 | 0.207 | 1.17e-49 | yes: same lexer (src/features.py) on the same files.zip snippet type |
+| LPL | method_calls | 1325 | 83110 | 3.0 | 1.0 | 0.279 | 4.90e-90 | yes: same lexer (src/features.py) on the same files.zip snippet type |
+| LPL | comment_ratio | 1325 | 83110 | 0.0 | 0.0 | 0.16 | 1.87e-29 | yes: same lexer (src/features.py) on the same files.zip snippet type |
+| LPL | mean_identifier_length | 1325 | 83110 | 7.879 | 9.184 | 0.256 | 1.22e-75 | yes: same lexer (src/features.py) on the same files.zip snippet type |
+
+- Every feature is computed by the same code path for both sources. Stored DesigniteJava metrics come from the same `method_metrics` / `class_metrics` tables; computed features come from the same lexer on the same kind of snippet file.
+- Large KS statistics are expected for the primary metric and size-related features, because DACOSX is selected outside the borderline band by construction.
+
+Tables: `tables/leakage_checks.csv`, `tables/leakage_duplicates_per_split.csv`, `tables/leakage_dedup_rerun.csv`, `tables/train_serve_skew.csv`. Runtime 29s.
+

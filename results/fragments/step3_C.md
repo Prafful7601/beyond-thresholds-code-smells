@@ -1,0 +1,88 @@
+**Analysis type: primary.** Models: the best model from B and LR (CM: LR; LPL: GB).
+Because LR is CM's best model, CM's ablation has a single model.
+
+**Method.**
+- The protocol and 25 splits are those of section B.
+- Each variant **reuses the hyperparameters selected for the full model** in that outer fold; nothing is re-tuned (plan.md §4.5 C).
+- Test set: always the held-out unanimous DACOS entities of the fold.
+- Δ is the variant minus (v) all features, as a repeat-mean over 5 repeats. The 95% CI is a paired bootstrap over test entities (B = 2000).
+- C1 feature groups:
+  - primary = {cc | pc}
+  - size = {loc, statements}
+  - structure = {max_nesting, method_calls}
+  - readability = {comment_ratio, mean_identifier_length}. Mean identifier length was computed with the existing lexer, so it is included.
+- C2 training labels (test labels unchanged):
+  - "ties counted as smelly" trains on unanimous entities plus ties labelled smelly. The rare non-unanimous majority entities keep their majority label.
+  - "soft labels" enter each entity twice, once per class, with sample weights y/n and 1 − y/n multiplied by the class weights.
+- C3 training source. DACOSX is the D4-cleaned set, with entries from the fold's held-out projects excluded so that no project is in both train and test (this restriction is a clarification of the plan). Class weights are recomputed on each training set.
+- C4: class weighting switched off (no `class_weight`, `scale_pos_weight` = 1, no GB sample weights).
+
+**Complex Method** (table `tables/ablation_CM.csv`, figure `figures/ablation_CM.pdf`)
+
+DACOSX training pool (D4-cleaned, features complete): {'consistent_entries': 83609, 'overlap_removed': 50, 'missing_features': 10, 'missing_step3_features': 0}
+
+| model | block | variant | macro-F1 mean ± SD [95% CI] | MCC mean ± SD [95% CI] | Δ macro-F1 [95% CI] | Δ MCC [95% CI] |
+|---|---|---|---|---|---|---|
+| LR | C1 feature groups | (i) primary only | 0.495 ± 0.000 [0.472, 0.518] | 0.052 ± 0.000 [0.005, 0.097] | -0.029 [-0.052, -0.006] | -0.044 [-0.090, 0.005] |
+| LR | C1 feature groups | (ii) size only | 0.519 ± 0.002 [0.495, 0.541] | 0.102 ± 0.004 [0.055, 0.147] | -0.006 [-0.024, 0.012] | 0.006 [-0.031, 0.043] |
+| LR | C1 feature groups | (iii) structure only | 0.509 ± 0.008 [0.485, 0.529] | 0.079 ± 0.010 [0.033, 0.123] | -0.016 [-0.033, 0.002] | -0.017 [-0.053, 0.018] |
+| LR | C1 feature groups | (iv) readability only | 0.470 ± 0.019 [0.450, 0.489] | -0.023 ± 0.027 [-0.063, 0.015] | -0.055 [-0.080, -0.027] | -0.119 [-0.171, -0.062] |
+| LR | C1 feature groups | (v) all features | 0.525 ± 0.010 [0.502, 0.545] | 0.095 ± 0.006 [0.052, 0.136] | reference | reference |
+| LR | C1 feature groups | (vi) all − primary | 0.527 ± 0.013 [0.504, 0.548] | 0.098 ± 0.012 [0.052, 0.140] | 0.002 [-0.006, 0.010] | 0.002 [-0.014, 0.018] |
+| LR | C1 feature groups | (vi) all − size | 0.527 ± 0.011 [0.504, 0.547] | 0.096 ± 0.006 [0.052, 0.138] | 0.002 [-0.007, 0.011] | 0.001 [-0.019, 0.020] |
+| LR | C1 feature groups | (vi) all − structure | 0.518 ± 0.012 [0.494, 0.539] | 0.079 ± 0.020 [0.034, 0.122] | -0.007 [-0.021, 0.008] | -0.016 [-0.046, 0.015] |
+| LR | C1 feature groups | (vi) all − readability | 0.512 ± 0.004 [0.489, 0.533] | 0.086 ± 0.010 [0.040, 0.127] | -0.012 [-0.027, 0.002] | -0.010 [-0.039, 0.019] |
+| LR | C2 label aggregation | unanimous only (= v) | 0.525 ± 0.010 [0.502, 0.545] | 0.095 ± 0.006 [0.052, 0.136] | reference | reference |
+| LR | C2 label aggregation | ties counted as smelly | 0.525 ± 0.006 [0.501, 0.545] | 0.086 ± 0.007 [0.040, 0.127] | 0.000 [-0.007, 0.007] | -0.009 [-0.023, 0.004] |
+| LR | C2 label aggregation | soft labels (y/n) as sample weights | 0.538 ± 0.011 [0.516, 0.559] | 0.091 ± 0.016 [0.048, 0.134] | 0.014 [0.003, 0.023] | -0.004 [-0.024, 0.014] |
+| LR | C3 training source | DACOS only (= v) | 0.525 ± 0.010 [0.502, 0.545] | 0.095 ± 0.006 [0.052, 0.136] | reference | reference |
+| LR | C3 training source | DACOSX only | 0.505 ± 0.003 [0.482, 0.528] | 0.054 ± 0.008 [0.009, 0.102] | -0.019 [-0.041, 0.002] | -0.041 [-0.086, 0.003] |
+| LR | C3 training source | DACOSX + DACOS | 0.400 ± 0.000 [0.392, 0.408] | 0.000 ± 0.000 [0.000, 0.000] | -0.125 [-0.148, -0.099] | -0.095 [-0.136, -0.052] |
+| LR | C3 training source | DACOSX only, primary metric removed | 0.514 ± 0.005 [0.492, 0.537] | 0.044 ± 0.009 [-0.001, 0.091] | -0.011 [-0.039, 0.018] | -0.052 [-0.107, 0.003] |
+| LR | C4 class weighting | weights on (= v) | 0.525 ± 0.010 [0.502, 0.545] | 0.095 ± 0.006 [0.052, 0.136] | reference | reference |
+| LR | C4 class weighting | weights off | 0.406 ± 0.006 [0.397, 0.416] | 0.005 ± 0.017 [-0.027, 0.037] | -0.118 [-0.142, -0.092] | -0.090 [-0.142, -0.041] |
+
+**Long Parameter List** (table `tables/ablation_LPL.csv`, figure `figures/ablation_LPL.pdf`)
+
+DACOSX training pool (D4-cleaned, features complete): {'consistent_entries': 83159, 'overlap_removed': 41, 'missing_features': 8, 'missing_step3_features': 0}
+
+| model | block | variant | macro-F1 mean ± SD [95% CI] | MCC mean ± SD [95% CI] | Δ macro-F1 [95% CI] | Δ MCC [95% CI] |
+|---|---|---|---|---|---|---|
+| GB | C1 feature groups | (i) primary only | 0.438 ± 0.012 [0.413, 0.462] | 0.206 ± 0.055 [0.174, 0.235] | -0.178 [-0.209, -0.145] | -0.027 [-0.082, 0.029] |
+| GB | C1 feature groups | (ii) size only | 0.616 ± 0.006 [0.590, 0.642] | 0.247 ± 0.011 [0.197, 0.298] | 0.000 [-0.021, 0.024] | 0.014 [-0.029, 0.061] |
+| GB | C1 feature groups | (iii) structure only | 0.611 ± 0.003 [0.584, 0.639] | 0.249 ± 0.007 [0.198, 0.303] | -0.005 [-0.026, 0.018] | 0.017 [-0.026, 0.060] |
+| GB | C1 feature groups | (iv) readability only | 0.522 ± 0.010 [0.498, 0.545] | 0.068 ± 0.028 [0.022, 0.115] | -0.094 [-0.119, -0.069] | -0.164 [-0.213, -0.115] |
+| GB | C1 feature groups | (v) all features | 0.616 ± 0.007 [0.591, 0.638] | 0.232 ± 0.014 [0.184, 0.278] | reference | reference |
+| GB | C1 feature groups | (vi) all − primary | 0.610 ± 0.007 [0.584, 0.635] | 0.227 ± 0.014 [0.175, 0.276] | -0.006 [-0.019, 0.009] | -0.005 [-0.032, 0.023] |
+| GB | C1 feature groups | (vi) all − size | 0.610 ± 0.010 [0.586, 0.634] | 0.223 ± 0.014 [0.176, 0.272] | -0.005 [-0.019, 0.007] | -0.009 [-0.036, 0.017] |
+| GB | C1 feature groups | (vi) all − structure | 0.612 ± 0.006 [0.587, 0.634] | 0.226 ± 0.012 [0.177, 0.271] | -0.004 [-0.016, 0.008] | -0.007 [-0.032, 0.018] |
+| GB | C1 feature groups | (vi) all − readability | 0.610 ± 0.020 [0.586, 0.633] | 0.224 ± 0.039 [0.176, 0.272] | -0.006 [-0.023, 0.014] | -0.009 [-0.044, 0.030] |
+| GB | C2 label aggregation | unanimous only (= v) | 0.616 ± 0.007 [0.591, 0.638] | 0.232 ± 0.014 [0.184, 0.278] | reference | reference |
+| GB | C2 label aggregation | ties counted as smelly | 0.634 ± 0.008 [0.608, 0.657] | 0.268 ± 0.016 [0.218, 0.316] | 0.018 [0.007, 0.029] | 0.036 [0.014, 0.057] |
+| GB | C2 label aggregation | soft labels (y/n) as sample weights | 0.613 ± 0.006 [0.589, 0.636] | 0.228 ± 0.013 [0.179, 0.274] | -0.002 [-0.013, 0.009] | -0.004 [-0.026, 0.018] |
+| GB | C3 training source | DACOS only (= v) | 0.616 ± 0.007 [0.591, 0.638] | 0.232 ± 0.014 [0.184, 0.278] | reference | reference |
+| GB | C3 training source | DACOSX only | 0.393 ± 0.000 [0.367, 0.420] | -0.013 ± 0.000 [-0.070, 0.044] | -0.223 [-0.259, -0.186] | -0.245 [-0.325, -0.169] |
+| GB | C3 training source | DACOSX + DACOS | 0.396 ± 0.001 [0.387, 0.406] | -0.021 ± 0.010 [-0.040, 0.009] | -0.219 [-0.244, -0.192] | -0.253 [-0.300, -0.197] |
+| GB | C3 training source | DACOSX only, primary metric removed | 0.392 ± 0.005 [0.368, 0.416] | -0.163 ± 0.017 [-0.215, -0.115] | -0.223 [-0.263, -0.184] | -0.396 [-0.479, -0.314] |
+| GB | C4 class weighting | weights on (= v) | 0.616 ± 0.007 [0.591, 0.638] | 0.232 ± 0.014 [0.184, 0.278] | reference | reference |
+| GB | C4 class weighting | weights off | 0.607 ± 0.009 [0.581, 0.635] | 0.281 ± 0.017 [0.233, 0.331] | -0.008 [-0.028, 0.013] | 0.049 [0.011, 0.088] |
+| LR | C1 feature groups | (i) primary only | 0.470 ± 0.015 [0.446, 0.494] | -0.055 ± 0.040 [-0.101, -0.006] | -0.100 [-0.127, -0.073] | -0.196 [-0.251, -0.142] |
+| LR | C1 feature groups | (ii) size only | 0.606 ± 0.007 [0.579, 0.632] | 0.219 ± 0.013 [0.165, 0.271] | 0.037 [0.012, 0.063] | 0.078 [0.029, 0.130] |
+| LR | C1 feature groups | (iii) structure only | 0.596 ± 0.006 [0.571, 0.623] | 0.193 ± 0.012 [0.141, 0.247] | 0.027 [0.008, 0.047] | 0.052 [0.014, 0.090] |
+| LR | C1 feature groups | (iv) readability only | 0.545 ± 0.004 [0.518, 0.570] | 0.130 ± 0.009 [0.078, 0.179] | -0.024 [-0.051, 0.004] | -0.011 [-0.064, 0.045] |
+| LR | C1 feature groups | (v) all features | 0.569 ± 0.011 [0.542, 0.596] | 0.141 ± 0.021 [0.088, 0.194] | reference | reference |
+| LR | C1 feature groups | (vi) all − primary | 0.602 ± 0.003 [0.576, 0.628] | 0.204 ± 0.007 [0.152, 0.256] | 0.033 [0.019, 0.046] | 0.063 [0.037, 0.090] |
+| LR | C1 feature groups | (vi) all − size | 0.571 ± 0.012 [0.544, 0.596] | 0.144 ± 0.023 [0.089, 0.195] | 0.001 [-0.004, 0.007] | 0.003 [-0.009, 0.013] |
+| LR | C1 feature groups | (vi) all − structure | 0.536 ± 0.016 [0.511, 0.561] | 0.095 ± 0.028 [0.043, 0.146] | -0.033 [-0.052, -0.013] | -0.045 [-0.084, -0.006] |
+| LR | C1 feature groups | (vi) all − readability | 0.572 ± 0.007 [0.547, 0.598] | 0.146 ± 0.014 [0.095, 0.198] | 0.003 [-0.012, 0.018] | 0.005 [-0.024, 0.034] |
+| LR | C2 label aggregation | unanimous only (= v) | 0.569 ± 0.011 [0.542, 0.596] | 0.141 ± 0.021 [0.088, 0.194] | reference | reference |
+| LR | C2 label aggregation | ties counted as smelly | 0.558 ± 0.010 [0.533, 0.582] | 0.120 ± 0.019 [0.070, 0.168] | -0.011 [-0.030, 0.006] | -0.021 [-0.057, 0.012] |
+| LR | C2 label aggregation | soft labels (y/n) as sample weights | 0.594 ± 0.007 [0.568, 0.619] | 0.193 ± 0.015 [0.143, 0.244] | 0.024 [0.011, 0.039] | 0.052 [0.026, 0.080] |
+| LR | C3 training source | DACOS only (= v) | 0.569 ± 0.011 [0.542, 0.596] | 0.141 ± 0.021 [0.088, 0.194] | reference | reference |
+| LR | C3 training source | DACOSX only | 0.401 ± 0.003 [0.376, 0.426] | -0.056 ± 0.044 [-0.109, -0.003] | -0.168 [-0.211, -0.125] | -0.196 [-0.290, -0.104] |
+| LR | C3 training source | DACOSX + DACOS | 0.390 ± 0.004 [0.380, 0.399] | -0.088 ± 0.031 [-0.104, -0.070] | -0.179 [-0.207, -0.151] | -0.229 [-0.282, -0.175] |
+| LR | C3 training source | DACOSX only, primary metric removed | 0.370 ± 0.006 [0.345, 0.395] | -0.195 ± 0.010 [-0.249, -0.144] | -0.199 [-0.244, -0.157] | -0.336 [-0.430, -0.248] |
+| LR | C4 class weighting | weights on (= v) | 0.569 ± 0.011 [0.542, 0.596] | 0.141 ± 0.021 [0.088, 0.194] | reference | reference |
+| LR | C4 class weighting | weights off | 0.528 ± 0.017 [0.503, 0.554] | 0.147 ± 0.017 [0.098, 0.197] | -0.041 [-0.067, -0.014] | 0.006 [-0.043, 0.056] |
+
+Runtime 158s.

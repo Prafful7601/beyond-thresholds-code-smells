@@ -1,0 +1,47 @@
+**Analysis type: primary (interpretability, calibration).**
+
+**Method.**
+- SHAP: `shap` 0.46.0 `TreeExplainer` on the best tree model (CM: GB, LPL: GB).
+  - The model is refitted on all unanimous entities, with hyperparameters from `GridSearchCV(GroupKFold(5) by project, MCC)` on all data. Parameters are in the table below.
+  - SHAP values are in log-odds of "smelly".
+- Permutation importance: on the held-out folds of repeat 0, using each fold's section-B parameters; scoring MCC, 10 permutations, averaged over the 5 folds.
+- Spearman ρ compares the two importance vectors.
+- Calibration: pooled repeat-0 out-of-fold probabilities of the best model and LR (CM's best model is LR), as a Brier score and a 10-bin reliability diagram.
+  - The reference Brier score is that of a constant prediction equal to the observed prevalence.
+  - Class weighting shifts predicted probabilities towards 0.5 by design; the calibration figures reflect the weighted models as evaluated.
+
+**Importance rankings**
+
+| smell | model | feature | mean_abs_SHAP | permutation_importance_MCC | rank_SHAP | rank_permutation |
+|---|---|---|---|---|---|---|
+| CM | GB | cc | 0.0444 | 0.0043 | 7 | 2 |
+| CM | GB | loc | 0.2033 | -0.0004 | 3 | 3 |
+| CM | GB | statements | 0.0671 | -0.0041 | 5 | 5 |
+| CM | GB | max_nesting | 0.0645 | -0.0043 | 6 | 6 |
+| CM | GB | method_calls | 0.2297 | 0.0285 | 1 | 1 |
+| CM | GB | comment_ratio | 0.1276 | -0.0193 | 4 | 7 |
+| CM | GB | mean_identifier_length | 0.2231 | -0.0025 | 2 | 4 |
+| LPL | GB | pc | 0.6944 | 0.0381 | 1 | 2 |
+| LPL | GB | loc | 0.1806 | 0.0215 | 4 | 3 |
+| LPL | GB | statements | 0.1765 | -0.0014 | 5 | 4 |
+| LPL | GB | max_nesting | 0.3488 | 0.0539 | 2 | 1 |
+| LPL | GB | method_calls | 0.0965 | -0.0085 | 7 | 5 |
+| LPL | GB | comment_ratio | 0.1738 | -0.0215 | 6 | 6 |
+| LPL | GB | mean_identifier_length | 0.3408 | -0.0342 | 3 | 7 |
+
+| smell | model | refit_params | spearman_rho | p | n_features |
+|---|---|---|---|---|---|
+| CM | GB | {'learning_rate': 0.05, 'max_depth': 3, 'n_estimators': 300} | 0.321 | 0.4821 | 7 |
+| LPL | GB | {'learning_rate': 0.1, 'max_depth': 2, 'n_estimators': 300} | 0.571 | 0.1802 | 7 |
+
+**Calibration**
+
+| smell | model | n | brier | brier_reference_constant_prevalence | mean_predicted | observed_prevalence | bins |
+|---|---|---|---|---|---|---|---|
+| CM | LR | 1695 | 0.2483 | 0.2224 | 0.4993 | 0.6661 | [0.38→0.59, n=70]; [0.46→0.63, n=883]; [0.54→0.71, n=607]; [0.63→0.77, n=112]; [0.74→0.77, n=22]; [0.83→0.00, n=1] |
+| LPL | GB | 1325 | 0.2169 | 0.2262 | 0.5278 | 0.6543 | [0.08→0.26, n=31]; [0.14→0.27, n=51]; [0.25→0.29, n=86]; [0.35→0.56, n=96]; [0.46→0.68, n=187]; [0.56→0.69, n=478]; [0.65→0.70, n=230]; [0.74→0.76, n=70]; [0.84→1.00, n=83]; [0.95→1.00, n=13] |
+| LPL | LR | 1325 | 0.2465 | 0.2262 | 0.5081 | 0.6543 | [0.06→0.50, n=6]; [0.16→0.52, n=31]; [0.26→0.49, n=81]; [0.35→0.49, n=164]; [0.46→0.68, n=251]; [0.55→0.69, n=454]; [0.65→0.71, n=263]; [0.72→0.73, n=75] |
+
+Tables: `tables/shap_permutation_importance.csv`, `tables/shap_rank_correlation.csv`, `tables/calibration.csv`.
+
+Figures: `figures/shap_summary_<smell>.pdf`, `figures/shap_dependence_<smell>.pdf` (DesigniteJava default and RQ2 Youden cut-off marked), `figures/reliability_<smell>.pdf` (.png).

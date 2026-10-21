@@ -1,0 +1,114 @@
+CM LOPO 3s
+LPL LOPO 10s
+**Analysis type: primary (generalisation).**
+
+**Method.**
+- Leave-one-project-out (LOPO) with the best model and LR:
+  - nested tuning with inner `GroupKFold(3)` by project on the 9 training projects;
+  - full Step 3 features, seed 20261021.
+- Per-project scores are also computed from the Tier 1 LOPO predictions (LR and RF with default hyperparameters and the Tier 1 feature set).
+- Projects with fewer than 20 test entities, or a single class, are flagged and excluded from the median, IQR and worst project. MCC and ROC-AUC are undefined for single-class projects. Pooled scores use every project.
+- Cross-smell transfer:
+  - The source smell's best model is tuned with `GridSearchCV(GroupKFold(5) by project)` on the source unanimous entities, then fitted on all of them.
+  - It is tested on the target smell's unanimous entities, minus the entities annotated for both smells.
+  - Method-level features only: cc, pc, loc, statements, max_nesting, method_calls, comment_ratio, mean_identifier_length.
+  - 95% CIs are a bootstrap over target entities (B = 2000).
+
+**Per-project score distribution**
+
+| smell | source | pooled_macro_F1 | pooled_MCC | macro_F1_median | macro_F1_q1 | macro_F1_q3 | macro_F1_worst | MCC_median | MCC_q1 | MCC_q3 | MCC_worst | projects_in_distribution | projects_flagged |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CM | Step 3 LOPO LR (nested tuning, full features) | 0.527 | 0.113 | 0.504 | 0.473 | 0.643 | lettuce-io_lettuce-core (0.419) | 0.075 | 0.025 | 0.323 | lettuce-io_lettuce-core (-0.079) | 8 | macrozheng_mall [< 20 entities]; shuzheng_zheng [< 20 entities] |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | 0.516 | 0.089 | 0.51 | 0.442 | 0.64 | lettuce-io_lettuce-core (0.427) | 0.084 | -0.015 | 0.331 | lettuce-io_lettuce-core (-0.079) | 8 | macrozheng_mall [< 20 entities]; shuzheng_zheng [< 20 entities] |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | 0.492 | 0.02 | 0.496 | 0.474 | 0.543 | igniterealtime_Smack (0.416) | 0.04 | -0.014 | 0.176 | kevin-wayne_algs4 (-0.064) | 8 | macrozheng_mall [< 20 entities]; shuzheng_zheng [< 20 entities] |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | 0.634 | 0.268 | 0.562 | 0.5 | 0.636 | kevin-wayne_algs4 (0.444) | 0.165 | 0.119 | 0.33 | shuzheng_zheng (0.016) | 9 | macrozheng_mall [< 20 entities] |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | 0.567 | 0.136 | 0.52 | 0.406 | 0.618 | alibaba_arthas (0.258) | 0.041 | -0.076 | 0.236 | shuzheng_zheng (-0.148) | 9 | macrozheng_mall [< 20 entities] |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | 0.547 | 0.099 | 0.514 | 0.426 | 0.601 | alibaba_arthas (0.220) | 0.132 | 0.005 | 0.21 | shuzheng_zheng (-0.228) | 9 | macrozheng_mall [< 20 entities] |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | 0.562 | 0.127 | 0.497 | 0.467 | 0.59 | shuzheng_zheng (0.345) | 0.073 | -0.039 | 0.184 | shuzheng_zheng (-0.298) | 9 | macrozheng_mall [< 20 entities] |
+
+**Per-project scores**
+
+| smell | source | project | n | n_smelly | single_class | flag | macro_F1 | MCC | ROC_AUC |
+|---|---|---|---|---|---|---|---|---|---|
+| CM | Step 3 LOPO LR (nested tuning, full features) | Blankj_AndroidUtilCode | 77 | 37 | False |  | 0.786 | 0.601 | 0.75 |
+| CM | Step 3 LOPO LR (nested tuning, full features) | MovingBlocks_Terasology | 355 | 217 | False |  | 0.526 | 0.07 | 0.525 |
+| CM | Step 3 LOPO LR (nested tuning, full features) | MyCATApache_Mycat-Server | 412 | 303 | False |  | 0.475 | 0.033 | 0.516 |
+| CM | Step 3 LOPO LR (nested tuning, full features) | alibaba_arthas | 167 | 141 | False |  | 0.596 | 0.231 | 0.738 |
+| CM | Step 3 LOPO LR (nested tuning, full features) | igniterealtime_Smack | 199 | 108 | False |  | 0.482 | 0.0 | 0.472 |
+| CM | Step 3 LOPO LR (nested tuning, full features) | kevin-wayne_algs4 | 263 | 181 | False |  | 0.468 | 0.079 | 0.522 |
+| CM | Step 3 LOPO LR (nested tuning, full features) | lettuce-io_lettuce-core | 173 | 106 | False |  | 0.419 | -0.079 | 0.505 |
+| CM | Step 3 LOPO LR (nested tuning, full features) | linlinjava_litemall | 34 | 23 | False |  | 0.828 | 0.657 | 0.889 |
+| CM | Step 3 LOPO LR (nested tuning, full features) | macrozheng_mall | 12 | 11 | False | < 20 entities | 0.496 | 0.302 | 0.727 |
+| CM | Step 3 LOPO LR (nested tuning, full features) | shuzheng_zheng | 3 | 2 | False | < 20 entities | 0.25 | -0.5 | 0.5 |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | Blankj_AndroidUtilCode | 77 | 37 | False |  | 0.742 | 0.531 | 0.813 |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | MovingBlocks_Terasology | 355 | 217 | False |  | 0.534 | 0.075 | 0.542 |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | MyCATApache_Mycat-Server | 412 | 303 | False |  | 0.439 | -0.027 | 0.511 |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | alibaba_arthas | 167 | 141 | False |  | 0.606 | 0.268 | 0.765 |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | igniterealtime_Smack | 199 | 108 | False |  | 0.486 | -0.01 | 0.476 |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | kevin-wayne_algs4 | 263 | 181 | False |  | 0.443 | 0.092 | 0.515 |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | lettuce-io_lettuce-core | 173 | 106 | False |  | 0.427 | -0.079 | 0.506 |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | linlinjava_litemall | 34 | 23 | False |  | 0.759 | 0.519 | 0.854 |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | macrozheng_mall | 12 | 11 | False | < 20 entities | 0.621 | 0.426 | 0.909 |
+| CM | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | shuzheng_zheng | 3 | 2 | False | < 20 entities | 0.667 | 0.5 | 0.5 |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | Blankj_AndroidUtilCode | 77 | 37 | False |  | 0.54 | 0.199 | 0.564 |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | MovingBlocks_Terasology | 355 | 217 | False |  | 0.494 | 0.06 | 0.53 |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | MyCATApache_Mycat-Server | 412 | 303 | False |  | 0.497 | -0.004 | 0.503 |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | alibaba_arthas | 167 | 141 | False |  | 0.583 | 0.169 | 0.584 |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | igniterealtime_Smack | 199 | 108 | False |  | 0.416 | -0.044 | 0.513 |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | kevin-wayne_algs4 | 263 | 181 | False |  | 0.447 | -0.064 | 0.458 |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | lettuce-io_lettuce-core | 173 | 106 | False |  | 0.484 | 0.019 | 0.515 |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | linlinjava_litemall | 34 | 23 | False |  | 0.55 | 0.228 | 0.538 |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | macrozheng_mall | 12 | 11 | False | < 20 entities | 0.478 | 0.0 | 0.318 |
+| CM | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | shuzheng_zheng | 3 | 2 | False | < 20 entities | 0.25 | -0.5 | 0.5 |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | Blankj_AndroidUtilCode | 151 | 122 | False |  | 0.675 | 0.416 | 0.958 |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | MovingBlocks_Terasology | 239 | 140 | False |  | 0.635 | 0.27 | 0.7 |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | MyCATApache_Mycat-Server | 179 | 105 | False |  | 0.636 | 0.33 | 0.76 |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | alibaba_arthas | 59 | 53 | False |  | 0.497 | 0.165 | 0.604 |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | igniterealtime_Smack | 197 | 115 | False |  | 0.676 | 0.352 | 0.682 |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | kevin-wayne_algs4 | 51 | 22 | False |  | 0.444 | 0.119 | 0.539 |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | lettuce-io_lettuce-core | 360 | 238 | False |  | 0.5 | 0.042 | 0.543 |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | linlinjava_litemall | 40 | 37 | False |  | 0.562 | 0.146 | 0.757 |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | macrozheng_mall | 17 | 15 | False | < 20 entities | 0.469 | 0.0 | 1.0 |
+| LPL | Step 3 LOPO GB (nested tuning, full features) | shuzheng_zheng | 32 | 20 | False |  | 0.508 | 0.016 | 0.398 |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | Blankj_AndroidUtilCode | 151 | 122 | False |  | 0.394 | -0.121 | 0.382 |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | MovingBlocks_Terasology | 239 | 140 | False |  | 0.618 | 0.236 | 0.655 |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | MyCATApache_Mycat-Server | 179 | 105 | False |  | 0.637 | 0.313 | 0.733 |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | alibaba_arthas | 59 | 53 | False |  | 0.258 | -0.076 | 0.355 |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | igniterealtime_Smack | 197 | 115 | False |  | 0.678 | 0.358 | 0.683 |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | kevin-wayne_algs4 | 51 | 22 | False |  | 0.52 | 0.041 | 0.574 |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | lettuce-io_lettuce-core | 360 | 238 | False |  | 0.49 | 0.034 | 0.556 |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | linlinjava_litemall | 40 | 37 | False |  | 0.531 | 0.208 | 0.721 |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | macrozheng_mall | 17 | 15 | False | < 20 entities | 0.433 | -0.133 | 0.8 |
+| LPL | Step 3 LOPO LR (nested tuning, full features) | shuzheng_zheng | 32 | 20 | False |  | 0.406 | -0.148 | 0.51 |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | Blankj_AndroidUtilCode | 151 | 122 | False |  | 0.426 | -0.099 | 0.251 |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | MovingBlocks_Terasology | 239 | 140 | False |  | 0.564 | 0.132 | 0.634 |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | MyCATApache_Mycat-Server | 179 | 105 | False |  | 0.62 | 0.292 | 0.723 |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | alibaba_arthas | 59 | 53 | False |  | 0.22 | 0.123 | 0.34 |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | igniterealtime_Smack | 197 | 115 | False |  | 0.601 | 0.21 | 0.686 |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | kevin-wayne_algs4 | 51 | 22 | False |  | 0.604 | 0.28 | 0.603 |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | lettuce-io_lettuce-core | 360 | 238 | False |  | 0.483 | 0.005 | 0.533 |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | linlinjava_litemall | 40 | 37 | False |  | 0.514 | 0.189 | 0.775 |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | macrozheng_mall | 17 | 15 | False | < 20 entities | 0.433 | -0.133 | 0.867 |
+| LPL | Tier 1 LOPO LR (default hyperparameters, Tier 1 features) | shuzheng_zheng | 32 | 20 | False |  | 0.373 | -0.228 | 0.429 |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | Blankj_AndroidUtilCode | 151 | 122 | False |  | 0.609 | 0.236 | 0.681 |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | MovingBlocks_Terasology | 239 | 140 | False |  | 0.59 | 0.184 | 0.624 |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | MyCATApache_Mycat-Server | 179 | 105 | False |  | 0.609 | 0.22 | 0.688 |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | alibaba_arthas | 59 | 53 | False |  | 0.457 | -0.004 | 0.566 |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | igniterealtime_Smack | 197 | 115 | False |  | 0.536 | 0.073 | 0.571 |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | kevin-wayne_algs4 | 51 | 22 | False |  | 0.497 | 0.092 | 0.658 |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | lettuce-io_lettuce-core | 360 | 238 | False |  | 0.473 | -0.039 | 0.503 |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | linlinjava_litemall | 40 | 37 | False |  | 0.467 | -0.065 | 0.649 |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | macrozheng_mall | 17 | 15 | False | < 20 entities | 0.469 | 0.0 | 1.0 |
+| LPL | Tier 1 LOPO RF (default hyperparameters, Tier 1 features) | shuzheng_zheng | 32 | 20 | False |  | 0.345 | -0.298 | 0.325 |
+
+**Cross-smell transfer**
+
+| source_smell | target_smell | model | params | train_n | test_n | shared_entities_removed_from_test | macro_F1 [95% CI] | MCC [95% CI] | ROC_AUC [95% CI] | PR_AUC [95% CI] |
+|---|---|---|---|---|---|---|---|---|---|---|
+| CM | LPL | LR | {'clf__C': 0.01} | 1695 | 1205 | 120 | 0.255 [0.234, 0.276] | -0.060 [-0.126, 0.002] | 0.468 [0.429, 0.505] | 0.690 [0.656, 0.727] |
+| LPL | CM | GB | {'learning_rate': 0.1, 'max_depth': 2, 'n_estimators': 100} | 1325 | 1575 | 120 | 0.285 [0.268, 0.302] | 0.051 [0.008, 0.090] | 0.516 [0.486, 0.546] | 0.692 [0.662, 0.723] |
+
+Tables: `tables/lopo_per_project.csv`, `tables/lopo_distribution.csv`, `tables/cross_smell.csv`. Figure: `figures/lopo_distribution.pdf` (.png). Runtime 15s.
+
+**Summary.** CM→LPL (LR): MCC -0.060 [-0.126, 0.002]; LPL→CM (GB): MCC 0.051 [0.008, 0.090].
+

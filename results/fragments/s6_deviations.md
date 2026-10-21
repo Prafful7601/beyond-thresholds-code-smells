@@ -5,8 +5,15 @@
 3. **Per-annotator analyses dropped.** RQ1's per-annotator counts and yes-rates are not computable, because the data have no annotator ids (D12).
 4. **MA excluded from models.** Multifaceted Abstraction fails the D8 rule after filtering (8 unanimous benign entities), so it is excluded from RQ4. Its RQ2 statistics are reported with very wide CIs.
 5. **DACOSX in-distribution scores.** These were not listed as an analysis in plan.md and are reported under EXPLORATORY.
-6. **Robustness R1–R6 deferred to Tier 2,** following the tier order. They are not yet run, including R6, which the PI asked for after the consistency filter.
-7. **LOPO CV.** Leave-one-project-out CV is reported alongside GroupKFold(5) as instructed (D6). It is referred to in the PI's instruction as "planned in Prompt 2 section D", whose full text has not been received; its implementation here (pooled out-of-fold predictions, same metrics) is my reading of it.
+6. **Robustness checks.** R1–R7 are complete (§4). R1 and R2 appear as extra columns of the robustness summary table, and RQ3/RQ5 rows are included. In every RQ4 robustness cell the DACOSX-trained models are unchanged; only the DACOS test labels vary.
+7. **LOPO CV.** Leave-one-project-out with pooled out-of-fold predictions was accepted in Prompt 2 as the plan's generalisation analysis. Section 5.4 adds per-project distributions.
+8. **C3 training-source ablation.** DACOSX entries from the held-out fold's projects are excluded from training, so that no project is in both train and test. plan.md §4.5 C did not state this; it is a protocol clarification, and section E asserts it holds in all 25 splits.
+9. **Ablation hyperparameters.** All ablation variants reuse the full model's tuned hyperparameters per fold, as pre-registered. The "(i) primary only" and similar subsets are therefore not individually tuned.
+10. **CM ablation, sensitivity and calibration use one model.** CM's best model in B is LR, so "best model and LR" is the same model.
+11. **SHAP beeswarm.** It is drawn as a jittered strip plot in the paper figure style, rather than with `shap.summary_plot`. The SHAP values themselves come from `shap.TreeExplainer`.
+12. **XGBoost runtime library.** No system OpenMP is installed, so xgboost loads scikit-learn's bundled `libomp` via `DYLD_LIBRARY_PATH`, which `run_all.sh` sets.
+13. **R3 applies no consistency filter.** The filter is defined on the checkbox, so it does not apply when `is_smell` is the answer column (plan.md §4.1).
+14. **RQ5 robustness BH family.** In robustness runs, the BH family is that variant's CM and LPL tests.
 
 **Known limitations**
 
@@ -14,11 +21,11 @@
   - The same annotator may have rated a snippet twice, and this cannot be checked.
   - Annotator-level effects cannot be modelled.
   - Whether the answer runs (section 1.7) come from individual annotators or from recording artefacts cannot be determined.
-- **The consistency filter overlaps the runs.** All 416 excluded CM annotations and 917 of the 965 excluded MA annotations lie inside answer runs (section 1.6). The primary results therefore depend partly on how those stretches are handled. R4 and R6 (Tier 2) quantify this.
+- **The consistency filter overlaps the runs.** All 416 excluded CM annotations and 917 of the 965 excluded MA annotations lie inside answer runs (section 1.6). The primary results therefore depend partly on how those stretches are handled. R4 and R6 quantify this (§4.1, §4.3).
 - **The pc = 3 LPL entities.**
   - All 274 annotations on the 137 pc = 3 LPL entities are "yes", and all lie inside the 1,054-answer run (ids 10790–11063).
   - They form the whole pc = 3 column of the LPL share-smelly table in RQ2.
-  - R5 (Tier 2) repeats the analysis without them.
+  - R5 repeats the analysis without them (§4.1).
 - **Two annotations per entity.** For most entities, majority labels coincide with unanimous labels and every split is a tie. The labelled sets in RQ2 and RQ4 therefore exclude all disagreement cases.
 - **MA labels are very imbalanced.** After filtering, 400 of 408 unanimous MA entities are smelly. Nominal alpha is near 0 even though percent agreement is 0.79; this is the expected behaviour of chance-corrected agreement under such a skewed marginal.
 - **Thresholds.**
@@ -27,4 +34,10 @@
 - **Youden cut-offs are chosen and evaluated on the same data,** so their P/R/F1 are optimistic.
 - **Grouped CV uses 10 projects of unequal size** (section 2), so fold sizes vary.
 - **The computed secondary features come from a lightweight lexer** (`src/features.py`), not a full Java parser. Method-call counting uses token heuristics, documented in the module docstring.
+- **Label noise in near-duplicates.** Many near-duplicate code groups carry conflicting human labels (CM 27 of 56 groups, LPL 62 of 160; §5.5). Structurally identical snippets were judged differently, which caps any model's attainable accuracy.
+- **R4 changes LPL a lot.** Removing run annotations leaves 254 LPL entities (from 1,694) and only 4 split LPL entities. R4 results for LPL rest on a small, selected subset.
+- **Friedman/Nemenyi blocks are not independent.** The 25 folds come from 5 repeats of the same data, so the test is anti-conservative.
+- **Class weighting and calibration.** Balanced class weights move predicted probabilities towards 0.5. The calibration results describe the weighted models as trained.
+- **CM learning curve is non-monotone.** macro-F1 lies between 0.506 and 0.530 at every training fraction. The pre-registered plateau rule classifies it as not plateaued.
+- **Feature selection is unstable across folds** (mean pairwise Jaccard 0.19 for CM, 0.57 for LPL), so the full feature set is kept.
 - **Data-integrity cross-check with lizard 1.17.13.** Cyclomatic complexity matches DesigniteJava exactly for 59% of method snippets (Spearman 0.92); parameter count matches for 96%.
