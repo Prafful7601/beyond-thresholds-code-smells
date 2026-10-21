@@ -1,0 +1,17 @@
+check,smell,value,detail,analysis
+exact duplicate groups (size ≥ 2),CM,22,46 entities; 0 groups span >1 project; 8 groups have conflicting labels,validity check
+near duplicate groups (size ≥ 2),CM,56,126 entities; 0 groups span >1 project; 27 groups have conflicting labels,validity check
+exact duplicate groups (size ≥ 2),LPL,71,169 entities; 0 groups span >1 project; 22 groups have conflicting labels,validity check
+near duplicate groups (size ≥ 2),LPL,160,462 entities; 6 groups span >1 project; 62 groups have conflicting labels,validity check
+test entities with a exact duplicate in the training fold (sum over 25 splits),CM,0,of 8475 test-entity slots; max 0 in one split,validity check
+test entities with a near duplicate in the training fold (sum over 25 splits),CM,0,of 8475 test-entity slots; max 0 in one split,validity check
+test entities with a exact duplicate in the training fold (sum over 25 splits),LPL,0,of 6625 test-entity slots; max 0 in one split,validity check
+test entities with a near duplicate in the training fold (sum over 25 splits),LPL,69,of 6625 test-entity slots; max 8 in one split,validity check
+entity_overlap (sum over 25 splits),CM,0,must be 0,validity check
+file_overlap (sum over 25 splits),CM,0,must be 0,validity check
+project_overlap (sum over 25 splits),CM,0,must be 0,validity check
+dacosx_train_projects_in_test (C3) (sum over 25 splits),CM,0,must be 0,validity check
+entity_overlap (sum over 25 splits),LPL,0,must be 0,validity check
+file_overlap (sum over 25 splits),LPL,0,must be 0,validity check
+project_overlap (sum over 25 splits),LPL,0,must be 0,validity check
+dacosx_train_projects_in_test (C3) (sum over 25 splits),LPL,0,must be 0,validity check

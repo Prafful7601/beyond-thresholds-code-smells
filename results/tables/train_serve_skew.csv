@@ -1,0 +1,15 @@
+smell,feature,DACOS_n,DACOSX_n,DACOS_median,DACOSX_median,KS_D,KS_p,computed_identically
+CM,cc,1695,83549,6.0,1.0,0.9954757088654562,0.0,yes: stored DesigniteJava value from the same tables
+CM,loc,1695,83549,24.0,4.0,0.8114664875620479,0.0,yes: stored DesigniteJava value from the same tables
+CM,statements,1695,83549,18.0,2.0,0.8966385790035565,0.0,yes: same lexer (src/features.py) on the same files.zip snippet type
+CM,max_nesting,1695,83549,3.0,0.0,0.8296285884696776,0.0,yes: same lexer (src/features.py) on the same files.zip snippet type
+CM,method_calls,1695,83549,14.0,1.0,0.7276629322252064,0.0,yes: same lexer (src/features.py) on the same files.zip snippet type
+CM,comment_ratio,1695,83549,0.0,0.0,0.18312661345711634,3.1955645308447544e-49,yes: same lexer (src/features.py) on the same files.zip snippet type
+CM,mean_identifier_length,1695,83549,8.05,9.181818181818182,0.22345548834660145,2.4272299349593157e-73,yes: same lexer (src/features.py) on the same files.zip snippet type
+LPL,pc,1325,83110,4.0,1.0,0.9984237757189267,0.0,yes: stored DesigniteJava value from the same tables
+LPL,loc,1325,83110,5.0,4.0,0.3058078518353716,9.713695201888993e-109,yes: stored DesigniteJava value from the same tables
+LPL,statements,1325,83110,5.0,2.0,0.38570278535153457,4.4834232078610146e-175,yes: same lexer (src/features.py) on the same files.zip snippet type
+LPL,max_nesting,1325,83110,0.0,0.0,0.20736518775980006,1.170594654765595e-49,yes: same lexer (src/features.py) on the same files.zip snippet type
+LPL,method_calls,1325,83110,3.0,1.0,0.27867250268455307,4.904950475948808e-90,yes: same lexer (src/features.py) on the same files.zip snippet type
+LPL,comment_ratio,1325,83110,0.0,0.0,0.1595242495170074,1.8655235627793085e-29,yes: same lexer (src/features.py) on the same files.zip snippet type
+LPL,mean_identifier_length,1325,83110,7.878787878787879,9.183790757682385,0.2556689815497987,1.221746473510506e-75,yes: same lexer (src/features.py) on the same files.zip snippet type

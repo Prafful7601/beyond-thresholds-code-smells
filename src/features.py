@@ -35,8 +35,9 @@ PRIMITIVE = set("boolean byte char double float int long short void var".split()
 CONTROL = {"if", "for", "while", "do", "switch", "try"}
 
 
-def strip(src):
-    """Return (code with comments/literals blanked, set of line indexes containing comments)."""
+def strip(src, keep_literals=False):
+    """Return (code with comments/literals blanked, set of line indexes containing comments).
+    keep_literals=True removes comments only (used for exact-duplicate detection)."""
     out = []
     comment_lines = set()
     i, n, line = 0, len(src), 0
@@ -65,7 +66,7 @@ def strip(src):
             j = src.find('"""', i + 3)
             j = n if j < 0 else j + 3
             seg = src[i:j]
-            out.append('""' + "".join(ch if ch == "\n" else " " for ch in seg[2:]))
+            out.append(seg if keep_literals else '""' + "".join(ch if ch == "\n" else " " for ch in seg[2:]))
             line += seg.count("\n")
             i = j
         elif c in ('"', "'"):
@@ -73,7 +74,10 @@ def strip(src):
             while j < n and src[j] != c and src[j] != "\n":
                 j += 2 if src[j] == "\\" else 1
             j = min(j + 1, n)
-            out.append(c + " " * (j - i - 2) + c if j - i >= 2 else c)
+            if keep_literals:
+                out.append(src[i:j])
+            else:
+                out.append(c + " " * (j - i - 2) + c if j - i >= 2 else c)
             i = j
         else:
             out.append(c)
