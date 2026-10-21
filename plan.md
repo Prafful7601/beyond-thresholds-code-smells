@@ -381,3 +381,32 @@ All earlier rules apply. Tags: **R5 Step 3 = robustness**, **human ceiling = pri
   - Class weights are balanced within each source. Then each source's weights are rescaled so that both sources sum to the same total.
   - Model: CM best model (LR), with B fold hyperparameters, on the 25 splits.
   - Question: whether the MCC = 0 collapse remains. It is answered from the MCC and the predicted-positive share.
+
+## 6. Prompt 3B: range restriction and external check (added before any of it was run)
+
+### 6.1 Range restriction (primary unless marked)
+- **Snippet universe.** All `sample` rows of the 10 projects, deduplicated by (granularity, `designite_id`). Methods are used for CM/LPL and classes for MA. Stored metrics come from `method_metrics` / `class_metrics` via `designite_id`.
+  - Computed features (§1.6, §4.4) are extended to every sample path. The extraction code is unchanged, so values for already-computed paths are identical.
+- **Annotated band.** The observed [min, max] of the primary metric over all annotated entities of the smell (§1.5 table: CM cc 5–14, LPL pc 3–10, MA LCOM 0.402–1.0). LPL is also reported with R5's band (pc 4–10).
+- **A1.** Per smell:
+  - the count and share of universe snippets inside the band;
+  - the count of snippets flagged by the DesigniteJava default rule (CM cc ≥ 8; LPL pc ≥ 5; MA LCOM ≥ 0.8 and NOF ≥ 7 and NOM ≥ 7), and the count and share of those flagged snippets inside the band;
+  - descriptive, so no test.
+- **A2.** On unanimous entities (CM primary; LPL R5):
+  - the share smelly by metric value;
+  - the Cochran–Armitage trend test (two-sided, scores = metric values);
+  - a logistic regression of the label on the metric, giving the slope as an OR per 1 unit with a 95% Wald CI.
+- **A3.**
+  - For every §1.6 secondary feature, and the primary metric, per smell: SD(annotated entities, primary set) / SD(universe snippets of that granularity).
+  - Reported next to the RQ3 GEE OR per SD (CM, LPL primary and LPL R5; MA has no RQ3 model and shows n/a).
+- **A4 (EXPLORATORY).**
+  - r = point-biserial correlation between the primary metric and the unanimous label (CM; LPL primary; LPL R5).
+  - Thorndike Case II correction: r_c = r·u / √(1 + r²(u² − 1)), with u = SD(universe) / SD(annotated) of the primary metric.
+  - Implied AUC = Φ(d/√2), with d = r_c / √((1 − r_c²)·p·q), where p and q are the annotated class shares.
+  - CI: bootstrap over entities (B = 2000) with u held fixed.
+  - Assumptions, stated in results.md: the relation is linear and homoscedastic over the full range, selection depends on the metric only, and the label is binormal. These are strong assumptions, and the corrected values are not observed quantities.
+
+### 6.2 External check, C# dataset (Zenodo 10.5281/zenodo.10475432)
+- **B0 audit only** (descriptive, then stop for the PI's go-ahead): files, columns, whether individual annotator answers are released, annotators per snippet, severity scale, provided metrics, project ids, and a proposed primary metric per smell with a literature justification.
+- B1 will be pre-registered in detail after the go-ahead, before it is run: RQ1 agreement (ordinal alpha if severity is graded, nominal for presence) and RQ2 (ROC-AUC against consensus presence, Youden cut-off), with the same bootstrap settings and no models.
+- The external data goes into `data/external/` (not committed).
