@@ -174,3 +174,163 @@ Per-annotator counts and yes-rates **cannot be computed**, because the annotatio
 - C2: "majority vote" and "unanimous-only" are the same training set. Three label variants are kept: unanimous only; ties counted as smelly; soft labels (0, 0.5, 1) used as sample weights.
 - J: annotator removal is impossible. It is replaced by R4 (run exclusion) and R6 (no consistency filter), applied to the B headline.
 - I: each error is tagged as unanimous or split, and flagged as inside or outside an R4 run.
+
+## 4. Prompt 2: robustness, Tier 2 and strengthening analyses (added before any of them was run)
+
+Everything in §1–3 still applies. Scope:
+- All model sections (A–J) cover **CM and LPL only**. MA stays descriptive (D8).
+- Every reported number is tagged as **primary**, **robustness (R1–R7)** or **exploratory**.
+- Compute environment: xgboost 2.1.4 and shap 0.46.0, pinned. xgboost loads scikit-learn's bundled `libomp` through `DYLD_LIBRARY_PATH`, which `run_all.sh` sets.
+
+### 4.1 Annotation-set variants (robustness definitions)
+
+| id | answer column | annotations kept | entity filter |
+|---|---|---|---|
+| primary | smell checkbox | consistency-filtered (D7) | ≥ 2 usable annotations |
+| R1 | checkbox | consistency-filtered | ≥ 3 usable annotations; **MA only** (mostly pooled duplicates) |
+| R2 | checkbox | consistency-filtered | as primary, but ties count as smelly in labelled analyses (RQ2, RQ4, B) |
+| R3 | `is_smell` | **all** (D7 is defined on the checkbox, so no filter applies when `is_smell` is the answer) | ≥ 2 |
+| R4 | checkbox | consistency-filtered, then annotations inside runs (§3 D5 rule, computed on the unfiltered checkbox stream) are removed | ≥ 2 remaining |
+| R5 | checkbox | consistency-filtered | LPL only; the 137 pc = 3 entities (empty `smells` field) are removed |
+| R6 | checkbox | all (no consistency filter) | ≥ 2 |
+| R7c | checkbox | consistency-filtered | entities with at least 2 usable annotations inside the **same** run are removed; applies to RQ1 alpha only |
+
+**Headline numbers repeated under R3–R6 and R7c** (Step 1):
+- RQ1 alpha (all smells).
+- RQ2 ROC-AUC and Youden cut-off (all smells).
+- RQ4 paired MCC difference, transfer − GroupKFold(5), for LR and RF (CM, LPL).
+
+In RQ4 the DACOSX training data never changes; only the DACOS test labels follow the variant.
+
+**Robustness summary table** (`tables/robustness_summary.csv`):
+- One row per headline number per smell.
+- Columns: primary / R3 / R4 / R5 / R6 / R7c, with n/a where a check does not apply.
+- R1 and R2 are reported in their own rows, and RQ3 and RQ5 rows are added in Step 2.
+
+### 4.2 R7 Run anatomy (descriptive)
+
+(a) **Each run** (as listed in `audit_answer_runs.csv`) gets:
+- its project composition and primary-metric median and IQR;
+- Spearman ρ of annotation id with `sample.id` and with the primary metric, with their p-values;
+- its number of project switches along the id order, compared with 2,000 random permutations of the run's own order. The one-sided p is the share of permutations with ≤ the observed number of switches.
+
+The same statistics over the whole smell stream are given as a reference.
+
+(b) **Co-location.**
+- Observed: the share of entities, among those with ≥ 2 annotations in the unfiltered stream, that have at least 2 annotations inside the same run.
+- Null: the annotation-to-position assignment is permuted within smell 2,000 times, keeping run positions fixed. p = (#null ≥ observed + 1)/(2001).
+
+(c) **Alpha after removing co-located entities** (primary set; R7c above).
+
+### 4.3 Tier 2
+
+**RQ3** (CM, LPL; primary set; all entities with ≥ 2 usable annotations, D11):
+- Model: annotation-level **GEE**, `statsmodels` Binomial family with logit link, exchangeable working correlation, groups = entity, robust (sandwich) SEs.
+- Predictors: primary metric and §1.6 secondary features, z-standardised over entities.
+- Reported: OR per 1 SD with 95% CI, Wald p, and BH within smell.
+- VIF is computed on the entity-level design. If any VIF > 5, a **reduced model** is also fitted, dropping the non-primary feature with the highest VIF repeatedly until all VIFs ≤ 5. The primary metric is never dropped.
+- Depth-3 `DecisionTreeClassifier(class_weight='balanced', random_state=SEED)` on unanimous entities, with rules from `export_text`.
+- Robustness: R3–R6 on the primary-metric OR.
+
+**RQ5:**
+- Unanimous vs split entities, primary set, on every feature: two-sided Mann–Whitney U and Cliff's delta (bootstrap CI, B = 2000).
+- The BH family is all CM and LPL tests. MA is reported with raw p only, labelled descriptive.
+- Robustness: R3–R6 on the primary-metric delta and on the number of BH-significant features.
+
+**R1** (MA: alpha, AUC, Youden) and **R2** (CM, LPL: AUC, Youden, RQ4 paired MCC difference).
+
+### 4.4 Step 3: shared protocol
+
+- **Data:** primary set, unanimous entities with complete features (CM 1,695; LPL 1,325).
+- **Full feature set:** primary metric, loc, statements, max_nesting, method_calls, comment_ratio and **mean_identifier_length**. The last is the mean length of identifier tokens that are not keywords, computed by the same lexer and added to `src/features.py`.
+- **Feature groups:**
+  - primary = {cc | pc}
+  - size = {loc, statements}
+  - structure = {max_nesting, method_calls}
+  - readability = {comment_ratio, mean_identifier_length}
+- **Outer CV:** grouped 5-fold by project, **repeated 5 times**. In repeat r (r = 0..4, seed 20261021 + r), the projects are shuffled and assigned round-robin to 5 folds (2 projects per fold). The same 25 splits are used by every model, baseline and variant in A–J.
+- **Inner tuning (nested):** `GridSearchCV` with `GroupKFold(3)` by project on the training fold, scoring MCC; ties broken by the first grid entry.
+- **Fixed grids:**
+  - LR: `StandardScaler` + `LogisticRegression(class_weight='balanced', max_iter=10000)`, C ∈ {0.01, 0.1, 1, 10}.
+  - RF: `RandomForestClassifier(n_estimators=300, class_weight='balanced')`, max_depth ∈ {None, 5, 10}, min_samples_leaf ∈ {1, 5, 20}.
+  - XGB: `XGBClassifier(scale_pos_weight=n_neg/n_pos of the training fold, n_jobs=1)`, n_estimators ∈ {100, 300}, max_depth ∈ {2, 4, 6}, learning_rate ∈ {0.05, 0.1}.
+  - GB: `GradientBoostingClassifier` with balanced sample weights, n_estimators ∈ {100, 300}, max_depth ∈ {2, 3}, learning_rate ∈ {0.05, 0.1}.
+  - SVM: `StandardScaler` + `SVC(kernel='rbf', class_weight='balanced')`, C ∈ {0.1, 1, 10}, gamma ∈ {'scale', 0.01, 0.1}. Scores come from `decision_function` for AUCs; predicted class is the sign.
+  - All models use `random_state = SEED + r`.
+- **Imbalance:** inverse-frequency class weights only. No SMOTE or other synthetic oversampling, because it fabricates borderline neighbours, which is exactly the region under study.
+- **Metrics:**
+  - macro-F1 and MCC at the predicted class (probability ≥ 0.5, or decision ≥ 0);
+  - ROC-AUC and PR-AUC (average precision, positive = smelly) on scores.
+  - Each metric is computed on pooled out-of-fold predictions per repeat and reported as mean ± SD over the 5 repeats.
+  - Its 95% CI is a bootstrap over entities (B = 2000) of the repeat-mean.
+  - Paired differences use the same resamples.
+- **Best model** per smell: the highest mean MCC over repeats among the five algorithms. The **best tree model** (for SHAP) is the highest among RF, XGB and GB.
+
+### 4.5 Step 3 sections
+
+**A. Baselines**, on the same 25 splits:
+- majority class of the training fold (constant score);
+- primary metric ≥ DesigniteJava default (score = metric);
+- primary metric ≥ Youden cut-off fitted on the training fold only.
+
+**B. Model comparison:**
+- Five algorithms with the grids above; metrics as in 4.4.
+- Statistical comparison: **Friedman test over the 25 outer folds** on fold-level MCC.
+- Then **Nemenyi** post-hoc with a critical difference CD = q₀.₀₅ √(k(k+1)/(6N)), with q₀.₀₅ = 2.728 for k = 5, plus a CD diagram.
+- Fold-level MCC on a single-class fold is defined as 0 by scikit-learn.
+
+**C. Ablation** (best model and LR; hyperparameters **reused** from the full model's inner tuning in each outer fold, not re-tuned):
+- C1: (i) primary only; (ii) size; (iii) structure; (iv) readability; (v) all; (vi) all minus each of the 4 groups.
+- C2: training labels are unanimous only / ties as smelly / soft labels.
+  - Soft labels: each entity enters twice, once per class, with weights y/n and 1 − y/n times the class weight.
+  - The test set is always the held-out unanimous entities.
+- C3: training source is DACOSX only / DACOS only / DACOSX + DACOS training folds / DACOSX only without the primary metric.
+  - DACOSX is the D4-cleaned set; the test set is always the held-out DACOS fold.
+  - Class weights are recomputed on each training set.
+- C4: class weights on vs off.
+- Reported: Δ macro-F1 and Δ MCC versus (v), with paired bootstrap CIs.
+
+**D. Generalisation:**
+- Leave-one-project-out with the best model and LR (nested tuning, inner `GroupKFold(3)`).
+- Per-project macro-F1 and MCC: median, IQR and worst project. Projects with < 20 entities or a single class are listed; metrics are computed where defined and excluded from the distribution otherwise.
+- Per-project scores are also computed from the Tier 1 LOPO predictions (LR, RF).
+- Cross-smell transfer: CM → LPL and LPL → CM, using method-level features only (cc, pc and the secondary features). The source smell's best model is tuned by grouped CV on the source data. Entities present in both smells (the 195 `1,2` snippets) are removed from the target test set.
+
+**E. Leakage and validity:**
+- Duplicates:
+  - Exact: comments stripped, whitespace collapsed.
+  - Near: additionally, identifiers become `ID` and literals become `LIT`.
+  - Count duplicate groups and how many cross train/test in the 25 splits.
+  - Deduplicate by keeping the lowest entity id per near-duplicate group, then rerun the B headline (best model and LR).
+- Assert that no entity, file or project is in both train and test in any split.
+- KS statistic DACOS (unanimous) versus DACOSX (D4-cleaned training set) for every feature, plus a statement of how each feature is computed for each source.
+
+**F. Interpretability and calibration:**
+- SHAP TreeExplainer on the best tree model. It is refitted on all unanimous entities with hyperparameters chosen by `GridSearchCV(GroupKFold(5))` on all data.
+- Plots: mean |SHAP| bar and beeswarm, plus a dependence plot of the primary metric with the DesigniteJava default and the RQ2 Youden cut-off marked.
+- Permutation importance (MCC, 10 repeats) on the held-out folds of repeat 0, averaged over folds. Spearman ρ between its ranking and the mean |SHAP| ranking.
+- Calibration on pooled out-of-fold probabilities of repeat 0 for the best model and LR: Brier score and a 10-bin reliability diagram. If the best model is the SVM, its probabilities come from `SVC(probability=True)`, refitted for calibration only.
+
+**G. Feature selection** (repeat-0 folds; reported only, never used to choose the final model):
+1. Mutual-information filter: keep features with `mutual_info_classif` > 0 (random_state = SEED).
+2. Pearson |r| > 0.85 pruning: drop the member with lower MI.
+3. `RFECV` with LR (scoring MCC, `GroupKFold(3)`).
+- Reported: surviving features per fold, Jaccard stability, and best-model performance on the selected subset versus all features.
+- If selection lowers mean MCC or the mean pairwise Jaccard is < 0.7, the full set is kept, and this is stated.
+
+**H. Learning curve:**
+- Best model with fold hyperparameters, on repeat-0 folds.
+- Training fractions 10/25/50/75/100%, stratified subsampling, 5 seeds (SEED + s).
+- Plateau rule (fixed): plateaued if the macro-F1 gain from 75% to 100% is < 0.01 and its bootstrap CI includes 0.
+
+**I. Error analysis:**
+- Uses the best model's repeat-0 out-of-fold predictions. Models are trained on unanimous entities, and every entity with a majority label in the held-out projects (unanimous or non-unanimous majority) is predicted. Ties are reported separately as a predicted-smelly share.
+- 15 FP and 15 FN are sampled per smell (seed SEED) and saved with code, features, vote split, run membership and score to `results/error_analysis/`.
+- Error rate on split vs unanimous entities, and in-run vs not-in-run, against the base rates. An entity is "in run" if any of its annotations lies in a run.
+
+**J. Sensitivity:**
+- The B protocol for the best model, with training labels taken from R4 and from R6.
+- Paired comparison: the variant-trained model and the primary model are evaluated on the same primary unanimous test entities. Reported as Δ macro-F1 and Δ MCC with paired bootstrap CIs.
+- Also reported, unpaired: each variant evaluated on its own labels.
+
+**Priority if time runs short:** Step 1 → Step 2 → A, B, C, E → D, F, H → G, I, J. Unfinished sections are listed in results.md.
