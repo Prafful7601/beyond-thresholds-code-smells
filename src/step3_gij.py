@@ -192,7 +192,7 @@ def main():
         fp[c] = fp[c].round(3)
     fp = fp[["smell", "model", "selected_macro_F1", "all_macro_F1", "selected_MCC", "all_MCC", "Δ macro-F1 [95% CI]",
              "Δ MCC [95% CI]", "mean_pairwise_jaccard", "decision"]]
-    txt_g = f"""**Analysis type: exploratory-transparent (reported only; never used to choose the final model).**
+    txt_g = f"""**Analysis type: primary, report-only (pre-registered in plan.md §4.5 G; never used to choose the final model).**
 
 **Method.**
 - Repeat-0 folds of section B; selection uses the training fold only.

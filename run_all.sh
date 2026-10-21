@@ -6,7 +6,9 @@ cd "$(dirname "$0")"
 ROOT="$PWD"
 PY="$ROOT/.venv/bin/python"
 LOGS="$ROOT/results/logs"
-mkdir -p "$LOGS" data/raw data/db results/tables results/figures results/fragments
+# xgboost needs an OpenMP runtime; reuse the libomp bundled with scikit-learn (no system install needed)
+export DYLD_LIBRARY_PATH="$ROOT/.venv/lib/python3.9/site-packages/sklearn/.dylibs${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"
+mkdir -p "$LOGS" data/raw data/db data/cache results/tables results/figures results/fragments results/error_analysis
 
 if [ ! -x "$PY" ]; then
   python3 -m venv .venv
@@ -45,6 +47,16 @@ step dataset_audit    "$PY" -I src/dataset_audit.py
 step rq1              "$PY" -I src/rq1.py
 step rq2              "$PY" -I src/rq2.py
 step rq4              "$PY" -I src/rq4.py
+step rq3              "$PY" -I src/rq3.py
+step rq5              "$PY" -I src/rq5.py
+step robustness       "$PY" -I src/robustness.py
+step run_anatomy      "$PY" -I src/run_anatomy.py
+step step3_A_B        "$PY" -I src/step3_ab.py
+step step3_C          "$PY" -I src/step3_c.py
+step step3_E          "$PY" -I src/step3_e.py
+step step3_D          "$PY" -I src/step3_d.py
+step step3_F_H        "$PY" -I src/step3_fh.py
+step step3_G_I_J      "$PY" -I src/step3_gij.py
 cp src/s6_deviations.md results/fragments/s6_deviations.md
 step build_report     "$PY" -I src/build_report.py
 echo "done: results/results.md"

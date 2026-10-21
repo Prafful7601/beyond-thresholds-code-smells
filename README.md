@@ -9,18 +9,19 @@ The analysis is pre-registered. [`plan.md`](plan.md) was committed before any ou
 
 ## Research questions
 
-| RQ | Question | Status |
+| RQ / section | Question | Status |
 |---|---|---|
 | RQ1 | How much do annotators agree? (Krippendorff's alpha, vote splits) | done |
 | RQ2 | Does the primary metric separate smelly from benign snippets in the borderline band? Where is the optimal cut-off relative to the DesigniteJava default? | done |
+| RQ3 | Which code features drive human judgment? (GEE, decision tree) | done |
 | RQ4 | Do models trained on the metric-labelled extremes (DACOSX) transfer to the human-labelled borderline snippets (DACOS)? | done |
-| RQ3 | Which code features drive human judgment? | Tier 2, pending |
-| RQ5 | Which features distinguish unanimous snippets from split ones? | Tier 2, pending |
-| R1–R6 | Robustness checks | Tier 2, pending |
+| RQ5 | Which features distinguish unanimous snippets from split ones? | done |
+| R1–R7 | Robustness checks, including the anatomy of answer runs | done |
+| Step 3 A–J | Baselines, five-model comparison, ablation, generalisation, leakage checks, SHAP and calibration, feature selection, learning curve, error analysis, sensitivity | done |
 
 ## Reproducing
 
-Requirements: Python 3.9+ and `curl`. No database server is needed; the MySQL dumps are converted to SQLite.
+Requirements: Python 3.9+ and `curl`. No database server is needed; the MySQL dumps are converted to SQLite. On macOS without a system OpenMP runtime, `run_all.sh` points xgboost at the `libomp` bundled with scikit-learn.
 
 ```bash
 bash run_all.sh
@@ -32,7 +33,7 @@ The script does the following:
 3. Converts the dumps.
 4. Regenerates every table in `results/tables/`, every figure in `results/figures/` (PDF and PNG, 300 dpi), and `results/results.md`.
 
-A full run takes about a minute. Seeds are fixed, and two consecutive runs produce byte-identical tables.
+A full run takes about 10 minutes on a 10-core laptop. Seeds are fixed, and two consecutive runs produce byte-identical tables.
 
 ## Layout
 
@@ -43,7 +44,9 @@ src/convert_sql.py       mysqldump -> SQLite converter
 src/audit.py             Phase 0 schema/count audit -> results/logs/audit.txt
 src/features.py          secondary features from snippet source (lexer-based)
 src/dataset_audit.py     results §1–2: data-quality findings, descriptives, eligibility
-src/rq1.py, rq2.py, rq4.py
+src/rq1.py … rq5.py      research questions
+src/robustness.py        R1-R7c headline numbers; src/run_anatomy.py (R7)
+src/protocol.py          Step 3 shared CV protocol; src/step3_*.py sections A-J
 src/build_report.py      assembles results/results.md
 results/                 tables, figures, logs, results.md
 ```
