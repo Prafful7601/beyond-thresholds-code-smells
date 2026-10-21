@@ -228,3 +228,7 @@ def headline_block():
     return ("\n".join(out) + "\n\nRows 1–15 are the Prompt 2 headline numbers; rows 16 onward were added in Prompt 3 and 3B. "
             "All values are read programmatically from the listed tables when this file is built, and the same rows are written to "
             "`results/paper_numbers.json`.\n")
+
+
+if __name__ == "__main__":
+    main()
