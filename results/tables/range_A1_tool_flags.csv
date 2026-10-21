@@ -1,0 +1,5 @@
+smell/band,metric,annotated_band,universe_snippets,inside_band,share_inside_band,DesigniteJava_rule,flagged,share_flagged,flagged_inside_band,share_of_flagged_inside_band,flagged_above_band,analysis
+CM,cc,5–14,87523,2601,0.029717902722712887,cc ≥ 8,987,0.0112770357506027,808,0.8186423505572442,179,primary (descriptive)
+LPL,pc,3–10,87523,4528,0.05173497252150863,pc ≥ 5,710,0.008112153376826662,702,0.9887323943661972,8,primary (descriptive)
+LPL R5,pc,4–10,87523,1888,0.0215714726414771,pc ≥ 5,710,0.008112153376826662,702,0.9887323943661972,8,primary (descriptive)
+MA,lcom,0.402174–1,8325,1411,0.1694894894894895,LCOM ≥ 0.8 & NOF ≥ 7 & NOM ≥ 7,12,0.0014414414414414415,12,1.0,0,primary (descriptive)

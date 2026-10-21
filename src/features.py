@@ -1,7 +1,7 @@
 """Secondary features computed from snippet source text (plan §1.6).
 
 Usage: python -I src/features.py
-Reads files.zip for every DACOS-annotated snippet and every granularity-consistent DACOSX entry.
+Reads files.zip for every sample row of the 10 projects (which covers every DACOS-annotated snippet and every\ngranularity-consistent DACOSX entry).
 Writes data/features/features.csv.gz (one row per path) and results/logs/features.log.
 
 Definitions (computed on text with comments, string, text-block and char literals removed):
@@ -156,7 +156,9 @@ def main():
     annotated = smp[smp.id.isin(ann.sample_id)]
     e = ent.merge(smp, left_on="sampleId", right_on="id")
     cons = e[(e.smellPresented.isin([2, 3, 5, 6]) & (e.is_class == 0)) | (e.smellPresented.isin([1, 4]) & (e.is_class == 1))]
-    need = pd.concat([annotated[["path_to_file", "is_class"]], cons[["path_to_file", "is_class"]]]).drop_duplicates()
+    # every sample path of the 10 projects (plan.md §6.1 snippet universe); includes all annotated and DACOSX paths
+    need = pd.concat([annotated[["path_to_file", "is_class"]], cons[["path_to_file", "is_class"]],
+                      smp[["path_to_file", "is_class"]]]).drop_duplicates()
     z = zipfile.ZipFile(ZIP)
     names = set(z.namelist())
     rows, missing, failed = [], 0, 0
