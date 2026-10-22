@@ -41,7 +41,7 @@ This single command:
 3. Converts the MySQL dumps to SQLite. No database server is needed.
 4. Rebuilds every table (`results/tables/`), figure (`results/figures/`, PDF and PNG at 300 dpi), paper figure (`results/paper_figures/`), `results/results.md` and `results/paper_numbers.json`.
 
-- **Expected runtime:** about 28 minutes (27.5 min wall-clock on the hardware below). The step-by-step runtime of the last run is in `results/logs/runtime.tsv` and results.md §11.
+- **Expected runtime:** about 18–28 minutes (two from-scratch runs took 18.3 and 27.5 min wall-clock on the hardware below). The step-by-step runtime of the last run is in `results/logs/runtime.tsv` and results.md §11.
 - **Hardware and OS used:** Apple M5 (10 cores), 16 GB RAM, macOS 26.6.2 (arm64), Python 3.9.6.
 - **Determinism:** seeds are fixed (20261021), models are single-threaded per fold, and two full regenerations produce byte-identical tables.
 - **OpenMP:** xgboost needs an OpenMP runtime. On macOS without one installed, `run_all.sh` points xgboost at the `libomp` bundled with scikit-learn (`DYLD_LIBRARY_PATH`). On Linux, the system `libgomp` is used.
