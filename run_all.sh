@@ -79,6 +79,8 @@ step human_ceiling    "$PY" -I src/human_ceiling.py
 step extras           "$PY" -I src/extras.py
 step range_restrict   "$PY" -I src/range_restriction.py
 step external_B0      "$PY" -I src/external_audit.py
+step agreement        "$PY" -I src/agreement_anatomy.py
+step external_B1      "$PY" -I src/external_b1.py
 cp src/s6_deviations.md results/fragments/s6_deviations.md
 step build_report     "$PY" -I src/build_report.py
 step paper_figures    "$PY" -I src/paper_figures.py

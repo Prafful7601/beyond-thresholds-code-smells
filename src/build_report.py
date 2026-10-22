@@ -40,7 +40,7 @@ def main():
         h_short, h_full, msg = c.split(" ", 2)
         w(f"- `{h_full}`: {msg}")
     w("")
-    w("Scope: **Tier 1, Tier 2, Step 3 (Prompt 2), Prompt 3 and Prompt 3B part A are complete.** The external check (Prompt 3B part B) has finished its B0 audit; B1 is waiting for the PI's go-ahead (§8).")
+    w("Scope: **all planned analyses are complete**: Tier 1, Tier 2, Step 3 (Prompt 2), Prompt 3, Prompt 3B (range restriction and external B0) and Prompt 4 (agreement anatomy and external check B1).")
     w(f"- **{', '.join(SMELL_NAME[s] for s in inel)} is reported descriptively only** (agreement, threshold ROC, RQ5 descriptives), "
       "because it fails the D8 eligibility rule after the consistency filter. Every model section (RQ4, RQ3 models, Step 3 A–J) covers CM and LPL only.")
     w("- Every section states its **analysis type**: *primary*, *robustness*, *validity check* or *exploratory*. "
@@ -89,15 +89,18 @@ def main():
         w(f"### 5.{'ABCDEFGHI'.index(key) + 1} {title}\n")
         w(frag(f"step3_{key}"))
     w("Section J (sensitivity) is reported in §4.3, because it is a robustness analysis.\n")
-    w("## 6 Human ceiling (plan.md §5.2)\n")
+    w("## 6 Human ceiling and agreement anatomy\n")
+    w("### 6.1 Human ceiling (plan.md §5.2)\n")
     w(frag("human_ceiling"))
+    w("### 6.2 Why same-snippet agreement exceeds cross-snippet agreement (plan.md §7.1)\n")
+    w(frag("agreement_anatomy"))
     w("## 7 Range restriction (plan.md §6.1)\n")
     w(frag("range_restriction"))
     w("## 8 External check: C# dataset (plan.md §6.2)\n")
     w("### 8.1 B0 audit\n")
     w(frag("external_B0"))
-    w("### 8.2 B1\n")
-    w("Not run. B1 waits for the PI's go-ahead and for decisions on the issues listed in §8.1.\n")
+    w("### 8.2 B1 (plan.md §7.2)\n")
+    w(frag("external_B1"))
     w("## 9 Exploratory\n")
     w("**Analysis type: exploratory.** Not part of the pre-registered primary or robustness analyses; A4 in §7 is also exploratory.\n")
     w(frag("exploratory_dacosx"))
@@ -123,7 +126,7 @@ def main():
     w("")
     w("## 12 Completion status\n")
     w("- Complete: Prompt 2 (Step 1 R3–R7; Step 2 RQ3, RQ5, R1, R2, R3–R6 on RQ3/RQ5; Step 3 A–J), Prompt 3 sections 1–4, and Prompt 3B part A (range restriction).")
-    w("- Prompt 3B part B: B0 audit complete; **B1 not run** (waiting for go-ahead). No section was skipped for time.\n")
+    w("- Prompt 3B part B (B0 audit) and Prompt 4 (Part 1 agreement anatomy 1.1–1.5; Part 2 external check B1) are complete. No section was skipped for time.\n")
     w("## 13 Headline numbers\n")
     w(headline_block())
     open(os.path.join(ROOT, "results/results.md"), "w").write("\n".join(md) + "\n")
@@ -204,6 +207,30 @@ def headline_rows():
     for r in a2.itertuples():
         add(f"Within-band logistic OR per unit of the primary metric, {r.smell}", r.logit_OR_per_unit, r.OR_lo, r.OR_hi,
             "primary (range restriction)", "range_A2_trend.csv", f"Cochran–Armitage z = {r.CA_z:.2f}, p = {r.CA_p:.2g}")
+    # ---- Prompt 4 additions
+    mm = rd("agreement_matched_neardup.csv")
+    for r in mm[mm.population.isin(["CM", "LPL"])].itertuples():
+        add(f"Same-snippet minus cross-snippet human MCC on matched near-duplicate entities, {r.population}", r.diff_MCC, r.diff_lo, r.diff_hi,
+            "primary (agreement anatomy)", "agreement_matched_neardup.csv",
+            f"same {r.same_MCC:.3f}, cross {r.cross_MCC:.3f}; {r.groups} groups, {r.entities} entities")
+    ex = rd("agreement_exact_dup.csv")
+    for r in ex[ex.population.isin(["CM", "LPL"])].itertuples():
+        if str(r.reported_as).startswith("CI"):
+            add(f"Same-snippet minus cross-snippet human MCC on exact duplicates, {r.population}", r.diff_MCC, r.diff_lo, r.diff_hi,
+                "primary (agreement anatomy)", "agreement_exact_dup.csv", f"{r.groups} groups")
+    lg = rd("agreement_gap_logit.csv")
+    for r in lg[(lg.set == "primary")].itertuples():
+        add(f"OR of unanimous per unit log(annotation-id gap), {r.population}", r.OR_per_log_gap, r.OR_lo, r.OR_hi,
+            "primary (agreement anatomy)", "agreement_gap_logit.csv", f"adjusted for the primary metric; p = {r.p:.2g}")
+    ea = rd("external_B1_agreement.csv")
+    for r in ea.itertuples():
+        add(f"External C#: share needing a third rating, {r.smell}", r.third_rating_share, r.third_lo, r.third_hi, "external check",
+            "external_B1_agreement.csv", f"first-pair ordinal alpha bounds {r.alpha_ordinal_min:.3f}–{r.alpha_ordinal_max:.3f}")
+    eu = rd("external_B1_auc.csv")
+    eu = eu[(eu.label == "final ≥ 1 (primary)") & eu.AUC.notna()]
+    for r in eu.itertuples():
+        add(f"External C#: ROC-AUC of {r.metric} ({r.orientation}), {r.smell}", r.AUC, r.AUC_lo, r.AUC_hi, "external check",
+            "external_B1_auc.csv", f"{r.positives}/{r.n_with_metric} positives; project-cluster CI [{r.AUC_project_lo:.3f}, {r.AUC_project_hi:.3f}]")
     return rows
 
 

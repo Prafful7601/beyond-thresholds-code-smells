@@ -21,6 +21,9 @@
 19. **Feature extraction now covers every sample path** (the §6.1 snippet universe). The values for the previously computed 95,496 paths are verified identical, so no earlier table changes.
 20. **Paper figures** (`results/paper_figures/`) are re-drawn from the committed tables at IEEE sizes. They contain no new analysis.
 21. **External dataset.** `openpyxl` 3.1.5 is pinned to read the xlsx files. B0 only reads and counts. The Refused Bequest header assumption (first `BOvR` column = BUR) is a proposal awaiting the PI's decision and is not used in any result.
+22. **Agreement anatomy.** Entities whose snippet file is missing from `files.zip` get no duplicate key and are excluded from the duplicate-group comparisons (1.1–1.2) only. A logistic fit with quasi-complete separation (LPL R4) is reported as not estimable, not as an OR.
+23. **External check sources.** The sampling filters and the adjudication-by-discussion are taken from the dataset author's doctoral dissertation (Prokić, Univ. Novi Sad, 2025, pp. 66–68). The Zenodo record does not describe them.
+24. **External Refused Bequest columns.** Both `BOvR`-labelled columns are reported, and neither is chosen as BUR, because the header order is not documented. The second column has only 41 non-missing values and 4 positives, so it is reported as counts only.
 
 **Known limitations**
 
@@ -53,4 +56,6 @@
   - The data cannot distinguish genuine context differences between near-duplicates from same-annotator or same-session effects within an entity. Annotator ids and timestamps are absent.
 - **Range restriction is a property of the design.** The annotated band holds 3.0% (CM) and 5.2% (LPL) of all methods but 81.9% and 98.9% of DesigniteJava flags. The SD-based Thorndike correction (A4, exploratory) cannot represent this upper-tail restriction.
 - **External dataset annotation is adjudicated.** Every snippet with exactly two annotations agrees, and a third annotation exists only after disagreement. Raw agreement on the released scores would therefore be biased upward relative to DACOS.
+- **Same-snippet agreement is a sequential, tool-mediated measurement.** On matched entities it exceeds cross-snippet agreement, also for exact duplicates with identical names. Its relation to the annotation-id gap runs in opposite directions for CM (rising) and LPL (falling). The data cannot separate annotator, session and serving-order effects.
+- **The external dataset is metric-filtered and adjudicated.** Its AUCs are computed within one-sided ranges of the same metrics, and its agreement is bounded rather than observed.
 - **Data-integrity cross-check with lizard 1.17.13.** Cyclomatic complexity matches DesigniteJava exactly for 59% of method snippets (Spearman 0.92); parameter count matches for 96%.

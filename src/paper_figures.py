@@ -94,21 +94,32 @@ def fig2(plt):
 def fig3(plt):
     H = pd.read_csv(os.path.join(TAB, "human_ceiling.csv"))
     H = H[H.metric == "MCC"].reset_index(drop=True)
-    fig, ax = plt.subplots(figsize=(SINGLE, 2.0))
-    ys = np.arange(len(H))[::-1]
+    Mm = pd.read_csv(os.path.join(TAB, "agreement_matched_neardup.csv")).set_index("population")
+    fig, ax = plt.subplots(figsize=(SINGLE, 3.0))
+    ys = np.arange(len(H))[::-1] * 1.0
+    off = {"human–human, all entities": 0.27, "human–human, same snippet (matched)": 0.09,
+           "human–human, identical-structure snippets": -0.09, "best model vs one human": -0.27}
+    style_ = {"human–human, all entities": ("o", COL["orange"]), "human–human, same snippet (matched)": ("^", COL["orange"]),
+              "human–human, identical-structure snippets": ("v", COL["aqua"]), "best model vs one human": ("s", COL["blue"])}
     for yy, r in zip(ys, H.itertuples()):
-        ax.errorbar(r.human_vs_human, yy + 0.13, xerr=[[r.human_vs_human - r.human_lo], [r.human_hi - r.human_vs_human]],
-                    fmt="o", color=COL["orange"], ms=4, capsize=0, label="human vs human" if yy == ys[0] else None)
-        ax.errorbar(r.model_vs_single_human, yy - 0.13, xerr=[[r.model_vs_single_human - r.model_lo], [r.model_hi - r.model_vs_single_human]],
-                    fmt="s", color=COL["blue"], ms=4, capsize=0, label="best model vs one human" if yy == ys[0] else None)
+        m = Mm.loc[r.population]
+        vals = {"human–human, all entities": (r.human_vs_human, r.human_lo, r.human_hi),
+                "human–human, same snippet (matched)": (m.same_MCC, m.same_lo, m.same_hi),
+                "human–human, identical-structure snippets": (m.cross_MCC, m.cross_lo, m.cross_hi),
+                "best model vs one human": (r.model_vs_single_human, r.model_lo, r.model_hi)}
+        for k, (e, lo, hi) in vals.items():
+            mk, c = style_[k]
+            ax.errorbar(e, yy + off[k], xerr=[[e - lo], [hi - e]], fmt=mk, color=c, ms=3.8, capsize=0, lw=1,
+                        label=k if yy == ys[0] else None)
     ax.set_yticks(ys)
     ax.set_yticklabels([f"{r.population} ({r.best_model})" for r in H.itertuples()])
-    ax.set_xlim(-0.05, 1)
+    ax.set_xlim(-0.2, 1.02)
     ax.axvline(0, color=COL["ink2"], lw=0.6, ls=":")
     ax.set_xlabel("MCC against a single annotation")
     ax.grid(axis="y", visible=False)
-    fig.legend(*ax.get_legend_handles_labels(), loc="upper center", ncol=2, frameon=False)
-    fig.tight_layout(rect=(0, 0, 1, 0.88))
+    fig.legend(*ax.get_legend_handles_labels(), loc="upper left", ncol=1, frameon=False, fontsize=7,
+               handletextpad=0.3, bbox_to_anchor=(0.02, 1.0))
+    fig.tight_layout(rect=(0, 0, 1, 0.74))
     save(fig, "fig3_human_ceiling")
 
 

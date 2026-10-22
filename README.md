@@ -24,10 +24,10 @@ The analysis is **pre-registered and robustness-first**:
 | RQ5 | which features distinguish unanimous from split snippets | §3 |
 | Robustness R1–R7 | the headline numbers under each alternative data reading; answer-run anatomy; sensitivity; LPL without the pc = 3 block; specification curves | §4 |
 | Step 3 A–I | baselines, five-model comparison (nested grouped CV), ablation, generalisation (LOPO, cross-smell), leakage checks, SHAP and calibration, feature selection, learning curve, error analysis | §5 |
-| Human ceiling | model MCC on the same scale as human-human agreement | §6 |
+| Human ceiling and agreement anatomy | model MCC on the same scale as human-human agreement; why same-snippet agreement exceeds agreement between structurally identical snippets (matched and exact-duplicate comparisons, annotation-id gap, tool design) | §6 |
 | Range restriction | how narrow the annotated band is and where the tool rule decides | §7 |
-| External check | audit of a C# code-smell dataset (B0; B1 pending) | §8 |
-| Headline numbers | 33 key numbers with CI, analysis type and source table; also in `results/paper_numbers.json` | §13 |
+| External check | C# code-smell dataset: audit (B0), adjudication rate, alpha bounds and metric AUCs (B1); external context, not a replication | §8 |
+| Headline numbers | key numbers with CI, analysis type and source table; also in `results/paper_numbers.json` | §13 |
 
 ## How to run
 
@@ -67,7 +67,7 @@ The data-quality observations in results.md §1 describe what this analysis foun
 |---|---|---|
 | Fig. 1 (single column): answer runs | `results/paper_figures/fig1_answer_runs.pdf` | `tables/audit_answer_runs.csv` and annotation data |
 | Fig. 2 (double column): specification curves | `results/paper_figures/fig2_spec_curves.pdf` | `tables/spec_curves.csv` |
-| Fig. 3 (single column): human ceiling | `results/paper_figures/fig3_human_ceiling.pdf` | `tables/human_ceiling.csv` |
+| Fig. 3 (single column): human ceiling with matched same- and cross-snippet agreement | `results/paper_figures/fig3_human_ceiling.pdf` | `tables/human_ceiling.csv`, `tables/agreement_matched_neardup.csv` |
 | Fig. 4 (single column): ablation | `results/paper_figures/fig4_ablation.pdf` | `tables/ablation_CM.csv`, `tables/ablation_LPL_R5.csv` |
 | Dataset audit tables | results.md §1 | `tables/audit_*.csv`, `tables/eligibility.csv` |
 | RQ1 / RQ2 / RQ4 tables | results.md §3 | `tables/rq1_*.csv`, `tables/rq2_*.csv`, `tables/rq4_*.csv` |
@@ -75,9 +75,10 @@ The data-quality observations in results.md §1 describe what this analysis foun
 | Robustness table | results.md §4.1 | `tables/robustness_summary.csv`, `tables/robustness_long.csv` |
 | LPL primary vs R5 | results.md §4.4 | `tables/lpl_r5_*.csv` |
 | Model comparison, ablation, generalisation, leakage, SHAP, calibration, learning curve | results.md §5 | `tables/model_*.csv`, `ablation_*.csv`, `lopo_*.csv`, `cross_smell.csv`, `leakage_*.csv`, `train_serve_skew.csv`, `shap_*.csv`, `calibration.csv`, `learning_curve*.csv`, `feature_selection*.csv`, `sensitivity.csv`, `results/error_analysis/` |
-| Human ceiling | results.md §6 | `tables/human_ceiling*.csv` |
+| Human ceiling | results.md §6.1 | `tables/human_ceiling*.csv` |
+| Agreement anatomy | results.md §6.2 | `tables/agreement_*.csv` |
 | Range restriction | results.md §7 | `tables/range_A*.csv` |
-| External check (B0) | results.md §8 | `tables/external_B0_*.csv` |
+| External check (B0, B1) | results.md §8 | `tables/external_B0_*.csv`, `tables/external_B1_*.csv` |
 | Every number quoted in the text | `results/paper_numbers.json` | value, CI, analysis type and source table for each headline number |
 
 ## Repository layout
@@ -95,7 +96,8 @@ src/rq1.py ... rq5.py    research questions
 src/robustness.py        R1-R7c headline numbers; src/run_anatomy.py (R7)
 src/protocol.py          Step 3 shared CV protocol; src/step3_*.py sections A-J and the R5 rerun
 src/human_ceiling.py     human ceiling; src/extras.py spec curves and exploratory reweighting
-src/range_restriction.py range-restriction analyses; src/external_audit.py external dataset audit
+src/range_restriction.py range-restriction analyses; src/agreement_anatomy.py agreement anatomy
+src/external_audit.py    external dataset audit (B0); src/external_b1.py external check (B1)
 src/build_report.py      assembles results/results.md and results/paper_numbers.json
 src/paper_figures.py     IEEE-sized paper figures
 results/                 tables, figures, paper_figures, error_analysis, logs, results.md, paper_numbers.json
@@ -124,7 +126,10 @@ The full list, with limitations, is in results.md §10. In short:
 18. Near-duplicate-ceiling designations are drawn as multinomial counts per pair type.
 19. Feature extraction covers every sample path; earlier values are unchanged.
 20. Paper figures are re-drawn from committed tables.
-21. `openpyxl` is pinned for the external dataset, and the Refused Bequest header assumption is not yet used.
+21. `openpyxl` is pinned for the external dataset.
+22. Entities whose snippet file is missing are excluded from the duplicate-group comparisons only, and a quasi-separated logistic fit is reported as not estimable.
+23. The external dataset's sampling filters and its discussion-based adjudication come from the dataset author's dissertation.
+24. Both ambiguous Refused Bequest columns are reported, and neither is chosen as BUR.
 
 ## Citation and licence
 
