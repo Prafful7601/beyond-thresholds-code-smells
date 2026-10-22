@@ -361,5 +361,137 @@
     "analysis_type": "primary (range restriction)",
     "source_table": "range_A2_trend.csv",
     "ci_level": 0.95
+  },
+  {
+    "id": 34,
+    "number": "Same-snippet minus cross-snippet human MCC on matched near-duplicate entities, CM",
+    "estimate": 0.7868749252012359,
+    "ci_lo": 0.5630819950677778,
+    "ci_hi": 1.014980409152503,
+    "note": "same 0.865, cross 0.078; 62 groups, 140 entities",
+    "analysis_type": "primary (agreement anatomy)",
+    "source_table": "agreement_matched_neardup.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 35,
+    "number": "Same-snippet minus cross-snippet human MCC on matched near-duplicate entities, LPL",
+    "estimate": 0.3581764301228318,
+    "ci_lo": 0.204326575203659,
+    "ci_hi": 0.4984306672039773,
+    "note": "same 0.456, cross 0.098; 207 groups, 614 entities",
+    "analysis_type": "primary (agreement anatomy)",
+    "source_table": "agreement_matched_neardup.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 36,
+    "number": "Same-snippet minus cross-snippet human MCC on exact duplicates, CM",
+    "estimate": 0.623247480566293,
+    "ci_lo": 0.268673252651661,
+    "ci_hi": 0.9715738926311902,
+    "note": "26 groups",
+    "analysis_type": "primary (agreement anatomy)",
+    "source_table": "agreement_exact_dup.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 37,
+    "number": "Same-snippet minus cross-snippet human MCC on exact duplicates, LPL",
+    "estimate": 0.4476855375513329,
+    "ci_lo": 0.2174403386466361,
+    "ci_hi": 0.5751972573183719,
+    "note": "92 groups",
+    "analysis_type": "primary (agreement anatomy)",
+    "source_table": "agreement_exact_dup.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 38,
+    "number": "OR of unanimous per unit log(annotation-id gap), CM",
+    "estimate": 1.2141900910159966,
+    "ci_lo": 1.132627345996319,
+    "ci_hi": 1.3016263313195913,
+    "note": "adjusted for the primary metric; p = 4.5e-08",
+    "analysis_type": "primary (agreement anatomy)",
+    "source_table": "agreement_gap_logit.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 39,
+    "number": "OR of unanimous per unit log(annotation-id gap), LPL",
+    "estimate": 0.186463785471175,
+    "ci_lo": 0.1407352088995295,
+    "ci_hi": 0.247050781137943,
+    "note": "adjusted for the primary metric; p = 1.3e-31",
+    "analysis_type": "primary (agreement anatomy)",
+    "source_table": "agreement_gap_logit.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 40,
+    "number": "External C#: share needing a third rating, Data Class",
+    "estimate": 0.1255411255411255,
+    "ci_lo": 0.0865800865800865,
+    "ci_hi": 0.1731601731601731,
+    "note": "first-pair ordinal alpha bounds 0.779–0.927",
+    "analysis_type": "external check",
+    "source_table": "external_B1_agreement.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 41,
+    "number": "External C#: share needing a third rating, Feature Envy",
+    "estimate": 0.4954545454545455,
+    "ci_lo": 0.4318181818181818,
+    "ci_hi": 0.5592045454545448,
+    "note": "first-pair ordinal alpha bounds 0.651–0.920",
+    "analysis_type": "external check",
+    "source_table": "external_B1_agreement.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 42,
+    "number": "External C#: share needing a third rating, Refused Bequest",
+    "estimate": 0.2296650717703349,
+    "ci_lo": 0.1722488038277512,
+    "ci_hi": 0.2870813397129186,
+    "note": "first-pair ordinal alpha bounds 0.606–0.927",
+    "analysis_type": "external check",
+    "source_table": "external_B1_agreement.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 43,
+    "number": "External C#: ROC-AUC of WOC (lower = smellier (negated)), Data Class",
+    "estimate": 0.4243827160493827,
+    "ci_lo": 0.3024234500706234,
+    "ci_hi": 0.5453286887724247,
+    "note": "15/231 positives; project-cluster CI [0.264, 0.554]",
+    "analysis_type": "external check",
+    "source_table": "external_B1_auc.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 44,
+    "number": "External C#: ROC-AUC of AID (higher = smellier), Feature Envy",
+    "estimate": 0.6833484299516909,
+    "ci_lo": 0.5765720023811238,
+    "ci_hi": 0.7817342866644496,
+    "note": "36/220 positives; project-cluster CI [0.617, 0.757]",
+    "analysis_type": "external check",
+    "source_table": "external_B1_auc.csv",
+    "ci_level": 0.95
+  },
+  {
+    "id": 45,
+    "number": "External C#: ROC-AUC of first `BOvR`-labelled column (lower = smellier (negated)), Refused Bequest",
+    "estimate": 0.3718599033816425,
+    "ci_lo": 0.2830393462900285,
+    "ci_hi": 0.4628037622403442,
+    "note": "30/168 positives; project-cluster CI [0.212, 0.602]",
+    "analysis_type": "external check",
+    "source_table": "external_B1_auc.csv",
+    "ci_level": 0.95
   }
 ]

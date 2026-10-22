@@ -165,6 +165,6 @@ Figure: `figures/model_cd_diagram_LPL_R5.pdf`.
 | exact | 71 groups; 169 entities; 0 groups span >1 project; 22 groups have conflicting labels | 51 groups; 129 entities; 0 groups span >1 project; 22 groups have conflicting labels |
 | near | 160 groups; 462 entities; 6 groups span >1 project; 62 groups have conflicting labels | 131 groups; 399 entities; 6 groups span >1 project; 62 groups have conflicting labels |
 
-Tables: `tables/lpl_r5_*.csv` (side by side), `tables/model_comparison_LPL_R5.csv`, `tables/baselines_LPL_R5.csv`, `tables/ablation_LPL_R5.csv`, `tables/rq3_odds_ratios_LPL_R5.csv`, `tables/rq3_tree_rules_LPL_R5.txt`, `tables/lopo_per_project_LPL_R5.csv`. Runtime 494s.
+Tables: `tables/lpl_r5_*.csv` (side by side), `tables/model_comparison_LPL_R5.csv`, `tables/baselines_LPL_R5.csv`, `tables/ablation_LPL_R5.csv`, `tables/rq3_odds_ratios_LPL_R5.csv`, `tables/rq3_tree_rules_LPL_R5.txt`, `tables/lopo_per_project_LPL_R5.csv`. Runtime 434s.
 
 **Summary.** R5 best model SVM, MCC 0.269 [0.213, 0.321]; primary best model GB, MCC 0.232 [0.184, 0.278].

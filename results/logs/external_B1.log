@@ -1,0 +1,54 @@
+**Analysis type: external check** (not a replication). plan.md §7.2.
+
+**Context.**
+- This dataset was **not sampled from a borderline band**. It is external context for DACOS, not a replication.
+- However, per the dataset author's doctoral dissertation (S. Prokić, University of Novi Sad, 2025, p. 68), its snippets were pre-filtered one-sidedly on the same metrics:
+  - Data Class: WOC < 0.33 ∨ NOPA > 1 ∨ NOPP > 1 (non-private, non-abstract classes)
+  - Feature Envy: AID ≥ 4
+  - Refused Bequest: BUR < 0.33 (non-abstract classes with a parent and with methods other than constructors)
+  - The primary metric is therefore range-restricted on one side.
+- Annotation was adjudicated. Snippets were re-served until the annotations agreed, and conflicting annotations were discussed and could be revised to reach consensus (p. 66).
+- Three annotators took part (p. 67).
+
+**Agreement** (no raw alpha, because the design is adjudicated).
+- (a) Share of snippets that needed a third rating: the pre-adjudication disagreement rate, with a bootstrap CI over snippets (B = 2000).
+- (b) Exact bounds on first-pair Krippendorff's alpha (ordinal, values 0–3):
+  - 2-rated snippets keep their released pair.
+  - Each 3-rated snippet contributes annotator 2 plus annotator 1 or annotator 3. Snippets of the same type (a2, {a1, a3}) are interchangeable, so every count combination is enumerated.
+  - Caveat: released scores may have been revised after discussion, so these bound the agreement of the released first pairs, not necessarily the original pre-discussion ratings.
+
+| smell | snippets | snippets_3_rated | third-rating share [95% CI] | with_a_choice_(a1≠a3) | choice_types | assignments_enumerated | first-pair ordinal alpha: min – max |
+|---|---|---|---|---|---|---|---|
+| Data Class | 231 | 29 | 0.126 [0.087, 0.173] | 6 | 4 | 36 | 0.779 – 0.927 |
+| Feature Envy | 220 | 109 | 0.495 [0.432, 0.559] | 20 | 5 | 960 | 0.651 – 0.920 |
+| Refused Bequest | 209 | 48 | 0.230 [0.172, 0.287] | 24 | 3 | 480 | 0.606 – 0.927 |
+
+**Labels.**
+- Consensus rule found in the data: the released final score equals the strict majority of the released individual scores for every snippet (§8.1).
+- Primary: smelly = final ≥ 1. Sensitivity: final ≥ 2.
+
+| smell | snippets | positives_final_ge1 | share_ge1 | positives_final_ge2 | share_ge2 |
+|---|---|---|---|---|---|
+| Data Class | 231 | 15 | 0.065 | 3 | 0.013 |
+| Feature Envy | 220 | 36 | 0.164 | 8 | 0.036 |
+| Refused Bequest | 209 | 36 | 0.172 | 1 | 0.005 |
+
+**Primary metric versus consensus.**
+- Each metric is oriented so that higher = smellier before the AUC is computed. The Youden rule is reported on the original scale.
+- LAA and FDP are **not provided** in the Feature Envy sheet, so no secondary metrics are added.
+- **Refused Bequest header is ambiguous.** The sheet labels two adjacent columns `BOvR`; the Data Class sheet has `BUR, BOvR` in those positions. Neither the Zenodo description nor the dissertation (which defines BUR and BOvR, p. 10) gives the column order. Both columns are therefore reported as "first column" and "second column", and neither is chosen as BUR.
+- CIs: bootstrap over snippets (B = 2000) and a cluster bootstrap over projects. Rows with fewer than 5 positives or negatives report counts only. Snippets with a missing metric are dropped (counts shown).
+
+| smell | metric | orientation | label | n_with_metric | missing_metric | positives | share_positive | projects | ROC-AUC [95% CI snippets] | [95% CI projects] | Youden rule [95% CI of cut] | note |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Data Class | WOC | lower = smellier (negated) | final ≥ 1 (primary) | 231 | 0 | 15 | 0.065 | 15 | 0.424 [0.302, 0.545] | [0.264, 0.554] | WOC ≤ 0.143 [0.0909, 0.286] |  |
+| Data Class | WOC | lower = smellier (negated) | final ≥ 2 (sensitivity) | 231 | 0 | 3 | 0.013 | 15 | – | – | – | fewer than 5 positives or negatives: counts only |
+| Feature Envy | AID | higher = smellier | final ≥ 1 (primary) | 220 | 0 | 36 | 0.164 | 11 | 0.683 [0.577, 0.782] | [0.617, 0.757] | AID ≥ 11 [7, 17] |  |
+| Feature Envy | AID | higher = smellier | final ≥ 2 (sensitivity) | 220 | 0 | 8 | 0.036 | 11 | 0.722 [0.503, 0.907] | [0.438, 0.883] | AID ≥ 7 [7, 29] |  |
+| Refused Bequest | first `BOvR`-labelled column | lower = smellier (negated) | final ≥ 1 (primary) | 168 | 41 | 30 | 0.179 | 15 | 0.372 [0.283, 0.463] | [0.212, 0.602] | first `BOvR`-labelled column ≤ 0.167 [0.154, 0.25] |  |
+| Refused Bequest | first `BOvR`-labelled column | lower = smellier (negated) | final ≥ 2 (sensitivity) | 168 | 41 | 1 | 0.006 | 15 | – | – | – | fewer than 5 positives or negatives: counts only |
+| Refused Bequest | second `BOvR`-labelled column | lower = smellier (negated) | final ≥ 1 (primary) | 41 | 168 | 4 | 0.098 | 11 | – | – | – | fewer than 5 positives or negatives: counts only |
+| Refused Bequest | second `BOvR`-labelled column | lower = smellier (negated) | final ≥ 2 (sensitivity) | 41 | 168 | 0 | 0.0 | 11 | – | – | – | fewer than 5 positives or negatives: counts only |
+
+Tables: `tables/external_B1_agreement.csv`, `external_B1_labels.csv`, `external_B1_auc.csv`.
+

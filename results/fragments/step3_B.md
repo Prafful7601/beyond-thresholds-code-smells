@@ -49,6 +49,6 @@ Pairs whose average ranks differ by more than the CD: CM: LR vs RF (|Δrank| 1.6
 - All pairwise rank differences are in `tables/model_nemenyi_pairs.csv`.
 - Caveat: the 25 folds come from 5 repeats of the same data, so they are not independent blocks. The test is therefore anti-conservative.
 
-Tables: `tables/model_comparison.csv`, `tables/model_friedman.csv`, `tables/model_nemenyi_pairs.csv`, `tables/model_fold_mcc.csv`. Figure: `figures/model_cd_diagram.pdf` (.png). Runtime 102s.
+Tables: `tables/model_comparison.csv`, `tables/model_friedman.csv`, `tables/model_nemenyi_pairs.csv`, `tables/model_fold_mcc.csv`. Figure: `figures/model_cd_diagram.pdf` (.png). Runtime 103s.
 
 **Summary.** CM: best model LR (MCC 0.095), Friedman p = 3.04e-04; LPL: best model GB (MCC 0.232), Friedman p = 0.0119.

@@ -24,6 +24,6 @@
 | CM | LR | 0.015 [0.005, 0.025] | False |
 | LPL | GB | 0.005 [-0.007, 0.016] | True |
 
-Tables: `tables/learning_curve.csv`, `tables/learning_curve_plateau.csv`. Figure: `figures/learning_curve.pdf` (.png). Runtime F+H 10s.
+Tables: `tables/learning_curve.csv`, `tables/learning_curve_plateau.csv`. Figure: `figures/learning_curve.pdf` (.png). Runtime F+H 9s.
 
 **Summary.** CM (LR): gain 75%→100% = 0.015 [0.005, 0.025], plateaued by rule: no; macro-F1 across all fractions ranges 0.506–0.530; LPL (GB): gain 75%→100% = 0.005 [-0.007, 0.016], plateaued by rule: yes; macro-F1 across all fractions ranges 0.556–0.612.

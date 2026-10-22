@@ -6,8 +6,9 @@ Pre-registered plan: `plan.md`. Plan commits, in order:
 - `a723d8e5b96a96c4e958ec10862f0bcc712716d4`: Plan amendment: pre-register Prompt 2 robustness, Tier 2 and Step 3 analyses
 - `4963a18301b024f0e22314ae23c78783b757ff2c`: Plan amendment: pre-register Prompt 3 close-out analyses
 - `86b0c3f6c01de5afcfbc5e7c8a7bbd48c5408f32`: Plan amendment: pre-register Prompt 3B range-restriction analyses and B0
+- `8e4003ce8b9667202a7d26528493798b6f0c7b97`: Plan amendment: pre-register Prompt 4 agreement anatomy and external B1
 
-Scope: **Tier 1, Tier 2, Step 3 (Prompt 2), Prompt 3 and Prompt 3B part A are complete.** The external check (Prompt 3B part B) has finished its B0 audit; B1 is waiting for the PI's go-ahead (§8).
+Scope: **all planned analyses are complete**: Tier 1, Tier 2, Step 3 (Prompt 2), Prompt 3, Prompt 3B (range restriction and external B0) and Prompt 4 (agreement anatomy and external check B1).
 - **Multifaceted Abstraction is reported descriptively only** (agreement, threshold ROC, RQ5 descriptives), because it fails the D8 eligibility rule after the consistency filter. Every model section (RQ4, RQ3 models, Step 3 A–J) covers CM and LPL only.
 - Every section states its **analysis type**: *primary*, *robustness*, *validity check* or *exploratory*. Numbers from different types must not be mixed when the paper is written.
 
@@ -669,7 +670,7 @@ Tables: `tables/run_anatomy.csv`, `tables/run_colocation.csv`. Figure: `figures/
 | LPL | GB | R4 | 250 | 0.616 → 0.570 | -0.046 [-0.069, -0.023] | 0.232 → 0.153 | -0.079 [-0.124, -0.034] | 0.633 [0.571, 0.695] | 0.267 [0.145, 0.395] |
 | LPL | GB | R6 | 1325 | 0.616 → 0.616 | 0.000 [0.000, 0.000] | 0.232 → 0.232 | 0.000 [0.000, 0.000] | 0.616 [0.591, 0.638] | 0.232 [0.184, 0.278] |
 
-Table: `tables/sensitivity.csv`. Runtime G+I+J 54s.
+Table: `tables/sensitivity.csv`. Runtime G+I+J 55s.
 
 ### 4.4 LPL Step 3 without the pc = 3 block (R5; plan.md §5.1)
 
@@ -840,7 +841,7 @@ Figure: `figures/model_cd_diagram_LPL_R5.pdf`.
 | exact | 71 groups; 169 entities; 0 groups span >1 project; 22 groups have conflicting labels | 51 groups; 129 entities; 0 groups span >1 project; 22 groups have conflicting labels |
 | near | 160 groups; 462 entities; 6 groups span >1 project; 62 groups have conflicting labels | 131 groups; 399 entities; 6 groups span >1 project; 62 groups have conflicting labels |
 
-Tables: `tables/lpl_r5_*.csv` (side by side), `tables/model_comparison_LPL_R5.csv`, `tables/baselines_LPL_R5.csv`, `tables/ablation_LPL_R5.csv`, `tables/rq3_odds_ratios_LPL_R5.csv`, `tables/rq3_tree_rules_LPL_R5.txt`, `tables/lopo_per_project_LPL_R5.csv`. Runtime 494s.
+Tables: `tables/lpl_r5_*.csv` (side by side), `tables/model_comparison_LPL_R5.csv`, `tables/baselines_LPL_R5.csv`, `tables/ablation_LPL_R5.csv`, `tables/rq3_odds_ratios_LPL_R5.csv`, `tables/rq3_tree_rules_LPL_R5.txt`, `tables/lopo_per_project_LPL_R5.csv`. Runtime 434s.
 
 **Summary.** R5 best model SVM, MCC 0.269 [0.213, 0.321]; primary best model GB, MCC 0.232 [0.184, 0.278].
 
@@ -989,7 +990,7 @@ Pairs whose average ranks differ by more than the CD: CM: LR vs RF (|Δrank| 1.6
 - All pairwise rank differences are in `tables/model_nemenyi_pairs.csv`.
 - Caveat: the 25 folds come from 5 repeats of the same data, so they are not independent blocks. The test is therefore anti-conservative.
 
-Tables: `tables/model_comparison.csv`, `tables/model_friedman.csv`, `tables/model_nemenyi_pairs.csv`, `tables/model_fold_mcc.csv`. Figure: `figures/model_cd_diagram.pdf` (.png). Runtime 102s.
+Tables: `tables/model_comparison.csv`, `tables/model_friedman.csv`, `tables/model_nemenyi_pairs.csv`, `tables/model_fold_mcc.csv`. Figure: `figures/model_cd_diagram.pdf` (.png). Runtime 103s.
 
 **Summary.** CM: best model LR (MCC 0.095), Friedman p = 3.04e-04; LPL: best model GB (MCC 0.232), Friedman p = 0.0119.
 
@@ -1194,7 +1195,7 @@ Runtime 156s.
 | CM | LPL | LR | {'clf__C': 0.01} | 1695 | 1205 | 120 | 0.255 [0.234, 0.276] | -0.060 [-0.126, 0.002] | 0.468 [0.429, 0.505] | 0.690 [0.656, 0.727] |
 | LPL | CM | GB | {'learning_rate': 0.1, 'max_depth': 2, 'n_estimators': 100} | 1325 | 1575 | 120 | 0.285 [0.268, 0.302] | 0.051 [0.008, 0.090] | 0.516 [0.486, 0.546] | 0.692 [0.662, 0.723] |
 
-Tables: `tables/lopo_per_project.csv`, `tables/lopo_distribution.csv`, `tables/cross_smell.csv`. Figure: `figures/lopo_distribution.pdf` (.png). Runtime 14s.
+Tables: `tables/lopo_per_project.csv`, `tables/lopo_distribution.csv`, `tables/cross_smell.csv`. Figure: `figures/lopo_distribution.pdf` (.png). Runtime 13s.
 
 **Summary.** CM→LPL (LR): MCC -0.060 [-0.126, 0.002]; LPL→CM (GB): MCC 0.051 [0.008, 0.090].
 
@@ -1380,7 +1381,7 @@ Tables: `tables/feature_selection.csv` (including per-fold MI values), `tables/f
 | CM | LR | 0.015 [0.005, 0.025] | False |
 | LPL | GB | 0.005 [-0.007, 0.016] | True |
 
-Tables: `tables/learning_curve.csv`, `tables/learning_curve_plateau.csv`. Figure: `figures/learning_curve.pdf` (.png). Runtime F+H 10s.
+Tables: `tables/learning_curve.csv`, `tables/learning_curve_plateau.csv`. Figure: `figures/learning_curve.pdf` (.png). Runtime F+H 9s.
 
 **Summary.** CM (LR): gain 75%→100% = 0.015 [0.005, 0.025], plateaued by rule: no; macro-F1 across all fractions ranges 0.506–0.530; LPL (GB): gain 75%→100% = 0.005 [-0.007, 0.016], plateaued by rule: yes; macro-F1 across all fractions ranges 0.556–0.612.
 
@@ -1416,7 +1417,9 @@ Files: `results/error_analysis/error_rates.csv`, `error_samples.csv`, `error_sam
 
 Section J (sensitivity) is reported in §4.3, because it is a robustness analysis.
 
-## 6 Human ceiling (plan.md §5.2)
+## 6 Human ceiling and agreement anatomy
+
+### 6.1 Human ceiling (plan.md §5.2)
 
 **Analysis type: primary (human ceiling).** plan.md §5.2.
 
@@ -1463,9 +1466,97 @@ Population sizes:
 | LPL | 209 | 1393 | 0.099 [0.039, 0.183] | 0.549 [0.519, 0.591] | 0.625 [0.583, 0.648] |
 | LPL R5 | 180 | 1352 | 0.087 [0.028, 0.158] | 0.543 [0.514, 0.579] | 0.613 [0.563, 0.638] |
 
-Tables: `tables/human_ceiling.csv`, `tables/human_ceiling_neardup.csv`. Figure: `figures/human_ceiling.pdf` (.png). Runtime 481s.
+Tables: `tables/human_ceiling.csv`, `tables/human_ceiling_neardup.csv`. Figure: `figures/human_ceiling.pdf` (.png). Runtime 39s.
 
 **Summary (MCC).** CM: human 0.806, model 0.091, ratio 0.11; LPL: human 0.540, model 0.171, ratio 0.32; LPL R5: human 0.515, model 0.201, ratio 0.39.
+
+### 6.2 Why same-snippet agreement exceeds cross-snippet agreement (plan.md §7.1)
+
+**Analysis type: primary** (R4 rows of 1.3 are robustness). plan.md §7.1.
+
+**Population.** Primary-set entities with exactly 2 usable annotations (R5 set for "LPL R5"). Entities whose snippet file is missing from `files.zip` (§1.8) get no duplicate key and are excluded from 1.1–1.2, but are kept in 1.3. Groups are entities of the same project with the same near-duplicate key (identifiers → ID, literals → LIT) or the same exact key (comments removed, whitespace collapsed, names kept), with at least 2 entities.
+
+**1.1 Matched comparison on near-duplicate groups**
+- (a) Same-snippet MCC: one annotation versus the other, random roles, 2000 designations.
+- (b) Cross-snippet MCC: for every entity pair within a group, one random annotation per entity, random roles, 2000 draws.
+- CIs: bootstrap over groups (B = 2000); the difference is paired.
+- The Prompt 3 cross-snippet number (§6, last column) used every primary-set entity with ≥ 2 usable annotations, drawing each entity's annotation with probability y/n. (b) uses the same construction restricted to entities with exactly 2 usable annotations, so both sides here are computed on identical entities.
+
+| population | groups | entities | pairs | same-snippet MCC [95% CI] | cross-snippet MCC [95% CI] | difference [95% CI] | Prompt 3 cross-snippet MCC |
+|---|---|---|---|---|---|---|---|
+| CM | 62 | 140 | 103 | 0.865 [0.754, 0.954] | 0.078 [-0.128, 0.280] | 0.787 [0.563, 1.015] | 0.082 |
+| LPL | 207 | 614 | 1391 | 0.456 [0.321, 0.590] | 0.098 [0.038, 0.189] | 0.358 [0.204, 0.498] | 0.099 |
+| LPL R5 | 178 | 551 | 1350 | 0.424 [0.286, 0.576] | 0.086 [0.030, 0.156] | 0.337 [0.191, 0.495] | 0.087 |
+
+**1.2 Exact duplicates**
+
+| population | key | reported_as | groups | entities | pairs | same_MCC | same_lo | same_hi | cross_MCC | cross_lo | cross_hi | diff_MCC | diff_lo | diff_hi | same_raw_agreement | cross_raw_agreement | diff_raw_agreement | diff_raw_lo | diff_raw_hi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CM | exact duplicate | CI (≥ 20 groups) | 26 | 54 | 30 | 0.803 | 0.582 | 0.962 | 0.18 | -0.112 | 0.465 | 0.623 | 0.269 | 0.972 | 0.907 | 0.601 | 0.306 | 0.116 | 0.477 |
+| LPL | exact duplicate | CI (≥ 20 groups) | 92 | 227 | 683 | 0.49 | 0.311 | 0.696 | 0.042 | -0.002 | 0.315 | 0.448 | 0.217 | 0.575 | 0.784 | 0.65 | 0.134 | 0.062 | 0.236 |
+| LPL R5 | exact duplicate | CI (≥ 20 groups) | 72 | 187 | 663 | 0.438 | 0.254 | 0.633 | 0.033 | -0.022 | 0.224 | 0.405 | 0.199 | 0.587 | 0.738 | 0.64 | 0.098 | 0.018 | 0.277 |
+
+**1.3 Annotation-id gap** (|id₁ − id₂| per entity; R4 = run annotations removed first)
+
+| population | entities | min | q1 | median | q3 | max | share_gap_le_10 | share_gap_le_100 | set |
+|---|---|---|---|---|---|---|---|---|---|
+| CM | 1858 | 1 | 1826.25 | 2944.0 | 3098.0 | 8288 | 0.034 | 0.074 | primary |
+| CM | 1468 | 1 | 1578.5 | 2975.0 | 3114.0 | 3787 | 0.042 | 0.073 | R4 |
+| LPL | 1692 | 1 | 1830.75 | 2536.5 | 3225.5 | 9624 | 0.018 | 0.035 | primary |
+| LPL | 252 | 1 | 126.5 | 300.5 | 1726.0 | 2944 | 0.115 | 0.226 | R4 |
+| LPL R5 | 1555 | 1 | 2061.5 | 2616.0 | 3314.5 | 9624 | 0.02 | 0.038 | R5 |
+
+| population | set | quintile | gap range | entities | share unanimous [95% CI] | same-snippet MCC [95% CI] |
+|---|---|---|---|---|---|---|
+| CM | primary | 1 | 1–1494 | 372 | 0.841 [0.804, 0.879] | 0.574 [0.468, 0.665] |
+| CM | primary | 2 | 1497–2626 | 371 | 0.865 [0.827, 0.900] | 0.595 [0.491, 0.695] |
+| CM | primary | 3 | 2629–3007 | 372 | 0.892 [0.860, 0.925] | 0.785 [0.721, 0.849] |
+| CM | primary | 4 | 3009–3131 | 371 | 0.987 [0.973, 0.997] | 0.971 [0.942, 0.994] |
+| CM | primary | 5 | 3131–8288 | 372 | 0.973 [0.954, 0.987] | 0.946 [0.908, 0.973] |
+| CM | R4 | 1 | 1–1393 | 294 | 0.833 [0.789, 0.874] | 0.585 [0.479, 0.682] |
+| CM | R4 | 2 | 1395–2785 | 293 | 0.863 [0.826, 0.901] | 0.640 [0.532, 0.734] |
+| CM | R4 | 3 | 2805–3053 | 294 | 0.925 [0.895, 0.952] | 0.841 [0.778, 0.901] |
+| CM | R4 | 4 | 3053–3135 | 293 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| CM | R4 | 5 | 3135–3787 | 294 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| LPL | primary | 1 | 1–1614 | 339 | 0.968 [0.947, 0.985] | 0.864 [0.779, 0.935] |
+| LPL | primary | 2 | 1615–2375 | 338 | 0.766 [0.722, 0.811] | 0.328 [0.206, 0.441] |
+| LPL | primary | 3 | 2375–2944 | 338 | 0.855 [0.814, 0.891] | 0.650 [0.551, 0.735] |
+| LPL | primary | 4 | 2944–3405 | 338 | 0.861 [0.822, 0.896] | 0.611 [0.506, 0.708] |
+| LPL | primary | 5 | 3406–9624 | 339 | 0.469 [0.416, 0.519] | -0.063 [-0.170, 0.038] |
+| LPL | R4 | 1 | 1–75 | 51 | 0.941 [0.863, 1.000] | 0.773 [0.472, 1.000] |
+| LPL | R4 | 2 | 76–271 | 50 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| LPL | R4 | 3 | 273–1270 | 50 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| LPL | R4 | 4 | 1270–1870 | 50 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| LPL | R4 | 5 | 1874–2944 | 51 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| LPL R5 | R5 | 1 | 1–1870 | 311 | 0.965 [0.942, 0.984] | 0.875 [0.797, 0.941] |
+| LPL R5 | R5 | 2 | 1874–2475 | 311 | 0.736 [0.688, 0.785] | 0.333 [0.211, 0.446] |
+| LPL R5 | R5 | 3 | 2475–3000 | 311 | 0.817 [0.775, 0.859] | 0.622 [0.531, 0.710] |
+| LPL R5 | R5 | 4 | 3000–3484 | 311 | 0.884 [0.849, 0.920] | 0.698 [0.601, 0.786] |
+| LPL R5 | R5 | 5 | 3486–9624 | 311 | 0.421 [0.370, 0.476] | -0.160 [-0.266, -0.051] |
+
+Logistic regression of unanimous on log(gap) and the raw primary metric:
+
+| population | set | entities | OR per unit log(gap) [95% CI] | p | OR per unit metric (p) | note |
+|---|---|---|---|---|---|---|
+| CM | primary | 1858 | 1.214 [1.133, 1.302] | 4.49e-08 | 1.005 (0.9079) |  |
+| CM | R4 | 1468 | 1.312 [1.220, 1.410] | 1.82e-13 | 1.025 (0.6648) |  |
+| LPL | primary | 1692 | 0.186 [0.141, 0.247] | 1.28e-31 | 0.391 (2.41e-23) |  |
+| LPL | R4 | 252 | n/a | n/a | n/a | not estimable: quasi-complete separation (robust SE > 5) |
+| LPL R5 | R5 | 1555 | 0.187 [0.141, 0.249] | 4.11e-31 | 0.391 (2.89e-23) |  |
+
+**1.4 Tool design** (public source SMART-Dal/Tagman @ 40f3aa67bc16d780c6a0e1da63995b7d92789ddc (2023-01-19); the deployed version may differ)
+
+| question | finding | reference |
+|---|---|---|
+| (a) Does serving prevent one user from annotating the same sample twice? | Yes for the same `sample` row. Once a user has any annotation, candidate samples are filtered by `id NOT IN (<sample ids this user annotated>)`. The filter does not apply across different `sample` rows of the same code entity, such as the 332 MA classes imported twice (§1.3). | src/main/java/com/smartlab/tagman/service/AnnotationService.java:99-120, 131-133 |
+| (b) What does the annotator see? | Only the contents of the snippet's own file (`sample.path_to_file`, the CodeSplit method or class file), read line by line. It is shown in a code block titled with the file path. The surrounding class or source file is not shown. | src/main/java/com/smartlab/tagman/web/AnnotationController.java:107-118; src/main/resources/templates/indexNonAdmin.html:438-439; src/main/java/com/smartlab/tagman/util/TagmanUtil.java:53-58 |
+| (c) How are samples assigned and ordered? | Each request picks methods with probability 0.7 and classes with 0.3 (`random.nextInt(10) < 7`). It first queries samples with `has_smell = true` and `sample_constraints = 1` (already annotated once), then falls back to `sample_constraints < 2`. Both queries use `LIMIT 10` with no `ORDER BY`, and the tool picks uniformly at random among the ≤ 10 rows returned. Without `ORDER BY`, the rows returned follow the database's storage order, so serving tends to follow sample-id order. Preferring samples with one annotation tends to bring a sample's second annotation soon after its first. The counter `sample_constraints` is incremented on submit. Each user is capped at `MaxUserAnnotations` = 2500. | AnnotationService.java:76-79, 92-93, 117-120, 131-133, 142-143; util/Constants.java:41, 51 |
+
+**1.5 Interpretation (rules fixed in plan.md §7.1)**
+
+In the matched comparison, same-snippet MCC exceeds cross-snippet MCC on the same entities for 3 of 3 populations (CI of the difference excluding 0). This shows that the gap is not an artefact of comparing different populations. It does not discriminate between the two explanations. For exact duplicates, which share names and text (CM: same − cross MCC 0.623 [0.269, 0.972]; LPL: same − cross MCC 0.448 [0.217, 0.575]; LPL R5: same − cross MCC 0.405 [0.199, 0.587]), cross-snippet agreement is below same-snippet agreement in 3 of 3 populations. Where it is lower, this is inconsistent with the view that information inside the snippet text explains the gap; context outside the snippet and collection effects remain possible. The annotation-id gap shows an OR per unit log(gap) below 1 with a CI excluding 1 for LPL, LPL R5. That is consistent with collection or session effects. The OR is above 1 with a CI excluding 1 for CM, meaning agreement rises with the gap. A null result here is not evidence against collection effects. The public tool source shows annotators only the snippet's own file, which is inconsistent with an explanation based on context outside the snippet, unless the deployed version differed. It prevents the same user from annotating the same sample row twice, so a same-annotator explanation is possible only through duplicated sample rows or multiple accounts. Neither can be checked, because the data have no annotator ids.
+
+Tables: `tables/agreement_matched_neardup.csv`, `agreement_exact_dup.csv`, `agreement_gap_distribution.csv`, `agreement_gap_quintiles.csv`, `agreement_gap_logit.csv`, `agreement_tool_design.csv`. Runtime 24s.
 
 ## 7 Range restriction (plan.md §6.1)
 
@@ -1639,9 +1730,61 @@ Metric definitions are from the Clean-CaDET platform's `CaDETMetrics.cs`, linked
 
 Tables: `tables/external_B0_audit.csv`, `external_B0_metrics.csv`, `external_B0_annotator_pairs.csv`. Log: `logs/external_audit.txt`.
 
-### 8.2 B1
+### 8.2 B1 (plan.md §7.2)
 
-Not run. B1 waits for the PI's go-ahead and for decisions on the issues listed in §8.1.
+**Analysis type: external check** (not a replication). plan.md §7.2.
+
+**Context.**
+- This dataset was **not sampled from a borderline band**. It is external context for DACOS, not a replication.
+- However, per the dataset author's doctoral dissertation (S. Prokić, University of Novi Sad, 2025, p. 68), its snippets were pre-filtered one-sidedly on the same metrics:
+  - Data Class: WOC < 0.33 ∨ NOPA > 1 ∨ NOPP > 1 (non-private, non-abstract classes)
+  - Feature Envy: AID ≥ 4
+  - Refused Bequest: BUR < 0.33 (non-abstract classes with a parent and with methods other than constructors)
+  - The primary metric is therefore range-restricted on one side.
+- Annotation was adjudicated. Snippets were re-served until the annotations agreed, and conflicting annotations were discussed and could be revised to reach consensus (p. 66).
+- Three annotators took part (p. 67).
+
+**Agreement** (no raw alpha, because the design is adjudicated).
+- (a) Share of snippets that needed a third rating: the pre-adjudication disagreement rate, with a bootstrap CI over snippets (B = 2000).
+- (b) Exact bounds on first-pair Krippendorff's alpha (ordinal, values 0–3):
+  - 2-rated snippets keep their released pair.
+  - Each 3-rated snippet contributes annotator 2 plus annotator 1 or annotator 3. Snippets of the same type (a2, {a1, a3}) are interchangeable, so every count combination is enumerated.
+  - Caveat: released scores may have been revised after discussion, so these bound the agreement of the released first pairs, not necessarily the original pre-discussion ratings.
+
+| smell | snippets | snippets_3_rated | third-rating share [95% CI] | with_a_choice_(a1≠a3) | choice_types | assignments_enumerated | first-pair ordinal alpha: min – max |
+|---|---|---|---|---|---|---|---|
+| Data Class | 231 | 29 | 0.126 [0.087, 0.173] | 6 | 4 | 36 | 0.779 – 0.927 |
+| Feature Envy | 220 | 109 | 0.495 [0.432, 0.559] | 20 | 5 | 960 | 0.651 – 0.920 |
+| Refused Bequest | 209 | 48 | 0.230 [0.172, 0.287] | 24 | 3 | 480 | 0.606 – 0.927 |
+
+**Labels.**
+- Consensus rule found in the data: the released final score equals the strict majority of the released individual scores for every snippet (§8.1).
+- Primary: smelly = final ≥ 1. Sensitivity: final ≥ 2.
+
+| smell | snippets | positives_final_ge1 | share_ge1 | positives_final_ge2 | share_ge2 |
+|---|---|---|---|---|---|
+| Data Class | 231 | 15 | 0.065 | 3 | 0.013 |
+| Feature Envy | 220 | 36 | 0.164 | 8 | 0.036 |
+| Refused Bequest | 209 | 36 | 0.172 | 1 | 0.005 |
+
+**Primary metric versus consensus.**
+- Each metric is oriented so that higher = smellier before the AUC is computed. The Youden rule is reported on the original scale.
+- LAA and FDP are **not provided** in the Feature Envy sheet, so no secondary metrics are added.
+- **Refused Bequest header is ambiguous.** The sheet labels two adjacent columns `BOvR`; the Data Class sheet has `BUR, BOvR` in those positions. Neither the Zenodo description nor the dissertation (which defines BUR and BOvR, p. 10) gives the column order. Both columns are therefore reported as "first column" and "second column", and neither is chosen as BUR.
+- CIs: bootstrap over snippets (B = 2000) and a cluster bootstrap over projects. Rows with fewer than 5 positives or negatives report counts only. Snippets with a missing metric are dropped (counts shown).
+
+| smell | metric | orientation | label | n_with_metric | missing_metric | positives | share_positive | projects | ROC-AUC [95% CI snippets] | [95% CI projects] | Youden rule [95% CI of cut] | note |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Data Class | WOC | lower = smellier (negated) | final ≥ 1 (primary) | 231 | 0 | 15 | 0.065 | 15 | 0.424 [0.302, 0.545] | [0.264, 0.554] | WOC ≤ 0.143 [0.0909, 0.286] |  |
+| Data Class | WOC | lower = smellier (negated) | final ≥ 2 (sensitivity) | 231 | 0 | 3 | 0.013 | 15 | – | – | – | fewer than 5 positives or negatives: counts only |
+| Feature Envy | AID | higher = smellier | final ≥ 1 (primary) | 220 | 0 | 36 | 0.164 | 11 | 0.683 [0.577, 0.782] | [0.617, 0.757] | AID ≥ 11 [7, 17] |  |
+| Feature Envy | AID | higher = smellier | final ≥ 2 (sensitivity) | 220 | 0 | 8 | 0.036 | 11 | 0.722 [0.503, 0.907] | [0.438, 0.883] | AID ≥ 7 [7, 29] |  |
+| Refused Bequest | first `BOvR`-labelled column | lower = smellier (negated) | final ≥ 1 (primary) | 168 | 41 | 30 | 0.179 | 15 | 0.372 [0.283, 0.463] | [0.212, 0.602] | first `BOvR`-labelled column ≤ 0.167 [0.154, 0.25] |  |
+| Refused Bequest | first `BOvR`-labelled column | lower = smellier (negated) | final ≥ 2 (sensitivity) | 168 | 41 | 1 | 0.006 | 15 | – | – | – | fewer than 5 positives or negatives: counts only |
+| Refused Bequest | second `BOvR`-labelled column | lower = smellier (negated) | final ≥ 1 (primary) | 41 | 168 | 4 | 0.098 | 11 | – | – | – | fewer than 5 positives or negatives: counts only |
+| Refused Bequest | second `BOvR`-labelled column | lower = smellier (negated) | final ≥ 2 (sensitivity) | 41 | 168 | 0 | 0.0 | 11 | – | – | – | fewer than 5 positives or negatives: counts only |
+
+Tables: `tables/external_B1_agreement.csv`, `external_B1_labels.csv`, `external_B1_auc.csv`.
 
 ## 9 Exploratory
 
@@ -1671,7 +1814,7 @@ Method:
 | LR | as in C3 (pooled class weights) | 0.400 ± 0.000 [0.392, 0.408] | 0.000 ± 0.000 [0.000, 0.000] | 1.0 |
 | LR | equal source weight (class-balanced within source) | 0.508 ± 0.004 [0.485, 0.530] | 0.077 ± 0.009 [0.030, 0.123] | 0.43 |
 
-The collapse does not persist under equal source weighting: MCC 0.077 [0.030, 0.123] with predicted-smelly share 0.430, versus MCC 0.000 and share 1.000 with pooled weights. Table: `tables/exploratory_cm_c3_reweight.csv`. Runtime 97s.
+The collapse does not persist under equal source weighting: MCC 0.077 [0.030, 0.123] with predicted-smelly share 0.430, versus MCC 0.000 and share 1.000 with pooled weights. Table: `tables/exploratory_cm_c3_reweight.csv`. Runtime 11s.
 
 ## 10 Deviations from plan.md and known limitations
 
@@ -1698,6 +1841,9 @@ The collapse does not persist under equal source weighting: MCC 0.077 [0.030, 0.
 19. **Feature extraction now covers every sample path** (the §6.1 snippet universe). The values for the previously computed 95,496 paths are verified identical, so no earlier table changes.
 20. **Paper figures** (`results/paper_figures/`) are re-drawn from the committed tables at IEEE sizes. They contain no new analysis.
 21. **External dataset.** `openpyxl` 3.1.5 is pinned to read the xlsx files. B0 only reads and counts. The Refused Bequest header assumption (first `BOvR` column = BUR) is a proposal awaiting the PI's decision and is not used in any result.
+22. **Agreement anatomy.** Entities whose snippet file is missing from `files.zip` get no duplicate key and are excluded from the duplicate-group comparisons (1.1–1.2) only. A logistic fit with quasi-complete separation (LPL R4) is reported as not estimable, not as an OR.
+23. **External check sources.** The sampling filters and the adjudication-by-discussion are taken from the dataset author's doctoral dissertation (Prokić, Univ. Novi Sad, 2025, pp. 66–68). The Zenodo record does not describe them.
+24. **External Refused Bequest columns.** Both `BOvR`-labelled columns are reported, and neither is chosen as BUR, because the header order is not documented. The second column has only 41 non-missing values and 4 positives, so it is reported as counts only.
 
 **Known limitations**
 
@@ -1730,6 +1876,8 @@ The collapse does not persist under equal source weighting: MCC 0.077 [0.030, 0.
   - The data cannot distinguish genuine context differences between near-duplicates from same-annotator or same-session effects within an entity. Annotator ids and timestamps are absent.
 - **Range restriction is a property of the design.** The annotated band holds 3.0% (CM) and 5.2% (LPL) of all methods but 81.9% and 98.9% of DesigniteJava flags. The SD-based Thorndike correction (A4, exploratory) cannot represent this upper-tail restriction.
 - **External dataset annotation is adjudicated.** Every snippet with exactly two annotations agrees, and a third annotation exists only after disagreement. Raw agreement on the released scores would therefore be biased upward relative to DACOS.
+- **Same-snippet agreement is a sequential, tool-mediated measurement.** On matched entities it exceeds cross-snippet agreement, also for exact duplicates with identical names. Its relation to the annotation-id gap runs in opposite directions for CM (rising) and LPL (falling). The data cannot separate annotator, session and serving-order effects.
+- **The external dataset is metric-filtered and adjudicated.** Its AUCs are computed within one-sided ranges of the same metrics, and its agreement is bounded rather than observed.
 - **Data-integrity cross-check with lizard 1.17.13.** Cyclomatic complexity matches DesigniteJava exactly for 59% of method snippets (Spearman 0.92); parameter count matches for 96%.
 
 ## 11 Reproducibility notes
@@ -1741,16 +1889,16 @@ The collapse does not persist under equal source weighting: MCC 0.077 [0.030, 0.
 - Determinism check: a full `run_all.sh` regeneration from freshly converted databases (with the model cache cleared) reproduced every committed CSV table byte for byte, including all Step 1–3 tables produced in earlier, separate runs. `rq4_predictions.csv.gz` differs only in its gzip header timestamp; its decompressed content is identical.
 - Parallelism: Step 3 parallelises over outer folds with `joblib`. Each fold's model is single-threaded and seeded (RF/GB/XGB `n_jobs=1`, `random_state = 20261021 + repeat`), so results do not depend on scheduling.
 - xgboost uses scikit-learn's bundled `libomp` (`DYLD_LIBRARY_PATH` set by `run_all.sh`), because no system OpenMP runtime is installed.
-- Code commit at report build: `314a5f1294df7578963ad10a62020466310221a5`; the working tree may contain uncommitted changes at build time.
-- Runtime of the last `run_all.sh` (seconds), total 1654s:
+- Code commit at report build: `c95dd71e8b81837301ab387b55055d323d6487b7`; the working tree may contain uncommitted changes at build time.
+- Runtime of the last `run_all.sh` (seconds), total 1098s:
 
 | step | seconds |
 |---|---|
 | convert_main | 4 |
 | convert_extended | 3 |
 | audit | 3 |
-| features | 22 |
-| dataset_audit | 4 |
+| features | 21 |
+| dataset_audit | 5 |
 | rq1 | 2 |
 | rq2 | 6 |
 | rq4 | 23 |
@@ -1758,26 +1906,28 @@ The collapse does not persist under equal source weighting: MCC 0.077 [0.030, 0.
 | rq5 | 11 |
 | robustness | 97 |
 | run_anatomy | 4 |
-| step3_A_B | 104 |
+| step3_A_B | 105 |
 | step3_C | 158 |
-| step3_E | 31 |
-| step3_D | 16 |
+| step3_E | 32 |
+| step3_D | 15 |
 | step3_F_H | 13 |
-| step3_G_I_J | 56 |
-| step3_R5 | 498 |
-| human_ceiling | 483 |
-| extras | 100 |
-| range_restrict | 6 |
+| step3_G_I_J | 57 |
+| step3_R5 | 438 |
+| human_ceiling | 41 |
+| extras | 13 |
+| range_restrict | 5 |
 | external_B0 | 1 |
+| agreement | 26 |
+| external_B1 | 7 |
 | build_report | 1 |
-| paper_figures | 3 |
+| paper_figures | 2 |
 
 - Logs: `results/logs/` (one log per step, plus `audit.txt`, `features.log`, `lizard_crosscheck.csv` and `runtime.tsv`).
 
 ## 12 Completion status
 
 - Complete: Prompt 2 (Step 1 R3–R7; Step 2 RQ3, RQ5, R1, R2, R3–R6 on RQ3/RQ5; Step 3 A–J), Prompt 3 sections 1–4, and Prompt 3B part A (range restriction).
-- Prompt 3B part B: B0 audit complete; **B1 not run** (waiting for go-ahead). No section was skipped for time.
+- Prompt 3B part B (B0 audit) and Prompt 4 (Part 1 agreement anatomy 1.1–1.5; Part 2 external check B1) are complete. No section was skipped for time.
 
 ## 13 Headline numbers
 
@@ -1816,6 +1966,18 @@ The collapse does not persist under equal source weighting: MCC 0.077 [0.030, 0.
 | 31 | Share of DesigniteJava-flagged snippets inside the annotated band, LPL | 0.989 (702/710 flags; band holds 0.052 of all snippets) | primary (range restriction, descriptive) | `tables/range_A1_tool_flags.csv` |
 | 32 | Within-band logistic OR per unit of the primary metric, CM | 1.105 [1.038, 1.176] (Cochran–Armitage z = 3.15, p = 0.0016) | primary (range restriction) | `tables/range_A2_trend.csv` |
 | 33 | Within-band logistic OR per unit of the primary metric, LPL R5 | 1.094 [0.892, 1.341] (Cochran–Armitage z = 0.87, p = 0.39) | primary (range restriction) | `tables/range_A2_trend.csv` |
+| 34 | Same-snippet minus cross-snippet human MCC on matched near-duplicate entities, CM | 0.787 [0.563, 1.015] (same 0.865, cross 0.078; 62 groups, 140 entities) | primary (agreement anatomy) | `tables/agreement_matched_neardup.csv` |
+| 35 | Same-snippet minus cross-snippet human MCC on matched near-duplicate entities, LPL | 0.358 [0.204, 0.498] (same 0.456, cross 0.098; 207 groups, 614 entities) | primary (agreement anatomy) | `tables/agreement_matched_neardup.csv` |
+| 36 | Same-snippet minus cross-snippet human MCC on exact duplicates, CM | 0.623 [0.269, 0.972] (26 groups) | primary (agreement anatomy) | `tables/agreement_exact_dup.csv` |
+| 37 | Same-snippet minus cross-snippet human MCC on exact duplicates, LPL | 0.448 [0.217, 0.575] (92 groups) | primary (agreement anatomy) | `tables/agreement_exact_dup.csv` |
+| 38 | OR of unanimous per unit log(annotation-id gap), CM | 1.214 [1.133, 1.302] (adjusted for the primary metric; p = 4.5e-08) | primary (agreement anatomy) | `tables/agreement_gap_logit.csv` |
+| 39 | OR of unanimous per unit log(annotation-id gap), LPL | 0.186 [0.141, 0.247] (adjusted for the primary metric; p = 1.3e-31) | primary (agreement anatomy) | `tables/agreement_gap_logit.csv` |
+| 40 | External C#: share needing a third rating, Data Class | 0.126 [0.087, 0.173] (first-pair ordinal alpha bounds 0.779–0.927) | external check | `tables/external_B1_agreement.csv` |
+| 41 | External C#: share needing a third rating, Feature Envy | 0.495 [0.432, 0.559] (first-pair ordinal alpha bounds 0.651–0.920) | external check | `tables/external_B1_agreement.csv` |
+| 42 | External C#: share needing a third rating, Refused Bequest | 0.230 [0.172, 0.287] (first-pair ordinal alpha bounds 0.606–0.927) | external check | `tables/external_B1_agreement.csv` |
+| 43 | External C#: ROC-AUC of WOC (lower = smellier (negated)), Data Class | 0.424 [0.302, 0.545] (15/231 positives; project-cluster CI [0.264, 0.554]) | external check | `tables/external_B1_auc.csv` |
+| 44 | External C#: ROC-AUC of AID (higher = smellier), Feature Envy | 0.683 [0.577, 0.782] (36/220 positives; project-cluster CI [0.617, 0.757]) | external check | `tables/external_B1_auc.csv` |
+| 45 | External C#: ROC-AUC of first `BOvR`-labelled column (lower = smellier (negated)), Refused Bequest | 0.372 [0.283, 0.463] (30/168 positives; project-cluster CI [0.212, 0.602]) | external check | `tables/external_B1_auc.csv` |
 
 Rows 1–15 are the Prompt 2 headline numbers; rows 16 onward were added in Prompt 3 and 3B. All values are read programmatically from the listed tables when this file is built, and the same rows are written to `results/paper_numbers.json`.
 

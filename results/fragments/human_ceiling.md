@@ -43,6 +43,6 @@ Population sizes:
 | LPL | 209 | 1393 | 0.099 [0.039, 0.183] | 0.549 [0.519, 0.591] | 0.625 [0.583, 0.648] |
 | LPL R5 | 180 | 1352 | 0.087 [0.028, 0.158] | 0.543 [0.514, 0.579] | 0.613 [0.563, 0.638] |
 
-Tables: `tables/human_ceiling.csv`, `tables/human_ceiling_neardup.csv`. Figure: `figures/human_ceiling.pdf` (.png). Runtime 481s.
+Tables: `tables/human_ceiling.csv`, `tables/human_ceiling_neardup.csv`. Figure: `figures/human_ceiling.pdf` (.png). Runtime 39s.
 
 **Summary (MCC).** CM: human 0.806, model 0.091, ratio 0.11; LPL: human 0.540, model 0.171, ratio 0.32; LPL R5: human 0.515, model 0.201, ratio 0.39.

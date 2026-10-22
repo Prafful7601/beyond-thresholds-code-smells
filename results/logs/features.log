@@ -1,4 +1,4 @@
-paths needed: 96299; computed: 96285; missing from zip: 14; failed: 0; runtime 18.9s
+paths needed: 96299; computed: 96285; missing from zip: 14; failed: 0; runtime 18.4s
         is_class  statements  max_nesting  comment_ratio  method_calls  mean_identifier_length
 count  96285.000   96285.000    96285.000      96285.000     96285.000               96285.000
 mean       0.091       7.712        0.370          0.133         6.981                   9.507

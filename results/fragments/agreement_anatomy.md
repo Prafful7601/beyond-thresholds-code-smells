@@ -1,0 +1,85 @@
+**Analysis type: primary** (R4 rows of 1.3 are robustness). plan.md §7.1.
+
+**Population.** Primary-set entities with exactly 2 usable annotations (R5 set for "LPL R5"). Entities whose snippet file is missing from `files.zip` (§1.8) get no duplicate key and are excluded from 1.1–1.2, but are kept in 1.3. Groups are entities of the same project with the same near-duplicate key (identifiers → ID, literals → LIT) or the same exact key (comments removed, whitespace collapsed, names kept), with at least 2 entities.
+
+**1.1 Matched comparison on near-duplicate groups**
+- (a) Same-snippet MCC: one annotation versus the other, random roles, 2000 designations.
+- (b) Cross-snippet MCC: for every entity pair within a group, one random annotation per entity, random roles, 2000 draws.
+- CIs: bootstrap over groups (B = 2000); the difference is paired.
+- The Prompt 3 cross-snippet number (§6, last column) used every primary-set entity with ≥ 2 usable annotations, drawing each entity's annotation with probability y/n. (b) uses the same construction restricted to entities with exactly 2 usable annotations, so both sides here are computed on identical entities.
+
+| population | groups | entities | pairs | same-snippet MCC [95% CI] | cross-snippet MCC [95% CI] | difference [95% CI] | Prompt 3 cross-snippet MCC |
+|---|---|---|---|---|---|---|---|
+| CM | 62 | 140 | 103 | 0.865 [0.754, 0.954] | 0.078 [-0.128, 0.280] | 0.787 [0.563, 1.015] | 0.082 |
+| LPL | 207 | 614 | 1391 | 0.456 [0.321, 0.590] | 0.098 [0.038, 0.189] | 0.358 [0.204, 0.498] | 0.099 |
+| LPL R5 | 178 | 551 | 1350 | 0.424 [0.286, 0.576] | 0.086 [0.030, 0.156] | 0.337 [0.191, 0.495] | 0.087 |
+
+**1.2 Exact duplicates**
+
+| population | key | reported_as | groups | entities | pairs | same_MCC | same_lo | same_hi | cross_MCC | cross_lo | cross_hi | diff_MCC | diff_lo | diff_hi | same_raw_agreement | cross_raw_agreement | diff_raw_agreement | diff_raw_lo | diff_raw_hi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CM | exact duplicate | CI (≥ 20 groups) | 26 | 54 | 30 | 0.803 | 0.582 | 0.962 | 0.18 | -0.112 | 0.465 | 0.623 | 0.269 | 0.972 | 0.907 | 0.601 | 0.306 | 0.116 | 0.477 |
+| LPL | exact duplicate | CI (≥ 20 groups) | 92 | 227 | 683 | 0.49 | 0.311 | 0.696 | 0.042 | -0.002 | 0.315 | 0.448 | 0.217 | 0.575 | 0.784 | 0.65 | 0.134 | 0.062 | 0.236 |
+| LPL R5 | exact duplicate | CI (≥ 20 groups) | 72 | 187 | 663 | 0.438 | 0.254 | 0.633 | 0.033 | -0.022 | 0.224 | 0.405 | 0.199 | 0.587 | 0.738 | 0.64 | 0.098 | 0.018 | 0.277 |
+
+**1.3 Annotation-id gap** (|id₁ − id₂| per entity; R4 = run annotations removed first)
+
+| population | entities | min | q1 | median | q3 | max | share_gap_le_10 | share_gap_le_100 | set |
+|---|---|---|---|---|---|---|---|---|---|
+| CM | 1858 | 1 | 1826.25 | 2944.0 | 3098.0 | 8288 | 0.034 | 0.074 | primary |
+| CM | 1468 | 1 | 1578.5 | 2975.0 | 3114.0 | 3787 | 0.042 | 0.073 | R4 |
+| LPL | 1692 | 1 | 1830.75 | 2536.5 | 3225.5 | 9624 | 0.018 | 0.035 | primary |
+| LPL | 252 | 1 | 126.5 | 300.5 | 1726.0 | 2944 | 0.115 | 0.226 | R4 |
+| LPL R5 | 1555 | 1 | 2061.5 | 2616.0 | 3314.5 | 9624 | 0.02 | 0.038 | R5 |
+
+| population | set | quintile | gap range | entities | share unanimous [95% CI] | same-snippet MCC [95% CI] |
+|---|---|---|---|---|---|---|
+| CM | primary | 1 | 1–1494 | 372 | 0.841 [0.804, 0.879] | 0.574 [0.468, 0.665] |
+| CM | primary | 2 | 1497–2626 | 371 | 0.865 [0.827, 0.900] | 0.595 [0.491, 0.695] |
+| CM | primary | 3 | 2629–3007 | 372 | 0.892 [0.860, 0.925] | 0.785 [0.721, 0.849] |
+| CM | primary | 4 | 3009–3131 | 371 | 0.987 [0.973, 0.997] | 0.971 [0.942, 0.994] |
+| CM | primary | 5 | 3131–8288 | 372 | 0.973 [0.954, 0.987] | 0.946 [0.908, 0.973] |
+| CM | R4 | 1 | 1–1393 | 294 | 0.833 [0.789, 0.874] | 0.585 [0.479, 0.682] |
+| CM | R4 | 2 | 1395–2785 | 293 | 0.863 [0.826, 0.901] | 0.640 [0.532, 0.734] |
+| CM | R4 | 3 | 2805–3053 | 294 | 0.925 [0.895, 0.952] | 0.841 [0.778, 0.901] |
+| CM | R4 | 4 | 3053–3135 | 293 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| CM | R4 | 5 | 3135–3787 | 294 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| LPL | primary | 1 | 1–1614 | 339 | 0.968 [0.947, 0.985] | 0.864 [0.779, 0.935] |
+| LPL | primary | 2 | 1615–2375 | 338 | 0.766 [0.722, 0.811] | 0.328 [0.206, 0.441] |
+| LPL | primary | 3 | 2375–2944 | 338 | 0.855 [0.814, 0.891] | 0.650 [0.551, 0.735] |
+| LPL | primary | 4 | 2944–3405 | 338 | 0.861 [0.822, 0.896] | 0.611 [0.506, 0.708] |
+| LPL | primary | 5 | 3406–9624 | 339 | 0.469 [0.416, 0.519] | -0.063 [-0.170, 0.038] |
+| LPL | R4 | 1 | 1–75 | 51 | 0.941 [0.863, 1.000] | 0.773 [0.472, 1.000] |
+| LPL | R4 | 2 | 76–271 | 50 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| LPL | R4 | 3 | 273–1270 | 50 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| LPL | R4 | 4 | 1270–1870 | 50 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| LPL | R4 | 5 | 1874–2944 | 51 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
+| LPL R5 | R5 | 1 | 1–1870 | 311 | 0.965 [0.942, 0.984] | 0.875 [0.797, 0.941] |
+| LPL R5 | R5 | 2 | 1874–2475 | 311 | 0.736 [0.688, 0.785] | 0.333 [0.211, 0.446] |
+| LPL R5 | R5 | 3 | 2475–3000 | 311 | 0.817 [0.775, 0.859] | 0.622 [0.531, 0.710] |
+| LPL R5 | R5 | 4 | 3000–3484 | 311 | 0.884 [0.849, 0.920] | 0.698 [0.601, 0.786] |
+| LPL R5 | R5 | 5 | 3486–9624 | 311 | 0.421 [0.370, 0.476] | -0.160 [-0.266, -0.051] |
+
+Logistic regression of unanimous on log(gap) and the raw primary metric:
+
+| population | set | entities | OR per unit log(gap) [95% CI] | p | OR per unit metric (p) | note |
+|---|---|---|---|---|---|---|
+| CM | primary | 1858 | 1.214 [1.133, 1.302] | 4.49e-08 | 1.005 (0.9079) |  |
+| CM | R4 | 1468 | 1.312 [1.220, 1.410] | 1.82e-13 | 1.025 (0.6648) |  |
+| LPL | primary | 1692 | 0.186 [0.141, 0.247] | 1.28e-31 | 0.391 (2.41e-23) |  |
+| LPL | R4 | 252 | n/a | n/a | n/a | not estimable: quasi-complete separation (robust SE > 5) |
+| LPL R5 | R5 | 1555 | 0.187 [0.141, 0.249] | 4.11e-31 | 0.391 (2.89e-23) |  |
+
+**1.4 Tool design** (public source SMART-Dal/Tagman @ 40f3aa67bc16d780c6a0e1da63995b7d92789ddc (2023-01-19); the deployed version may differ)
+
+| question | finding | reference |
+|---|---|---|
+| (a) Does serving prevent one user from annotating the same sample twice? | Yes for the same `sample` row. Once a user has any annotation, candidate samples are filtered by `id NOT IN (<sample ids this user annotated>)`. The filter does not apply across different `sample` rows of the same code entity, such as the 332 MA classes imported twice (§1.3). | src/main/java/com/smartlab/tagman/service/AnnotationService.java:99-120, 131-133 |
+| (b) What does the annotator see? | Only the contents of the snippet's own file (`sample.path_to_file`, the CodeSplit method or class file), read line by line. It is shown in a code block titled with the file path. The surrounding class or source file is not shown. | src/main/java/com/smartlab/tagman/web/AnnotationController.java:107-118; src/main/resources/templates/indexNonAdmin.html:438-439; src/main/java/com/smartlab/tagman/util/TagmanUtil.java:53-58 |
+| (c) How are samples assigned and ordered? | Each request picks methods with probability 0.7 and classes with 0.3 (`random.nextInt(10) < 7`). It first queries samples with `has_smell = true` and `sample_constraints = 1` (already annotated once), then falls back to `sample_constraints < 2`. Both queries use `LIMIT 10` with no `ORDER BY`, and the tool picks uniformly at random among the ≤ 10 rows returned. Without `ORDER BY`, the rows returned follow the database's storage order, so serving tends to follow sample-id order. Preferring samples with one annotation tends to bring a sample's second annotation soon after its first. The counter `sample_constraints` is incremented on submit. Each user is capped at `MaxUserAnnotations` = 2500. | AnnotationService.java:76-79, 92-93, 117-120, 131-133, 142-143; util/Constants.java:41, 51 |
+
+**1.5 Interpretation (rules fixed in plan.md §7.1)**
+
+In the matched comparison, same-snippet MCC exceeds cross-snippet MCC on the same entities for 3 of 3 populations (CI of the difference excluding 0). This shows that the gap is not an artefact of comparing different populations. It does not discriminate between the two explanations. For exact duplicates, which share names and text (CM: same − cross MCC 0.623 [0.269, 0.972]; LPL: same − cross MCC 0.448 [0.217, 0.575]; LPL R5: same − cross MCC 0.405 [0.199, 0.587]), cross-snippet agreement is below same-snippet agreement in 3 of 3 populations. Where it is lower, this is inconsistent with the view that information inside the snippet text explains the gap; context outside the snippet and collection effects remain possible. The annotation-id gap shows an OR per unit log(gap) below 1 with a CI excluding 1 for LPL, LPL R5. That is consistent with collection or session effects. The OR is above 1 with a CI excluding 1 for CM, meaning agreement rises with the gap. A null result here is not evidence against collection effects. The public tool source shows annotators only the snippet's own file, which is inconsistent with an explanation based on context outside the snippet, unless the deployed version differed. It prevents the same user from annotating the same sample row twice, so a same-annotator explanation is possible only through duplicated sample rows or multiple accounts. Neither can be checked, because the data have no annotator ids.
+
+Tables: `tables/agreement_matched_neardup.csv`, `agreement_exact_dup.csv`, `agreement_gap_distribution.csv`, `agreement_gap_quintiles.csv`, `agreement_gap_logit.csv`, `agreement_tool_design.csv`. Runtime 24s.

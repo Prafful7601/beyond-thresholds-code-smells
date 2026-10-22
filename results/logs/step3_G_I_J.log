@@ -3,7 +3,7 @@ CM I 4s
 CM J 16s
 LPL G 17s
 LPL I 17s
-LPL J 54s
+LPL J 55s
 **Analysis type: primary, report-only (pre-registered in plan.md §4.5 G; never used to choose the final model).**
 
 **Method.**
@@ -80,5 +80,5 @@ Files: `results/error_analysis/error_rates.csv`, `error_samples.csv`, `error_sam
 | LPL | GB | R4 | 250 | 0.616 → 0.570 | -0.046 [-0.069, -0.023] | 0.232 → 0.153 | -0.079 [-0.124, -0.034] | 0.633 [0.571, 0.695] | 0.267 [0.145, 0.395] |
 | LPL | GB | R6 | 1325 | 0.616 → 0.616 | 0.000 [0.000, 0.000] | 0.232 → 0.232 | 0.000 [0.000, 0.000] | 0.616 [0.591, 0.638] | 0.232 [0.184, 0.278] |
 
-Table: `tables/sensitivity.csv`. Runtime G+I+J 54s.
+Table: `tables/sensitivity.csv`. Runtime G+I+J 55s.
 
