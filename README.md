@@ -1,5 +1,8 @@
 # Metric Thresholds Versus Human Judgment on Borderline Code Smells: A Robustness-First Audit of the DACOS Benchmark
 
+**Authors:** Prashant Kumar Singh, Prafful Gupta, Mohd. Aatir, Pragya Mishra, Shweta Singh, Rabi N. Panda
+(Department of Computer Applications, Krishna Institute of Engineering & Technology (KIET), Ghaziabad, Delhi-NCR, India)
+
 Replication package for a study of how human annotators judge three code smells in the borderline snippets of the
 [DACOS dataset](https://doi.org/10.5281/zenodo.7570428), compared with metric thresholds and with models trained on threshold-derived labels:
 - Complex Method (CM)
