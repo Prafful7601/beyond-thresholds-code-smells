@@ -1,0 +1,4 @@
+smell,snippets,positives_final_ge1,share_ge1,positives_final_ge2,share_ge2,analysis
+Data Class,231,15,0.06493506493506493,3,0.012987012987012988,external check
+Feature Envy,220,36,0.16363636363636364,8,0.03636363636363636,external check
+Refused Bequest,209,36,0.1722488038277512,1,0.004784688995215311,external check

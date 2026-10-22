@@ -27,7 +27,11 @@ def load(path):
     a0 = next(i for i, g in enumerate(groups) if g == "Annotators")
     fin = names.index("Final annotation")
     df = raw.iloc[2:].reset_index(drop=True)
-    cols = names[:m0] + [f"metric:{n}" for n in names[m0:fin]] + ["final"] + [f"ann{n.replace('.0', '')}" for n in names[a0:]]
+    mnames, seen = [], {}
+    for n in names[m0:fin]:   # disambiguate repeated headers by position (Refused Bequest has two `BOvR` columns)
+        seen[n] = seen.get(n, 0) + 1
+        mnames.append(f"metric:{n}" if names[m0:fin].count(n) == 1 else f"metric:{n}#{seen[n]}")
+    cols = names[:m0] + mnames + ["final"] + [f"ann{n.replace('.0', '')}" for n in names[a0:]]
     df.columns = cols
     return df, names[m0:fin]
 
