@@ -410,3 +410,62 @@ All earlier rules apply. Tags: **R5 Step 3 = robustness**, **human ceiling = pri
 - **B0 audit only** (descriptive, then stop for the PI's go-ahead): files, columns, whether individual annotator answers are released, annotators per snippet, severity scale, provided metrics, project ids, and a proposed primary metric per smell with a literature justification.
 - B1 will be pre-registered in detail after the go-ahead, before it is run: RQ1 agreement (ordinal alpha if severity is graded, nominal for presence) and RQ2 (ROC-AUC against consensus presence, Youden cut-off), with the same bootstrap settings and no models.
 - The external data goes into `data/external/` (not committed).
+
+## 7. Prompt 4: agreement anatomy and external check B1 (added before any of it was run)
+
+All earlier rules apply. B = 2000 bootstrap resamples and 2,000 random designations per estimate, seed 20261021.
+
+### 7.1 Why same-snippet agreement exceeds cross-snippet agreement (primary; CM, LPL, LPL R5)
+- **Population.** Primary-set entities with exactly 2 usable annotations (the R5 set for LPL R5).
+- **1.1 Matched near-duplicate comparison.**
+  - Groups: the same project and the same near-duplicate key (§4.5 E), with at least 2 population entities. Entities are the members of those groups; pairs are all unordered entity pairs within a group.
+  - (a) Same-snippet human-human MCC on exactly these entities. One annotation is the prediction and the other the target, with random roles, simulated exactly as in §5.2.
+  - (b) Cross-snippet MCC at annotation level. For each pair, one random annotation per entity and random roles, over 2,000 draws (multinomial draws per pair type, as in §5.2).
+  - CIs: bootstrap resampling groups. Each resample recomputes (a) and (b) with fresh designations. The paired difference (a) − (b) uses the same resamples.
+  - Counts: groups, entities and pairs.
+  - The §5.2 cross-snippet number used every primary-set entity with ≥ 2 usable annotations (each entity's random annotation drawn with probability y/n). (b) differs only by restricting to entities with exactly 2. Both numbers are reported.
+- **1.2 Exact duplicates.** As 1.1 with the exact key (comments removed, whitespace collapsed, names kept).
+  - If fewer than 20 groups qualify, only counts and raw agreement are reported. Raw agreement is the expected share of agreeing annotation pairs; no CI.
+- **1.3 Annotation-id gap.** gap = |annotation id 1 − annotation id 2| per entity.
+  - Distribution per smell: min, quartiles, max.
+  - Within per-smell gap quintiles: share unanimous (bootstrap CI over entities) and same-snippet MCC (designations as in 1.1, bootstrap CI over entities).
+  - Logistic regression of unanimous on log(gap) and the raw primary metric, giving the OR per unit of log(gap) with a 95% Wald CI and p.
+  - Robustness column: R4 (run annotations removed, then entities with exactly 2 remaining usable annotations), for CM and LPL.
+- **1.4 Tool design.** From the public Tagman source (SMART-Dal/Tagman at 40f3aa6, and Tagman-scripts at ed9e0fb), with file:line references:
+  - (a) whether serving prevents one user from annotating the same sample twice;
+  - (b) what the annotator sees;
+  - (c) how samples are assigned and ordered.
+  - The deployed version may differ from the public source, and this is stated.
+- **1.5 Fixed interpretation rules** (one neutral paragraph; no conclusion beyond these mappings):
+  - A matched gap (a) − (b) whose CI excludes 0 shows that the gap is not a population-composition artefact. It does not discriminate between the two explanations.
+  - Exact-duplicate cross-snippet agreement well below same-snippet agreement (CI of the difference excluding 0, or raw agreement lower when no CI) is inconsistent with "information inside the snippet text (names, semantics) explains the gap". Context outside the snippet or collection effects remain possible.
+  - An OR for log(gap) below 1 with a CI excluding 1 (agreement falls as annotations are further apart in time or order) is consistent with collection/session effects. A null is not evidence against them.
+  - If the tool shows only the snippet, that is inconsistent with "context outside the snippet". If the tool does not prevent one user from annotating a sample twice, the same-annotator explanation remains possible but unverified.
+
+### 7.2 External check B1 (C# dataset; tag: external check)
+- **Context, stated in results.md.**
+  - The dataset was not sampled from a borderline band. It was pre-filtered one-sidedly on the same metrics, per Prokić's doctoral dissertation (Univ. Novi Sad, 2025), p. 68: Data Class WOC < 0.33 ∨ NOPA > 1 ∨ NOPP > 1; Feature Envy AID ≥ 4; Refused Bequest BUR < 0.33.
+  - Conflicting annotations were discussed and could be revised to reach consensus (p. 66).
+  - It is external context, not a replication.
+- **(a) Pre-adjudication disagreement rate.** The share of snippets with a third rating, with a bootstrap CI over snippets.
+- **(b) Bounds on Krippendorff's alpha (ordinal, values 0–3) for the first pair.**
+  - 2-rated snippets: the pair as released.
+  - 3-rated snippets: annotator 2 plus annotator 1 or annotator 3. Snippets of the same type (a2, {a1, a3}) are interchangeable, so alpha is enumerated exactly over the per-type counts choosing a1. Minimum and maximum are reported.
+  - Caveat: because annotations could be revised after discussion, the released first-pair scores may not be the original ones.
+- **Labels.**
+  - Consensus rule: the released final score equals the strict majority of the released scores for every snippet (§8.1, B0).
+  - Primary: smelly = final ≥ 1. Sensitivity: final ≥ 2. Positives per smell are reported under both.
+- **Metrics, each oriented so that higher = smellier before AUC:**
+  - Data Class: −WOC.
+  - Feature Envy: AID. LAA and FDP are not provided, as stated in results.md.
+  - Refused Bequest: −first column and −second column of the two `BOvR`-labelled columns. The header is ambiguous after checking the Zenodo description and the dissertation, which define BUR and BOvR (p. 10) but give no column order, so neither is picked. Both BUR and BOvR are "lower = smellier" in the Lanza–Marinescu rule.
+- **Per smell × metric × label rule:**
+  - n (snippets with a non-missing metric), positives and share;
+  - ROC-AUC with a bootstrap CI over snippets and a cluster bootstrap CI over projects;
+  - Youden cut-off (oriented metric ≥ c, reported on the original scale) with a bootstrap CI.
+  - AUC is computed only with ≥ 5 positives and ≥ 5 negatives; otherwise counts only. No models.
+
+### 7.3 Outputs
+- `fig3_human_ceiling` adds the matched cross-snippet bars.
+- `paper_numbers.json` is extended.
+- Then a from-scratch rerun with the byte-identical check, and tag v1.1 locally. No push.
