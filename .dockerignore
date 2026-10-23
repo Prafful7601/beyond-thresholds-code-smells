@@ -1,0 +1,12 @@
+# Keep the API image small and never ship the DACOS data.
+data/
+.git/
+.venv*/
+**/node_modules/
+**/__pycache__/
+webapp/frontend/
+webapp/backend/codesniff.db
+webapp/backend/tests/
+paper/
+results/figures/
+results/logs/

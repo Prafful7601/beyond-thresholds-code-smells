@@ -1,0 +1,17 @@
+# Render blueprint for the CodeSniff API (https://render.com/docs/blueprint-spec).
+# The website itself is deployed to Vercel (webapp/frontend/vercel.json); set CODESNIFF_CORS to its URL.
+services:
+  - type: web
+    name: codesniff-api
+    runtime: docker
+    dockerfilePath: ./webapp/backend/Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: GITHUB_TOKEN
+        sync: false            # set in the Render dashboard; optional but avoids the 60 requests/hour limit
+      - key: CODESNIFF_CORS
+        sync: false            # e.g. https://codesniff.vercel.app
+      - key: CODESNIFF_DB
+        value: /tmp/codesniff.db   # the free plan has no persistent disk; history resets on redeploy

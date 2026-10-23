@@ -1,0 +1,17 @@
+# One-command local run of the CodeSniff website:  docker compose up --build
+# site http://localhost:5173 · API http://localhost:8000/docs
+# Optional: export GITHUB_TOKEN=... first to raise the GitHub API rate limit from 60 to 5,000 requests/hour.
+services:
+  api:
+    build: { context: ., dockerfile: webapp/backend/Dockerfile }
+    environment:
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      CODESNIFF_CORS: http://localhost:5173
+    ports: ["8000:8000"]
+    volumes: ["codesniff-data:/data"]
+  web:
+    build: { context: webapp/frontend, args: { VITE_API_URL: "http://localhost:8000" } }
+    ports: ["5173:80"]
+    depends_on: [api]
+volumes:
+  codesniff-data:
