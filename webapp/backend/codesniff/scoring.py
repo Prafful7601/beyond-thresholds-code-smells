@@ -56,9 +56,10 @@ def change_status(before, after, params=RISK):
         return "improved"
     if after["zone"] == "borderline":
         delta = after["probability"] - before["probability"]
-        if delta >= params["probability_delta"]:
+        eps = 1e-9   # 0.6 - 0.4 is 0.19999999999999996 in floating point
+        if delta >= params["probability_delta"] - eps:
             return "worsened"
-        if delta <= -params["probability_delta"]:
+        if delta <= -params["probability_delta"] + eps:
             return "improved"
     return "unchanged"
 

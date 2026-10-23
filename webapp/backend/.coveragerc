@@ -1,0 +1,6 @@
+[run]
+source = .
+omit =
+    tests/*
+    train_models.py
+    codesniff/__main__.py

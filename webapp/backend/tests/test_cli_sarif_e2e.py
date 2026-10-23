@@ -1,6 +1,4 @@
 """CLI exit codes, report formats, SARIF structure and end-to-end runs."""
-import csv
-import io
 import json
 import os
 import zipfile
@@ -19,43 +17,45 @@ def run(capsys, *args):
 
 
 def test_exit_codes(capsys):
-    assert run(capsys, "scan", SAMPLE)[0] == 1                       # sample has clear methods
+    # sample project: risk score 42.8 (Medium) -> fails only with --fail-on medium
+    assert run(capsys, "scan", SAMPLE)[0] == 0                        # default --fail-on high
+    assert run(capsys, "scan", SAMPLE, "--fail-on", "medium")[0] == 1
     assert run(capsys, "scan", SAMPLE, "--fail-on", "never")[0] == 0
-    assert run(capsys, "scan", SAMPLE, "--fail-on", "borderline")[0] == 1
     assert run(capsys, "scan", "does/not/exist")[0] == 2
-    assert run(capsys, "scan", "https://example.com/not-github")[0] == 2
+    assert run(capsys, "check", "--repo", "https://example.com/not-github")[0] == 2
+    assert run(capsys, "check")[0] == 2
 
 
-def test_clean_only_input_passes_default_gate(tmp_path, capsys):
+def test_clean_only_input_scores_zero(tmp_path, capsys):
     f = tmp_path / "Clean.java"
     f.write_text("class Clean { int one() { return 1; } int two(int a) { return a + 1; } }")
-    assert run(capsys, "scan", str(f))[0] == 0
-    assert run(capsys, "scan", str(f), "--fail-on", "borderline")[0] == 0
+    code, out, _ = run(capsys, "scan", str(f), "--fail-on", "medium")
+    assert code == 0 and "0.0 / 100 (Low)" in out
 
 
-def test_borderline_only_input_warns_but_passes_default_gate(tmp_path, capsys):
-    f = tmp_path / "B.java"
-    f.write_text("class B { void f(int a, int b, int c, int d, int e) { } }")
-    assert run(capsys, "scan", str(f))[0] == 0
-    assert run(capsys, "scan", str(f), "--fail-on", "borderline")[0] == 1
+def test_clear_only_input_is_high(tmp_path, capsys):
+    f = tmp_path / "C.java"
+    f.write_text("class C { void f(int a, int b, int c, int d, int e, int f2, int g, int h, int i, int j, int k) { } }")
+    code, out, _ = run(capsys, "scan", str(f))
+    assert code == 1 and "100.0 / 100 (High)" in out
 
 
-def test_json_and_csv(capsys, tmp_path):
+def test_json_and_markdown(capsys, tmp_path):
     code, out, _ = run(capsys, "scan", SAMPLE, "--format", "json", "--fail-on", "never")
     data = json.loads(out)
-    assert data["meta"]["tool"] == "CodeSniff" and len(data["methods"]) == 6
+    assert data["risk"]["band"] in {"Low", "Medium", "High"} and len(data["methods"]) == 6
     for m in data["methods"]:
         for s in ("CM", "LPL"):
-            assert 0 <= m[f"{s}_probability"] <= 1 and m[f"{s}_zone"] in {"clean", "borderline", "clear"}
-    out_file = tmp_path / "r.csv"
-    run(capsys, "scan", SAMPLE, "--format", "csv", "--fail-on", "never", "--output", str(out_file))
-    rows = list(csv.DictReader(io.StringIO(out_file.read_text())))
-    assert len(rows) == 6 and "CM_note" in rows[0]
+            assert 0 <= m["smells"][s]["probability"] <= 1
+    out_file = tmp_path / "r.md"
+    run(capsys, "scan", SAMPLE, "--format", "markdown", "--fail-on", "never", "--output", str(out_file))
+    md = out_file.read_text()
+    assert "not a probability of bugs" in md and "candidates to review, not verdicts" in md
 
 
 def test_table_output(capsys):
     _, out, _ = run(capsys, "scan", SAMPLE, "--fail-on", "never")
-    assert "candidates to review, not verdicts" in out
+    assert "candidates to review, not verdicts" in out and "not a probability of bugs" in out
 
 
 def test_sarif_is_valid_2_1_0(capsys):
