@@ -32,6 +32,10 @@ The analysis is **pre-registered and robustness-first**:
 | External check | C# code-smell dataset: audit (B0), adjudication rate, alpha bounds and metric AUCs (B1); external context, not a replication | §8 |
 | Headline numbers | key numbers with CI, analysis type and source table; also in `results/paper_numbers.json` | §13 |
 
+## CodeSniff website
+
+[`webapp/`](webapp/README.md) holds **CodeSniff**, a website, CLI and GitHub Action built on this study. It scores the code-smell risk (Complex Method, Long Parameter List) of the Java methods a commit or pull request changes, using the paper's threshold bands and models. Borderline results are shown as candidates to review, not verdicts. Run it locally with `cd webapp && make install && make dev`; the website does not need the DACOS data.
+
 ## How to run
 
 ```bash
