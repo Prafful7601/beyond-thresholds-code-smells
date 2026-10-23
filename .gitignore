@@ -3,3 +3,7 @@ data/
 __pycache__/
 *.pyc
 .DS_Store
+.venv-app/
+.pytest_cache/
+.coverage
+htmlcov/
