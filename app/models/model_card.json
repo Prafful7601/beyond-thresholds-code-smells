@@ -1,0 +1,159 @@
+{
+  "CM": {
+    "smell": "CM",
+    "model": "LR",
+    "file": "cm_lr.joblib",
+    "features": [
+      "cc",
+      "loc",
+      "statements",
+      "max_nesting",
+      "method_calls",
+      "comment_ratio",
+      "mean_identifier_length"
+    ],
+    "hyperparameters": {
+      "clf__C": 0.01
+    },
+    "hyperparameter_rule": "most frequent selection across the paper's 25 outer folds (15/25)",
+    "hyperparameter_selection_counts": {
+      "{\"clf__C\": 0.1}": 4,
+      "{\"clf__C\": 0.01}": 15,
+      "{\"clf__C\": 1}": 5,
+      "{\"clf__C\": 10}": 1
+    },
+    "class_weighting": "inverse-frequency (balanced), as in the paper",
+    "probability": "logistic regression predict_proba",
+    "training_data": {
+      "source": "DACOS (Zenodo 10.5281/zenodo.7570428), primary analysis set",
+      "set": "unanimous entities, consistency-filtered",
+      "n": 1695,
+      "smelly": 1129,
+      "benign": 566,
+      "projects": 10
+    },
+    "feature_definitions": "CodeSniff extraction (app/codesniff/extract.py): lizard-based cc (DesigniteJava-compatible), declaration pc, lizard NLOC; paper's compute() for the other features",
+    "paper_cv": {
+      "source": "results/tables/model_comparison.csv (DesigniteJava features)",
+      "MCC": 0.0953514220045704,
+      "MCC_sd": 0.0060138535483428,
+      "MCC_lo": 0.0517152909296825,
+      "MCC_hi": 0.1359802076510277,
+      "macro_F1": 0.5247315460226117,
+      "ROC_AUC": 0.5565677747279402
+    },
+    "app_cv": {
+      "protocol": "the paper's 25 project-grouped splits (5 repeats x 5 folds), fixed hyperparameters",
+      "caveat": "hyperparameters are the modal choice of the paper's nested tuning over these same folds, so this estimate is slightly optimistic; the paper's nested-CV value (paper_cv) is the one CodeSniff quotes",
+      "macro_F1": 0.5241594035380677,
+      "macro_F1_sd": 0.008268519308434058,
+      "MCC": 0.10702261184090942,
+      "MCC_sd": 0.01031989426857269,
+      "ROC_AUC": 0.5558962714431922,
+      "ROC_AUC_sd": 0.009868702801073595,
+      "PR_AUC": 0.7092130546637317,
+      "PR_AUC_sd": 0.007933020881002834,
+      "macro_F1_lo": 0.5016047789677779,
+      "macro_F1_hi": 0.5450021116091229,
+      "MCC_lo": 0.061214277982348214,
+      "MCC_hi": 0.15049271025371486,
+      "ROC_AUC_lo": 0.5269007191086463,
+      "ROC_AUC_hi": 0.5823747523438997,
+      "PR_AUC_lo": 0.6799829746621056,
+      "PR_AUC_hi": 0.7416765564964994
+    },
+    "feature_agreement_with_designite": {
+      "cc_exact": 0.7899705014749262,
+      "pc_exact": 1.0,
+      "loc_exact": 0.904424778761062,
+      "note": "upper bounds: the alignment picks, among overloads in a snippet file, the method matching the stored pc (then cc); the unbiased rates are in lizard_agreement.json"
+    },
+    "versions": {
+      "scikit-learn": "1.5.2",
+      "joblib": "1.5.3",
+      "python": "3.9.6"
+    },
+    "trained_at": "2026-10-23",
+    "repository_commit": "2c8df3cd963a597fa7a651ed8f7ddcd44bd1ce28",
+    "intended_use": "rank borderline methods for human review; not a verdict"
+  },
+  "LPL": {
+    "smell": "LPL",
+    "model": "SVM",
+    "file": "lpl_svm.joblib",
+    "features": [
+      "pc",
+      "loc",
+      "statements",
+      "max_nesting",
+      "method_calls",
+      "comment_ratio",
+      "mean_identifier_length"
+    ],
+    "hyperparameters": {
+      "clf__C": 0.1,
+      "clf__gamma": 0.01
+    },
+    "hyperparameter_rule": "most frequent selection across the paper's 25 outer folds (12/25)",
+    "hyperparameter_selection_counts": {
+      "{\"clf__C\": 0.1, \"clf__gamma\": 0.01}": 12,
+      "{\"clf__C\": 0.1, \"clf__gamma\": 0.1}": 7,
+      "{\"clf__C\": 1, \"clf__gamma\": 0.01}": 5,
+      "{\"clf__C\": 10, \"clf__gamma\": \"scale\"}": 1
+    },
+    "class_weighting": "inverse-frequency (balanced), as in the paper",
+    "probability": "SVC(probability=True): Platt scaling; the paper's class rule is the decision-function sign",
+    "training_data": {
+      "source": "DACOS (Zenodo 10.5281/zenodo.7570428), primary analysis set",
+      "set": "unanimous entities, consistency-filtered; R5: pc = 3 block removed",
+      "n": 1189,
+      "smelly": 731,
+      "benign": 458,
+      "projects": 10
+    },
+    "feature_definitions": "CodeSniff extraction (app/codesniff/extract.py): lizard-based cc (DesigniteJava-compatible), declaration pc, lizard NLOC; paper's compute() for the other features",
+    "paper_cv": {
+      "source": "results/tables/model_comparison_LPL_R5.csv (DesigniteJava features)",
+      "MCC": 0.268941390302125,
+      "MCC_sd": 0.0223167613018326,
+      "MCC_lo": 0.2126429727020557,
+      "MCC_hi": 0.3210405387994594,
+      "macro_F1": 0.6186417739964456,
+      "ROC_AUC": 0.6419210986923458
+    },
+    "app_cv": {
+      "protocol": "the paper's 25 project-grouped splits (5 repeats x 5 folds), fixed hyperparameters",
+      "caveat": "hyperparameters are the modal choice of the paper's nested tuning over these same folds, so this estimate is slightly optimistic; the paper's nested-CV value (paper_cv) is the one CodeSniff quotes",
+      "macro_F1": 0.6184673933620549,
+      "macro_F1_sd": 0.0014980672427134549,
+      "MCC": 0.3115163912353279,
+      "MCC_sd": 0.0038128342636631566,
+      "ROC_AUC": 0.6362403598587806,
+      "ROC_AUC_sd": 0.0051605778394357305,
+      "PR_AUC": 0.6999590355722882,
+      "PR_AUC_sd": 0.006395728504839781,
+      "macro_F1_lo": 0.5877168187244297,
+      "macro_F1_hi": 0.647994573472259,
+      "MCC_lo": 0.25186898917211265,
+      "MCC_hi": 0.36479547182574346,
+      "ROC_AUC_lo": 0.6022180632365751,
+      "ROC_AUC_hi": 0.6690613923273018,
+      "PR_AUC_lo": 0.663280913482693,
+      "PR_AUC_hi": 0.7374780284631578
+    },
+    "feature_agreement_with_designite": {
+      "cc_exact": 0.9411269974768713,
+      "pc_exact": 1.0,
+      "loc_exact": 0.7746005046257359,
+      "note": "upper bounds: the alignment picks, among overloads in a snippet file, the method matching the stored pc (then cc); the unbiased rates are in lizard_agreement.json"
+    },
+    "versions": {
+      "scikit-learn": "1.5.2",
+      "joblib": "1.5.3",
+      "python": "3.9.6"
+    },
+    "trained_at": "2026-10-23",
+    "repository_commit": "2c8df3cd963a597fa7a651ed8f7ddcd44bd1ce28",
+    "intended_use": "rank borderline methods for human review; not a verdict"
+  }
+}

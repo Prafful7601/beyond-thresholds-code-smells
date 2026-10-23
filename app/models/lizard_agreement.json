@@ -1,0 +1,2013 @@
+{
+  "n": 200,
+  "seed": 20261021,
+  "selection": "random 200 annotated DACOS method snippets (files present)",
+  "alignment": "extracted method with the DesigniteJava method name (largest NLOC among overloads)",
+  "cc_exact_raw_lizard": 0.635,
+  "cc_exact_codesniff": 0.835,
+  "cc_within_1_codesniff": 0.93,
+  "pc_exact_codesniff": 0.93,
+  "paper_crosscheck_for_reference": "results.md \u00a71.8: raw lizard cc 0.592 exact, pc 0.957 exact (n = 3,491)",
+  "rows": [
+    {
+      "sample_id": 2568,
+      "designite_cc": 5,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 5,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 2569,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 2793,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 2827,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 2954,
+      "designite_cc": 5,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 3018,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 3088,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 3335,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 3619,
+      "designite_cc": 6,
+      "lizard_cc_raw": 9,
+      "codesniff_cc": 6,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 3625,
+      "designite_cc": 5,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 3669,
+      "designite_cc": 3,
+      "lizard_cc_raw": 3,
+      "codesniff_cc": 3,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 3828,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 4,
+      "has_body": true
+    },
+    {
+      "sample_id": 4062,
+      "designite_cc": 1,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 1,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 4125,
+      "designite_cc": 3,
+      "lizard_cc_raw": 3,
+      "codesniff_cc": 3,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 4169,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 4336,
+      "designite_cc": 10,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 10,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 5131,
+      "designite_cc": 1,
+      "lizard_cc_raw": 12,
+      "codesniff_cc": 7,
+      "designite_pc": 3,
+      "codesniff_pc": 5,
+      "methods_in_file": 3,
+      "has_body": true
+    },
+    {
+      "sample_id": 5663,
+      "designite_cc": 8,
+      "lizard_cc_raw": 11,
+      "codesniff_cc": 10,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 5686,
+      "designite_cc": 5,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 5,
+      "designite_pc": 6,
+      "codesniff_pc": 6,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 5701,
+      "designite_cc": 1,
+      "lizard_cc_raw": 11,
+      "codesniff_cc": 10,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 5787,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 5931,
+      "designite_cc": 5,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 7,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 6184,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 2,
+      "has_body": false
+    },
+    {
+      "sample_id": 6247,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": false
+    },
+    {
+      "sample_id": 6261,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": false
+    },
+    {
+      "sample_id": 23142,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 23218,
+      "designite_cc": 3,
+      "lizard_cc_raw": 3,
+      "codesniff_cc": 3,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 23300,
+      "designite_cc": 3,
+      "lizard_cc_raw": 3,
+      "codesniff_cc": 3,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 23438,
+      "designite_cc": 5,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 23467,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 23924,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 6,
+      "codesniff_pc": 6,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 23949,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 6,
+      "codesniff_pc": 6,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 24913,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 24922,
+      "designite_cc": 3,
+      "lizard_cc_raw": 4,
+      "codesniff_cc": 3,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 25044,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 37324,
+      "designite_cc": 2,
+      "lizard_cc_raw": 3,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 37532,
+      "designite_cc": 10,
+      "lizard_cc_raw": 17,
+      "codesniff_cc": 11,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 42126,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 44525,
+      "designite_cc": 3,
+      "lizard_cc_raw": 4,
+      "codesniff_cc": 3,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 44685,
+      "designite_cc": 12,
+      "lizard_cc_raw": 13,
+      "codesniff_cc": 12,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 44851,
+      "designite_cc": 8,
+      "lizard_cc_raw": 9,
+      "codesniff_cc": 8,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 45024,
+      "designite_cc": 8,
+      "lizard_cc_raw": 11,
+      "codesniff_cc": 9,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 45093,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 45155,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 45164,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 45202,
+      "designite_cc": 9,
+      "lizard_cc_raw": 9,
+      "codesniff_cc": 9,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 45269,
+      "designite_cc": 8,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 9,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 45419,
+      "designite_cc": 5,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 6,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 45532,
+      "designite_cc": 7,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 7,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 45533,
+      "designite_cc": 6,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 46430,
+      "designite_cc": 7,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 7,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 46489,
+      "designite_cc": 6,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 47294,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 47518,
+      "designite_cc": 6,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 7,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 47550,
+      "designite_cc": 5,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 47806,
+      "designite_cc": 5,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 7,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 48225,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 48333,
+      "designite_cc": 6,
+      "lizard_cc_raw": 13,
+      "codesniff_cc": 6,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 48476,
+      "designite_cc": 12,
+      "lizard_cc_raw": 12,
+      "codesniff_cc": 12,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 48659,
+      "designite_cc": 3,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 3,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 4,
+      "has_body": true
+    },
+    {
+      "sample_id": 49062,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 3,
+      "has_body": true
+    },
+    {
+      "sample_id": 49111,
+      "designite_cc": 5,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 5,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 49210,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 49260,
+      "designite_cc": 1,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 70302,
+      "designite_cc": 1,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 70134,
+      "designite_cc": 3,
+      "lizard_cc_raw": 4,
+      "codesniff_cc": 4,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 70032,
+      "designite_cc": 5,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 69961,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 69769,
+      "designite_cc": 9,
+      "lizard_cc_raw": 9,
+      "codesniff_cc": 9,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 72825,
+      "designite_cc": 12,
+      "lizard_cc_raw": 20,
+      "codesniff_cc": 14,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 72775,
+      "designite_cc": 9,
+      "lizard_cc_raw": 11,
+      "codesniff_cc": 10,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 72374,
+      "designite_cc": 8,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 8,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 72278,
+      "designite_cc": 10,
+      "lizard_cc_raw": 29,
+      "codesniff_cc": 17,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 71715,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 71665,
+      "designite_cc": 9,
+      "lizard_cc_raw": 11,
+      "codesniff_cc": 11,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 71572,
+      "designite_cc": 5,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 71563,
+      "designite_cc": 7,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 7,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 71540,
+      "designite_cc": 9,
+      "lizard_cc_raw": 11,
+      "codesniff_cc": 10,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 71534,
+      "designite_cc": 8,
+      "lizard_cc_raw": 14,
+      "codesniff_cc": 13,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 71027,
+      "designite_cc": 8,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 8,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 69692,
+      "designite_cc": 9,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 9,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 69658,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 0,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 70807,
+      "designite_cc": 5,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 73024,
+      "designite_cc": 8,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 8,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 73358,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 73511,
+      "designite_cc": 6,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 73564,
+      "designite_cc": 6,
+      "lizard_cc_raw": 11,
+      "codesniff_cc": 6,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 73575,
+      "designite_cc": 3,
+      "lizard_cc_raw": 3,
+      "codesniff_cc": 3,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 73591,
+      "designite_cc": 27,
+      "lizard_cc_raw": 54,
+      "codesniff_cc": 27,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 73593,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 73791,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 74262,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 74548,
+      "designite_cc": 1,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 74782,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 75455,
+      "designite_cc": 5,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 8,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 75525,
+      "designite_cc": 5,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 75804,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 75923,
+      "designite_cc": 7,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 7,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 76124,
+      "designite_cc": 1,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 76376,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 76459,
+      "designite_cc": 5,
+      "lizard_cc_raw": 20,
+      "codesniff_cc": 5,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 76466,
+      "designite_cc": 8,
+      "lizard_cc_raw": 17,
+      "codesniff_cc": 8,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 76509,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 76723,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 77544,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 77590,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 77844,
+      "designite_cc": 5,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 5,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 78100,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": false
+    },
+    {
+      "sample_id": 79147,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 80101,
+      "designite_cc": 8,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 8,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 80546,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 6,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 80994,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 80996,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 81100,
+      "designite_cc": 8,
+      "lizard_cc_raw": 11,
+      "codesniff_cc": 10,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 81150,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 81319,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 81383,
+      "designite_cc": 7,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 7,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 81810,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 82093,
+      "designite_cc": 1,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 82289,
+      "designite_cc": 3,
+      "lizard_cc_raw": 3,
+      "codesniff_cc": 3,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 82348,
+      "designite_cc": 10,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 10,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 82897,
+      "designite_cc": 10,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 10,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 83116,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": false
+    },
+    {
+      "sample_id": 83586,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 83603,
+      "designite_cc": 7,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 8,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 83893,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 84604,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 85386,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 85741,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 85862,
+      "designite_cc": 3,
+      "lizard_cc_raw": 3,
+      "codesniff_cc": 3,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 86563,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 3,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 87082,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 87193,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 3,
+      "methods_in_file": 12,
+      "has_body": true
+    },
+    {
+      "sample_id": 87330,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 2,
+      "methods_in_file": 4,
+      "has_body": true
+    },
+    {
+      "sample_id": 88028,
+      "designite_cc": 6,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 6,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 88541,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 88611,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 3,
+      "methods_in_file": 12,
+      "has_body": false
+    },
+    {
+      "sample_id": 88627,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 3,
+      "methods_in_file": 2,
+      "has_body": false
+    },
+    {
+      "sample_id": 89187,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 3,
+      "methods_in_file": 2,
+      "has_body": false
+    },
+    {
+      "sample_id": 90295,
+      "designite_cc": 5,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 90403,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 90422,
+      "designite_cc": 3,
+      "lizard_cc_raw": 3,
+      "codesniff_cc": 3,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 90957,
+      "designite_cc": 6,
+      "lizard_cc_raw": 21,
+      "codesniff_cc": 18,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 91187,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 1,
+      "methods_in_file": 3,
+      "has_body": true
+    },
+    {
+      "sample_id": 91214,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 92421,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": false
+    },
+    {
+      "sample_id": 92841,
+      "designite_cc": 7,
+      "lizard_cc_raw": 13,
+      "codesniff_cc": 7,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 92847,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 93137,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 3,
+      "methods_in_file": 12,
+      "has_body": false
+    },
+    {
+      "sample_id": 93161,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": false
+    },
+    {
+      "sample_id": 93325,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 93529,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 93640,
+      "designite_cc": 8,
+      "lizard_cc_raw": 20,
+      "codesniff_cc": 12,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 94383,
+      "designite_cc": 6,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 94957,
+      "designite_cc": 5,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 5,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 95340,
+      "designite_cc": 9,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 10,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 95941,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 3,
+      "methods_in_file": 2,
+      "has_body": false
+    },
+    {
+      "sample_id": 96078,
+      "designite_cc": 10,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 10,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 96133,
+      "designite_cc": 8,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 8,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 96214,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 96301,
+      "designite_cc": 5,
+      "lizard_cc_raw": 4,
+      "codesniff_cc": 4,
+      "designite_pc": 1,
+      "codesniff_pc": 0,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 96361,
+      "designite_cc": 7,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 7,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 96478,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 96720,
+      "designite_cc": 9,
+      "lizard_cc_raw": 9,
+      "codesniff_cc": 9,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 97006,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 97107,
+      "designite_cc": 9,
+      "lizard_cc_raw": 9,
+      "codesniff_cc": 9,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 97179,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 97380,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 97456,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 97478,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 97498,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 5,
+      "codesniff_pc": 4,
+      "methods_in_file": 3,
+      "has_body": true
+    },
+    {
+      "sample_id": 97843,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 97847,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 98288,
+      "designite_cc": 5,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 98308,
+      "designite_cc": 8,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 8,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 98539,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 5,
+      "codesniff_pc": 5,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 98648,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 98691,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 98759,
+      "designite_cc": 8,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 8,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 99218,
+      "designite_cc": 7,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 7,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 100002,
+      "designite_cc": 7,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 7,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 100870,
+      "designite_cc": 5,
+      "lizard_cc_raw": 5,
+      "codesniff_cc": 5,
+      "designite_pc": 3,
+      "codesniff_pc": 3,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 101078,
+      "designite_cc": 6,
+      "lizard_cc_raw": 10,
+      "codesniff_cc": 7,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 101579,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 102129,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 102795,
+      "designite_cc": 7,
+      "lizard_cc_raw": 7,
+      "codesniff_cc": 7,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 102804,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 103258,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 2,
+      "has_body": true
+    },
+    {
+      "sample_id": 103528,
+      "designite_cc": 9,
+      "lizard_cc_raw": 9,
+      "codesniff_cc": 9,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 104396,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 105017,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 105224,
+      "designite_cc": 5,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 1,
+      "codesniff_pc": 1,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 105269,
+      "designite_cc": 5,
+      "lizard_cc_raw": 9,
+      "codesniff_cc": 9,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 105270,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 105306,
+      "designite_cc": 6,
+      "lizard_cc_raw": 8,
+      "codesniff_cc": 6,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 105315,
+      "designite_cc": 8,
+      "lizard_cc_raw": 11,
+      "codesniff_cc": 8,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 105330,
+      "designite_cc": 2,
+      "lizard_cc_raw": 2,
+      "codesniff_cc": 2,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 105511,
+      "designite_cc": 1,
+      "lizard_cc_raw": 1,
+      "codesniff_cc": 1,
+      "designite_pc": 4,
+      "codesniff_pc": 4,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 106161,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 0,
+      "codesniff_pc": 0,
+      "methods_in_file": 1,
+      "has_body": true
+    },
+    {
+      "sample_id": 106564,
+      "designite_cc": 6,
+      "lizard_cc_raw": 6,
+      "codesniff_cc": 6,
+      "designite_pc": 2,
+      "codesniff_pc": 2,
+      "methods_in_file": 1,
+      "has_body": true
+    }
+  ]
+}
