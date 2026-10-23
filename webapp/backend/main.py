@@ -1,7 +1,11 @@
 """CodeSniff website API (FastAPI).   Run:  uvicorn main:app --app-dir webapp/backend --port 8000
 
 Endpoints: POST /analyze, GET /analysis/{id}, GET /analysis/{id}/report.{json,csv,pdf}, GET /history,
-GET /findings, GET /config, GET /health.
+GET /findings, GET /config, GET /health. The same routes also answer under CODESNIFF_API_PREFIX (default /api), so the
+API works whether or not a proxy (e.g. a Vercel rewrite of /api/*) strips the prefix.
+
+On serverless hosts (VERCEL set, or CODESNIFF_INLINE=1) POST /analyze runs the analysis inside the request and returns
+the finished record, because a background job on one instance cannot be polled from another.
 """
 import csv
 import io
@@ -11,7 +15,7 @@ from typing import Optional
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -24,17 +28,38 @@ from codesniff.resources import PRIMARY, SMELLS  # noqa: E402
 from codesniff.service import analyze_commit, cache_key  # noqa: E402
 from codesniff.store import Store  # noqa: E402
 
+API_PREFIX = os.environ.get("CODESNIFF_API_PREFIX", "/api").rstrip("/")
+INLINE = bool(os.environ.get("VERCEL") or os.environ.get("CODESNIFF_INLINE"))
+
 app = FastAPI(title="CodeSniff API", version=__version__,
               description="Smell risk of the Java methods changed by a commit (Complex Method, Long Parameter List). "
                           "The score measures code-smell risk; it is not a bug or build-failure prediction.")
 app.add_middleware(CORSMiddleware, allow_origins=os.environ.get("CODESNIFF_CORS", "*").split(","),
                    allow_methods=["GET", "POST"], allow_headers=["*"])
-STATE = {"store": None, "github": GitHub}
+STATE = {"store": None, "github": GitHub, "inline": INLINE}
+
+
+class PrefixRoot:
+    """Serve every route under API_PREFIX too: a matching request gets root_path = API_PREFIX, which Starlette strips
+    before routing (and which /docs uses to find /api/openapi.json)."""
+
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        path = scope.get("path", "")
+        if scope["type"] in ("http", "websocket") and API_PREFIX and (path == API_PREFIX or path.startswith(API_PREFIX + "/")):
+            scope = dict(scope, root_path=scope.get("root_path", "") + API_PREFIX)
+        await self.app(scope, receive, send)
+
+
+app.add_middleware(PrefixRoot)
 
 
 def store():
     if STATE["store"] is None:
-        STATE["store"] = Store()
+        # Serverless file systems are read-only except /tmp (and /tmp is per instance).
+        STATE["store"] = Store(os.environ.get("CODESNIFF_DB") or ("/tmp/codesniff.db" if os.environ.get("VERCEL") else None))
     return STATE["store"]
 
 
@@ -75,6 +100,9 @@ def analyze(req: AnalyzeRequest, background: BackgroundTasks):
         raise HTTPException(exc.status, exc.message)
     body = req.model_dump()
     aid = store().create(body)
+    if STATE["inline"]:
+        run_job(aid, body)
+        return JSONResponse(store().get(aid), status_code=200)
     background.add_task(run_job, aid, body)
     return {"id": aid, "status": "running", "stage": "queued"}
 

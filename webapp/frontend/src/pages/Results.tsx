@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { api } from "../api";
 import MethodDrawer from "../components/MethodDrawer";
 import MethodsTable from "../components/MethodsTable";
@@ -37,11 +37,13 @@ function Stat({ label, value, tone }: { label: string; value: number | string; t
 export default function Results() {
   const { id = "" } = useParams();
   const { config } = useConfig();
-  const [a, setA] = useState<Analysis | null>(null);
+  const handed = (useLocation().state as { analysis?: Analysis } | null)?.analysis;
+  const [a, setA] = useState<Analysis | null>(handed?.id === id ? handed : null);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState<MethodResult | null>(null);
 
   useEffect(() => {
+    if (handed?.id === id && handed.status !== "running") { setA(handed); return; }
     let stop = false;
     let timer: ReturnType<typeof setTimeout>;
     const poll = async () => {
@@ -54,7 +56,7 @@ export default function Results() {
     };
     void poll();
     return () => { stop = true; clearTimeout(timer); };
-  }, [id]);
+  }, [id, handed]);
 
   if (error) return <ErrorBox message={error} />;
   if (!a || a.status === "running") return <Progress stage={a?.stage ?? "queued"} mode={(a?.request?.mode as string) ?? "commit"} />;

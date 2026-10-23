@@ -10,8 +10,18 @@ import sys
 
 BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))           # webapp/backend
 APP_DIR = BACKEND_DIR
-# Repository root holding src/ and results/; overridable for container layouts.
-REPO = os.environ.get("CODESNIFF_ROOT") or os.path.dirname(os.path.dirname(BACKEND_DIR))
+# The paper files the backend reads (relative to the repository root). sync_paper_files.py copies them into
+# webapp/backend/paper/ so a deployment rooted at webapp/backend (e.g. a Vercel service) has them too.
+PAPER_FILES = ["src/features.py", "src/common.py", "results/paper_numbers.json"] + [
+    f"results/tables/{t}" for t in (
+        "audit_threshold_ranges.csv", "rq2_share_smelly_by_metric.csv", "audit_answer_runs.csv", "human_ceiling.csv",
+        "agreement_matched_neardup.csv", "spec_curves.csv", "model_comparison_LPL_R5.csv", "ablation_CM.csv",
+        "ablation_LPL_R5.csv")]
+REPO_ROOT = os.path.dirname(os.path.dirname(BACKEND_DIR))
+BUNDLED = os.path.join(BACKEND_DIR, "paper")
+# Repository root holding src/ and results/: CODESNIFF_ROOT if set, else the checkout, else the bundled copy.
+REPO = (os.environ.get("CODESNIFF_ROOT")
+        or (REPO_ROOT if os.path.exists(os.path.join(REPO_ROOT, "src", "features.py")) else BUNDLED))
 SRC = os.path.join(REPO, "src")
 RESULTS = os.path.join(REPO, "results")
 TABLES = os.path.join(RESULTS, "tables")

@@ -1,6 +1,9 @@
 import type { Analysis, Findings, SiteConfig } from "./types";
 
-export const API_URL: string = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") || "http://localhost:8000";
+// VITE_API_URL if set; otherwise the same-origin /api path in production builds (Vercel services rewrite /api/* to the
+// backend) and the local backend in development.
+export const API_URL: string = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "")
+  || (import.meta.env.PROD ? "/api" : "http://localhost:8000");
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
@@ -20,7 +23,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 export interface AnalyzeInput { repo_url?: string; commit_sha?: string; pr_url?: string; mode: "commit" | "repo"; max_files?: number; }
 
 export const api = {
-  analyze: (body: AnalyzeInput) => request<{ id: string; status: string }>("/analyze", { method: "POST", body: JSON.stringify(body) }),
+  // Returns {id, status: "running"} for a background job, or the finished record when the server runs inline (serverless).
+  analyze: (body: AnalyzeInput) => request<Pick<Analysis, "id" | "status"> & Partial<Analysis>>("/analyze", { method: "POST", body: JSON.stringify(body) }),
   analysis: (id: string) => request<Analysis>(`/analysis/${id}`),
   history: () => request<Analysis[]>("/history"),
   findings: () => request<Findings>("/findings"),

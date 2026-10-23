@@ -4,3 +4,5 @@ omit =
     tests/*
     train_models.py
     codesniff/__main__.py
+    paper/*
+    sync_paper_files.py

@@ -129,3 +129,23 @@ def test_analyze_errors(client):
     assert a["status"] == "error" and "not found" in a["error"]
     assert client.get("/analysis/doesnotexist").status_code == 404
     assert client.get(f"/analysis/{r.json()['id']}/report.json").status_code == 409
+
+
+def test_routes_also_answer_under_api_prefix(client):
+    assert client.get("/api/health").json()["status"] == "ok"
+    r = client.post("/api/analyze", json={"repo_url": "https://github.com/o/r", "commit_sha": "a" * 40})
+    assert r.status_code == 202
+    assert client.get(f"/api/analysis/{r.json()['id']}").json()["status"] == "done"
+    assert client.get(f"/api/analysis/{r.json()['id']}/report.pdf").content[:4] == b"%PDF"
+    assert client.get("/apiary").status_code == 404           # only the exact prefix segment is stripped
+    assert "'/api/openapi.json'" in client.get("/api/docs").text
+
+
+def test_inline_mode_returns_the_finished_analysis(client, monkeypatch):
+    import main
+    monkeypatch.setitem(main.STATE, "inline", True)
+    r = client.post("/api/analyze", json={"repo_url": "https://github.com/o/r", "commit_sha": "a" * 40})
+    assert r.status_code == 200 and r.json()["status"] == "done"
+    assert r.json()["result"]["summary"]["changed_methods"] == 2
+    bad = client.post("/api/analyze", json={"repo_url": "https://github.com/o/r", "commit_sha": "bad1234"})
+    assert bad.status_code == 200 and bad.json()["status"] == "error" and "not found" in bad.json()["error"]

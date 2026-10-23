@@ -1,0 +1,14 @@
+# Never upload the DACOS data (not redistributed) or local environments with `vercel deploy`.
+data/
+.venv*/
+**/node_modules/
+**/__pycache__/
+.git/
+results/figures/
+results/logs/
+webapp/backend/codesniff.db
+webapp/backend/tests/
+webapp/frontend/dist/
+webapp/frontend/coverage/
+webapp/frontend/test-results/
+webapp/frontend/playwright-report/

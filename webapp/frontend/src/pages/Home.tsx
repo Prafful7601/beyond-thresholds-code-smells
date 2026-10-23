@@ -20,8 +20,9 @@ export default function Home() {
     if (!input) { setError("Enter a GitHub repository, commit or pull-request URL."); return; }
     setBusy(true); setError(null);
     try {
-      const { id } = await api.analyze(parseInput(input, override ? "" : sha, mode, maxFiles));
-      nav(`/analysis/${id}`);
+      const r = await api.analyze(parseInput(input, override ? "" : sha, mode, maxFiles));
+      // A finished record (inline server) is handed over so the Results page does not have to poll for it.
+      nav(`/analysis/${r.id}`, { state: r.status === "running" ? undefined : { analysis: r } });
     } catch (err) { setError((err as Error).message); setBusy(false); }
   }
 

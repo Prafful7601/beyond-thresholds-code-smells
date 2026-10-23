@@ -135,7 +135,31 @@ CI ([`.github/workflows/webapp-ci.yml`](../.github/workflows/webapp-ci.yml)) run
 
 ## Deploy
 
-The API and the site are deployed separately. Neither needs the DACOS data.
+Neither the API nor the site needs the DACOS data.
+
+### Option A: one Vercel project (services)
+
+The root [`vercel.json`](../vercel.json) defines two services on one domain:
+
+| Service | Root | Public path |
+|---|---|---|
+| `backend` (FastAPI, `main.py`) | `webapp/backend` | `/api/*` |
+| `frontend` (Vite) | `webapp/frontend` | everything else |
+
+How the pieces fit:
+
+- The site calls the API on its own domain at `/api`; that is the default when `VITE_API_URL` is unset in a production build. No service calls another server-side, so there are no bindings.
+- The API answers its routes both with and without the `/api` prefix.
+- A service only sees its own folder. The backend therefore reads a bundled copy of the paper files it needs, in `webapp/backend/paper/`. Refresh the copy with `python webapp/backend/sync_paper_files.py` after regenerating results; a test fails if the copy and the source differ.
+- On Vercel (`VERCEL` is set) `POST /api/analyze` runs the analysis inside the request and returns the finished result, and the site shows it without polling. History and report downloads use SQLite in `/tmp`, which is per instance and temporary.
+
+Steps:
+
+1. Import the repository into Vercel with the Root Directory left at the repository root.
+2. Optionally set `GITHUB_TOKEN` in the project's environment variables.
+3. Deploy, then test locally with `vercel dev`.
+
+### Option B: API on Render, site on Vercel
 
 1. **API on Render:**
    - Create a new Blueprint from this repository; [`render.yaml`](../render.yaml) builds `webapp/backend/Dockerfile` from the repository root.
@@ -144,7 +168,7 @@ The API and the site are deployed separately. Neither needs the DACOS data.
    - **Any Docker host works instead:** `docker build -f webapp/backend/Dockerfile -t codesniff-api .`, then run it with `-p 8000:8000`.
 2. **Site on Vercel:**
    - Import the repository with **Root Directory** set to `webapp/frontend`. [`vercel.json`](frontend/vercel.json) sets the Vite build and the SPA rewrites.
-   - Add the environment variable `VITE_API_URL=https://<your-api>.onrender.com`.
+   - Add the environment variable `VITE_API_URL=https://<your-api>.onrender.com` (without it the site calls `/api` on its own domain).
    - Deploy.
 3. **Check:**
    - `https://<your-api>/health` lists both models.

@@ -125,3 +125,12 @@ it("Unknown routes show not found inside the layout with the project card", asyn
   expect(screen.getByText("Page not found.")).toBeInTheDocument();
   expect(screen.getByTestId("project-card")).toBeInTheDocument();
 });
+
+it("Results uses the finished record returned by an inline server without polling", async () => {
+  const calls = mockApi((p) => (p === "/analyze" ? { status: 200, body: ANALYSIS } : undefined));
+  at("/");
+  await userEvent.type(screen.getByLabelText("GitHub repository, commit or pull-request URL"), "https://github.com/o/r");
+  await userEvent.click(screen.getByRole("button", { name: "Analyze" }));
+  expect(await screen.findByTestId("risk-score")).toHaveTextContent(ANALYSIS.result.risk.score.toFixed(1));
+  expect(calls.some((c) => c.path.startsWith("/analysis/"))).toBe(false);
+});
