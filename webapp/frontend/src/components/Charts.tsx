@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, Cell, ErrorBar, Legend, ReferenceLine, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, ComposedChart, ErrorBar, Legend, ReferenceLine, ResponsiveContainer, Scatter, Tooltip, XAxis, YAxis } from "recharts";
 import type { Findings, Triple } from "../types";
 
 const BLUE = "#2a78d6", ORANGE = "#eb6834", AQUA = "#1baf7a", INK2 = "#52514e";
@@ -15,7 +15,7 @@ export function RunsChart({ data }: { data: Findings["runs"] }) {
         <YAxis type="category" dataKey="label" width={120} tick={{ fontSize: 11 }} />
         <Tooltip formatter={(_: unknown, __: unknown, p: { payload?: { first_ann_id: number; last_ann_id: number; length: number } }) =>
           p.payload ? [`ids ${p.payload.first_ann_id}–${p.payload.last_ann_id} (${p.payload.length} answers)`, "run"] : ""} />
-        <Bar dataKey="range" isAnimationActive={false}>
+        <Bar dataKey="range" isAnimationActive={false} barSize={14}>
           {rows.map((r) => <Cell key={r.i} fill={r.answer ? ORANGE : BLUE} />)}
         </Bar>
       </BarChart>
@@ -23,25 +23,40 @@ export function RunsChart({ data }: { data: Findings["runs"] }) {
   );
 }
 
+/** Dot + 95% CI chart: one row per category, one point series per measure (vertical ComposedChart). */
 function DotCI({ series, height, xLabel, reference, domain }: {
   series: { name: string; colour: string; shape: "circle" | "triangle" | "square" | "diamond"; points: { y: string; v: Triple }[] }[];
   height: number; xLabel: string; reference?: number; domain?: [number | string, number | string];
 }) {
+  const cats: string[] = [];
+  series.forEach((s) => s.points.forEach((p) => { if (!cats.includes(p.y)) cats.push(p.y); }));
+  const data = cats.map((y) => {
+    const row: Record<string, unknown> = { y };
+    series.forEach((s, i) => {
+      const p = s.points.find((q) => q.y === y);
+      if (p) { row[`v${i}`] = p.v[0]; row[`e${i}`] = err(p.v); row[`ci${i}`] = `${fmt(p.v[0])} [${fmt(p.v[1])}, ${fmt(p.v[2])}]`; }
+    });
+    return row;
+  });
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <ScatterChart margin={{ left: 20, right: 20, top: 10, bottom: 20 }}>
+      <ComposedChart data={data} layout="vertical" margin={{ left: 20, right: 24, top: 10, bottom: 20 }}>
         <CartesianGrid stroke="#e4e3df" />
-        <XAxis type="number" dataKey="x" domain={domain ?? ["auto", "auto"]} tickFormatter={(v: number) => v.toFixed(2)} label={{ value: xLabel, position: "insideBottom", offset: -10, fontSize: 12 }} />
-        <YAxis type="category" dataKey="y" width={170} tick={{ fontSize: 11 }} allowDuplicatedCategory={false} />
-        <Tooltip formatter={(v: number) => fmt(v)} />
+        <XAxis type="number" domain={domain ?? ["auto", "auto"]} tickFormatter={(v: number) => v.toFixed(2)}
+               label={{ value: xLabel, position: "insideBottom", offset: -10, fontSize: 12 }} />
+        <YAxis type="category" dataKey="y" width={190} tick={{ fontSize: 11 }} interval={0} />
+        <Tooltip formatter={(_v: unknown, name: string, item: { dataKey?: unknown; payload?: Record<string, unknown> }) => {
+          const i = String(item.dataKey ?? "").replace("v", "");
+          return [String(item.payload?.[`ci${i}`] ?? ""), name];
+        }} />
         {reference !== undefined && <ReferenceLine x={reference} stroke={INK2} strokeDasharray="4 4" />}
         <Legend verticalAlign="top" height={30} />
-        {series.map((s) => (
-          <Scatter key={s.name} name={s.name} data={s.points.map((p) => ({ y: p.y, x: p.v[0], e: err(p.v) }))} fill={s.colour} shape={s.shape}>
-            <ErrorBar dataKey="e" direction="x" stroke={s.colour} width={0} strokeWidth={2} />
+        {series.map((s, i) => (
+          <Scatter key={s.name} name={s.name} dataKey={`v${i}`} fill={s.colour} shape={s.shape} isAnimationActive={false}>
+            <ErrorBar dataKey={`e${i}`} direction="x" stroke={s.colour} width={6} strokeWidth={2} />
           </Scatter>
         ))}
-      </ScatterChart>
+      </ComposedChart>
     </ResponsiveContainer>
   );
 }
