@@ -1,0 +1,32 @@
+sequenceDiagram
+  autonumber
+  actor U as User
+  participant W as Website (React)
+  participant A as API (FastAPI)
+  participant S as SQLite store
+  participant G as GitHub REST API
+  U->>W: paste commit / PR URL, click Analyze
+  W->>A: POST /analyze {repo_url, commit_sha | pr_url}
+  A->>A: parse_target (400 on a bad URL or SHA)
+  A->>S: create analysis (status running)
+  A-->>W: 202 {id}
+  W->>W: navigate to /results/{id}
+  par background job
+    A->>S: cached result for repo + full sha?
+    alt cache hit
+      S-->>A: stored result
+    else cache miss
+      A->>G: GET commit / compare (changed files)
+      A->>G: GET raw file before and after
+      G-->>A: Java sources (or 404 / 429 rate limit / 5xx)
+      A->>A: extract, pair, metrics, zones, models, score
+    end
+    A->>S: finish(result) or fail(friendly message)
+  and polling
+    loop every 800 ms until done or failed
+      W->>A: GET /analysis/{id}
+      A-->>W: {status, stage}
+    end
+  end
+  A-->>W: {status: done, result}
+  W-->>U: gauge, counts, method table, drawer, downloads

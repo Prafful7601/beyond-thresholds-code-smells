@@ -1,0 +1,15 @@
+flowchart TD
+  A["Commit / PR / repository URL"] --> B["Fetch changed .java files<br/>(before and after versions)"]
+  B --> C["Extract methods with lizard<br/>+ lexer fallback"]
+  C --> D["Pair methods before ↔ after<br/>(name, or name + pc for overloads)"]
+  D --> E["Keep methods whose lines changed<br/>added · modified · deleted"]
+  E --> F["Metrics as in src/features.py<br/>cc (DesigniteJava-compatible), pc, loc, …"]
+  F --> G{"Zone per smell<br/>from audit_threshold_ranges.csv"}
+  G -- clean --> H["0 points"]
+  G -- borderline --> I["Model probability<br/>CM: LR · LPL: R5 SVM<br/>+ honest note (paper numbers)"]
+  G -- clear --> J["1 point"]
+  I --> K["0.5 × probability"]
+  F --> L["Change status per smell<br/>introduced · worsened · improved · unchanged"]
+  H & J & K & L --> M["Method points<br/>+0.25 per introduced/worsened, cap 1"]
+  M --> N["Smell risk score = 100 × Σ points / n<br/>Low · Medium · High, small-sample flag"]
+  N --> O["Results page · JSON · CSV · PDF<br/>CLI table · PR comment"]

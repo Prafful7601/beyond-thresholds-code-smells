@@ -1,0 +1,30 @@
+flowchart LR
+  subgraph Browser["Browser"]
+    UI["React + Vite + Tailwind site<br/>Home · Results · History · Research findings · About"]
+  end
+  subgraph API["FastAPI backend (webapp/backend)"]
+    EP["main.py<br/>POST /analyze · GET /analysis/{id}<br/>/history · /findings · /config · /health"]
+    SVC["service.py<br/>job stages, before/after pairing"]
+    GH["github.py<br/>REST client, tarball, errors"]
+    DIFF["diff.py + extract.py<br/>lizard, changed methods"]
+    SC["zones.py · model.py · notes.py<br/>scoring.py"]
+    FND["findings.py<br/>charts and captions"]
+    DB[("SQLite<br/>analyses + cache")]
+  end
+  subgraph Paper["Paper artefacts (read-only)"]
+    FEAT["src/features.py<br/>metric definitions"]
+    RES["results/paper_numbers.json<br/>results/tables/*.csv"]
+    MOD["models/*.joblib<br/>model_card.json"]
+  end
+  GHAPI[("GitHub REST API")]
+  CLI["codesniff CLI<br/>check · scan"]
+  ACT["GitHub Action<br/>PR comment + fail-on"]
+  UI -- "JSON over HTTPS" --> EP
+  EP --> SVC --> GH --> GHAPI
+  SVC --> DIFF --> SC
+  DIFF -. imports .-> FEAT
+  SC -. reads .-> RES
+  SC -. loads .-> MOD
+  EP --> FND -. reads .-> RES
+  EP <--> DB
+  ACT --> CLI --> SVC
