@@ -1,0 +1,216 @@
+{
+ "risk": {
+  "params": {
+   "clear_points": 1.0,
+   "borderline_weight": 0.5,
+   "change_bonus": 0.25,
+   "method_cap": 1.0,
+   "probability_delta": 0.2,
+   "small_sample_below": 3,
+   "medium_from": 25.0,
+   "high_above": 50.0
+  },
+  "formula": [
+   "method points = 1 if any smell is clear",
+   "otherwise 0.5 \u00d7 model probability if borderline (highest among borderline smells); 0 if clean",
+   "+ 0.25 for each introduced or worsened smell, capped at 1 per method",
+   "score = 100 \u00d7 (sum of method points) / (number of changed methods); deleted methods are not scored",
+   "Low < 25, Medium 25\u201350, High > 50; small-sample flag if fewer than 3 methods changed"
+  ],
+  "disclaimer": "The smell risk score measures code-smell risk in the changed Java methods (Complex Method and Long Parameter List). It is not a probability of bugs, defects or build failure."
+ },
+ "smells": {
+  "CM": {
+   "name": "Complex Method",
+   "metric": "cc",
+   "band": {
+    "metric": "cc",
+    "lo": 5.0,
+    "hi": 14.0,
+    "rule_threshold": 8.0
+   },
+   "anomalous_values": {},
+   "evidence": {
+    "model": {
+     "estimate": 0.0953514220045704,
+     "ci_lo": 0.0517152909296825,
+     "ci_hi": 0.1359802076510277,
+     "label": "Best model MCC, CM (LR, 5\u00d75 grouped CV)",
+     "source_table": "model_comparison.csv"
+    },
+    "same": {
+     "estimate": 0.8057935463197431,
+     "ci_lo": 0.7758712685930127,
+     "ci_hi": 0.8327963790578683,
+     "label": "Human-vs-human MCC, CM",
+     "source_table": "human_ceiling.csv"
+    },
+    "copies": {
+     "estimate": 0.0821956164501423,
+     "ci_lo": -0.1123375073858905,
+     "ci_hi": 0.3012767972308657,
+     "label": "Human-vs-human MCC between same-project near-duplicates, CM",
+     "source_table": "human_ceiling_neardup.csv"
+    }
+   },
+   "model": {
+    "model": "LR",
+    "features": [
+     "cc",
+     "loc",
+     "statements",
+     "max_nesting",
+     "method_calls",
+     "comment_ratio",
+     "mean_identifier_length"
+    ],
+    "hyperparameters": {
+     "clf__C": 0.01
+    },
+    "trained_at": "2026-10-23",
+    "repository_commit": "2c8df3cd963a597fa7a651ed8f7ddcd44bd1ce28",
+    "training_data": {
+     "source": "DACOS (Zenodo 10.5281/zenodo.7570428), primary analysis set",
+     "set": "unanimous entities, consistency-filtered",
+     "n": 1695,
+     "smelly": 1129,
+     "benign": 566,
+     "projects": 10
+    },
+    "paper_cv": {
+     "source": "results/tables/model_comparison.csv (DesigniteJava features)",
+     "MCC": 0.0953514220045704,
+     "MCC_sd": 0.0060138535483428,
+     "MCC_lo": 0.0517152909296825,
+     "MCC_hi": 0.1359802076510277,
+     "macro_F1": 0.5247315460226117,
+     "ROC_AUC": 0.5565677747279402
+    },
+    "app_cv": {
+     "protocol": "the paper's 25 project-grouped splits (5 repeats x 5 folds), fixed hyperparameters",
+     "caveat": "hyperparameters are the modal choice of the paper's nested tuning over these same folds, so this estimate is slightly optimistic; the paper's nested-CV value (paper_cv) is the one CodeSniff quotes",
+     "macro_F1": 0.5241594035380677,
+     "macro_F1_sd": 0.008268519308434058,
+     "MCC": 0.10702261184090942,
+     "MCC_sd": 0.01031989426857269,
+     "ROC_AUC": 0.5558962714431922,
+     "ROC_AUC_sd": 0.009868702801073595,
+     "PR_AUC": 0.7092130546637317,
+     "PR_AUC_sd": 0.007933020881002834,
+     "macro_F1_lo": 0.5016047789677779,
+     "macro_F1_hi": 0.5450021116091229,
+     "MCC_lo": 0.061214277982348214,
+     "MCC_hi": 0.15049271025371486,
+     "ROC_AUC_lo": 0.5269007191086463,
+     "ROC_AUC_hi": 0.5823747523438997,
+     "PR_AUC_lo": 0.6799829746621056,
+     "PR_AUC_hi": 0.7416765564964994
+    },
+    "probability": "logistic regression predict_proba"
+   }
+  },
+  "LPL": {
+   "name": "Long Parameter List",
+   "metric": "pc",
+   "band": {
+    "metric": "pc",
+    "lo": 3.0,
+    "hi": 10.0,
+    "rule_threshold": 5.0
+   },
+   "anomalous_values": {
+    "3": {
+     "entities": 137,
+     "share_smelly": 1.0
+    }
+   },
+   "evidence": {
+    "model": {
+     "estimate": 0.268941390302125,
+     "ci_lo": 0.2126429727020557,
+     "ci_hi": 0.3210405387994594,
+     "label": "Best model MCC, LPL R5 (SVM, 5\u00d75 grouped CV) [R5 value of row 14]",
+     "source_table": "model_comparison_LPL_R5.csv"
+    },
+    "same": {
+     "estimate": 0.5145288713201062,
+     "ci_lo": 0.4724300719282155,
+     "ci_hi": 0.558154992526264,
+     "label": "Human-vs-human MCC, LPL R5",
+     "source_table": "human_ceiling.csv"
+    },
+    "copies": {
+     "estimate": 0.087343185530259,
+     "ci_lo": 0.0284861252206021,
+     "ci_hi": 0.1578694961339169,
+     "label": "Human-vs-human MCC between same-project near-duplicates, LPL R5",
+     "source_table": "human_ceiling_neardup.csv"
+    }
+   },
+   "model": {
+    "model": "SVM",
+    "features": [
+     "pc",
+     "loc",
+     "statements",
+     "max_nesting",
+     "method_calls",
+     "comment_ratio",
+     "mean_identifier_length"
+    ],
+    "hyperparameters": {
+     "clf__C": 0.1,
+     "clf__gamma": 0.01
+    },
+    "trained_at": "2026-10-23",
+    "repository_commit": "2c8df3cd963a597fa7a651ed8f7ddcd44bd1ce28",
+    "training_data": {
+     "source": "DACOS (Zenodo 10.5281/zenodo.7570428), primary analysis set",
+     "set": "unanimous entities, consistency-filtered; R5: pc = 3 block removed",
+     "n": 1189,
+     "smelly": 731,
+     "benign": 458,
+     "projects": 10
+    },
+    "paper_cv": {
+     "source": "results/tables/model_comparison_LPL_R5.csv (DesigniteJava features)",
+     "MCC": 0.268941390302125,
+     "MCC_sd": 0.0223167613018326,
+     "MCC_lo": 0.2126429727020557,
+     "MCC_hi": 0.3210405387994594,
+     "macro_F1": 0.6186417739964456,
+     "ROC_AUC": 0.6419210986923458
+    },
+    "app_cv": {
+     "protocol": "the paper's 25 project-grouped splits (5 repeats x 5 folds), fixed hyperparameters",
+     "caveat": "hyperparameters are the modal choice of the paper's nested tuning over these same folds, so this estimate is slightly optimistic; the paper's nested-CV value (paper_cv) is the one CodeSniff quotes",
+     "macro_F1": 0.6184673933620549,
+     "macro_F1_sd": 0.0014980672427134549,
+     "MCC": 0.3115163912353279,
+     "MCC_sd": 0.0038128342636631566,
+     "ROC_AUC": 0.6362403598587806,
+     "ROC_AUC_sd": 0.0051605778394357305,
+     "PR_AUC": 0.6999590355722882,
+     "PR_AUC_sd": 0.006395728504839781,
+     "macro_F1_lo": 0.5877168187244297,
+     "macro_F1_hi": 0.647994573472259,
+     "MCC_lo": 0.25186898917211265,
+     "MCC_hi": 0.36479547182574346,
+     "ROC_AUC_lo": 0.6022180632365751,
+     "ROC_AUC_hi": 0.6690613923273018,
+     "PR_AUC_lo": 0.663280913482693,
+     "PR_AUC_hi": 0.7374780284631578
+    },
+    "probability": "SVC(probability=True): Platt scaling; the paper's class rule is the decision-function sign"
+   }
+  }
+ },
+ "excluded": {
+  "MA": "Multifaceted Abstraction is descriptive only in the paper: after the consistency filter it has too few benign labels to train or evaluate a model."
+ },
+ "links": {
+  "repository": "https://github.com/Prafful7601/beyond-thresholds-code-smells",
+  "results": "https://github.com/Prafful7601/beyond-thresholds-code-smells/blob/main/results/results.md",
+  "paper": "Metric Thresholds Versus Human Judgment on Borderline Code Smells: A Robustness-First Audit of the DACOS Benchmark"
+ }
+}

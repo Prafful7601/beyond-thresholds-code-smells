@@ -1,0 +1,798 @@
+{
+ "runs": {
+  "rows": [
+   {
+    "smell": "CM",
+    "first_ann_id": 787,
+    "last_ann_id": 1364,
+    "length": 63,
+    "answer": 1
+   },
+   {
+    "smell": "CM",
+    "first_ann_id": 2008,
+    "last_ann_id": 2090,
+    "length": 40,
+    "answer": 1
+   },
+   {
+    "smell": "CM",
+    "first_ann_id": 3854,
+    "last_ann_id": 4234,
+    "length": 69,
+    "answer": 1
+   },
+   {
+    "smell": "CM",
+    "first_ann_id": 4605,
+    "last_ann_id": 5066,
+    "length": 50,
+    "answer": 1
+   },
+   {
+    "smell": "CM",
+    "first_ann_id": 9225,
+    "last_ann_id": 9396,
+    "length": 170,
+    "answer": 1
+   },
+   {
+    "smell": "CM",
+    "first_ann_id": 9397,
+    "last_ann_id": 9469,
+    "length": 73,
+    "answer": 0
+   },
+   {
+    "smell": "CM",
+    "first_ann_id": 9470,
+    "last_ann_id": 9715,
+    "length": 246,
+    "answer": 1
+   },
+   {
+    "smell": "CM",
+    "first_ann_id": 9932,
+    "last_ann_id": 11111,
+    "length": 133,
+    "answer": 0
+   },
+   {
+    "smell": "LPL",
+    "first_ann_id": 941,
+    "last_ann_id": 1261,
+    "length": 55,
+    "answer": 1
+   },
+   {
+    "smell": "LPL",
+    "first_ann_id": 3068,
+    "last_ann_id": 4724,
+    "length": 305,
+    "answer": 0
+   },
+   {
+    "smell": "LPL",
+    "first_ann_id": 9254,
+    "last_ann_id": 9709,
+    "length": 41,
+    "answer": 0
+   },
+   {
+    "smell": "LPL",
+    "first_ann_id": 9927,
+    "last_ann_id": 11063,
+    "length": 1054,
+    "answer": 1
+   },
+   {
+    "smell": "LPL",
+    "first_ann_id": 11067,
+    "last_ann_id": 12114,
+    "length": 296,
+    "answer": 0
+   },
+   {
+    "smell": "MA",
+    "first_ann_id": 6,
+    "last_ann_id": 4859,
+    "length": 1474,
+    "answer": 1
+   },
+   {
+    "smell": "MA",
+    "first_ann_id": 9786,
+    "last_ann_id": 9926,
+    "length": 141,
+    "answer": 1
+   }
+  ],
+  "caption": "Ordered by annotation id, DACOS answers contain 15 runs of at least 40 identical answers; the longest is 1474 consecutive 'yes' answers (MA). The paper repeats every result without them."
+ },
+ "ceiling": {
+  "rows": [
+   {
+    "population": "CM",
+    "model": "LR",
+    "human": [
+     0.8057935463197431,
+     0.7758712685930127,
+     0.8327963790578683
+    ],
+    "copies": [
+     0.0779797227374988,
+     -0.1281657695414603,
+     0.2802441596114947
+    ],
+    "model_mcc": [
+     0.0908654996848648,
+     0.0529356049732576,
+     0.1301082863426531
+    ]
+   },
+   {
+    "population": "LPL",
+    "model": "GB",
+    "human": [
+     0.54043852132096,
+     0.4984510974261463,
+     0.5810763824463678
+    ],
+    "copies": [
+     0.0979071663552556,
+     0.037992705477536,
+     0.1890635009300081
+    ],
+    "model_mcc": [
+     0.1714765972400322,
+     0.1329672506877952,
+     0.2102540433219934
+    ]
+   },
+   {
+    "population": "LPL R5",
+    "model": "SVM",
+    "human": [
+     0.5145288713201062,
+     0.4724300719282155,
+     0.558154992526264
+    ],
+    "copies": [
+     0.0863019410086672,
+     0.0301328285418913,
+     0.1559142231915494
+    ],
+    "model_mcc": [
+     0.2013594773036625,
+     0.1621397112529539,
+     0.2429215866394542
+    ]
+   }
+  ],
+  "caption": "Two annotators of the same Complex Method snippet agree at MCC 0.81; the best model reaches 0.09; annotators of structurally identical copies agree at only 0.08."
+ },
+ "spec": {
+  "rows": [
+   {
+    "spec": "alpha",
+    "smell": "CM",
+    "condition": "primary",
+    "estimate": 0.804399419061451,
+    "lo": 0.7738823217497471,
+    "hi": 0.8321032036527496,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "LPL",
+    "condition": "primary",
+    "estimate": 0.539516567083107,
+    "lo": 0.4979712980664731,
+    "hi": 0.5766580082083483,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "MA",
+    "condition": "primary",
+    "estimate": 0.0203998368013055,
+    "lo": -0.0349233564527896,
+    "hi": 0.0767911275889517,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "MA",
+    "condition": "R1",
+    "estimate": -0.0137802471825785,
+    "lo": -0.0583887698220345,
+    "hi": 0.0314934902203525,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "CM",
+    "condition": "R3",
+    "estimate": 0.6304744558411605,
+    "lo": 0.5974373148423069,
+    "hi": 0.6623880460271885,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "LPL",
+    "condition": "R3",
+    "estimate": 0.4887695064517303,
+    "lo": 0.4431955121132785,
+    "hi": 0.5297899422980535,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "MA",
+    "condition": "R3",
+    "estimate": 0.560922586457828,
+    "lo": 0.5198297627138497,
+    "hi": 0.6027523192468486,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "CM",
+    "condition": "R4",
+    "estimate": 0.824041999800173,
+    "lo": 0.791930170503942,
+    "hi": 0.8550317337987944,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "LPL",
+    "condition": "R4",
+    "estimate": 0.9599716892104436,
+    "lo": 0.9162961745517596,
+    "hi": 0.9906111138787684,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "MA",
+    "condition": "R4",
+    "estimate": 0.0555087781861167,
+    "lo": -0.0257230774599699,
+    "hi": 0.1406338850805371,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "LPL",
+    "condition": "R5",
+    "estimate": 0.5133489461358314,
+    "lo": 0.4660150232079595,
+    "hi": 0.5555394398317515,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "CM",
+    "condition": "R6",
+    "estimate": 0.5986128850209405,
+    "lo": 0.5640059969756299,
+    "hi": 0.6352865395058759,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "LPL",
+    "condition": "R6",
+    "estimate": 0.539516567083107,
+    "lo": 0.4979712980664731,
+    "hi": 0.5766580082083483,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "MA",
+    "condition": "R6",
+    "estimate": 0.0589979959919838,
+    "lo": 0.009848459794535,
+    "hi": 0.1133013056811557,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "CM",
+    "condition": "R7c",
+    "estimate": 0.8043431294335114,
+    "lo": 0.7769551437163771,
+    "hi": 0.832332745651031,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "LPL",
+    "condition": "R7c",
+    "estimate": 0.513129102844639,
+    "lo": 0.468538983662502,
+    "hi": 0.5544565997826202,
+    "reference": 0.667
+   },
+   {
+    "spec": "alpha",
+    "smell": "MA",
+    "condition": "R7c",
+    "estimate": -0.0498889675199492,
+    "lo": -0.1074444505215417,
+    "hi": 0.0124990855085228,
+    "reference": 0.667
+   },
+   {
+    "spec": "auc",
+    "smell": "CM",
+    "condition": "primary",
+    "estimate": 0.5413801575552335,
+    "lo": 0.5134165004944813,
+    "hi": 0.5684206751841481,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "LPL",
+    "condition": "primary",
+    "estimate": 0.4331143219366913,
+    "lo": 0.4086683269367765,
+    "hi": 0.4578988348365034,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "MA",
+    "condition": "primary",
+    "estimate": 0.51953125,
+    "lo": 0.298505070265091,
+    "hi": 0.7269383639666266,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "CM",
+    "condition": "R2",
+    "estimate": 0.5394793656519612,
+    "lo": 0.511357929137784,
+    "hi": 0.5655342247387518,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "LPL",
+    "condition": "R2",
+    "estimate": 0.4953200087760894,
+    "lo": 0.4724273273633852,
+    "hi": 0.5181139081204922,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "MA",
+    "condition": "R2",
+    "estimate": 0.5253661087866109,
+    "lo": 0.3014723006477431,
+    "hi": 0.7396808044535318,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "CM",
+    "condition": "R3",
+    "estimate": 0.5465881860551759,
+    "lo": 0.5222221661822148,
+    "hi": 0.5735129394810419,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "LPL",
+    "condition": "R3",
+    "estimate": 0.4500348014840769,
+    "lo": 0.4248288801160788,
+    "hi": 0.4738556330646054,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "MA",
+    "condition": "R3",
+    "estimate": 0.4742229729729729,
+    "lo": 0.4339518866174049,
+    "hi": 0.5136984718438735,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "CM",
+    "condition": "R4",
+    "estimate": 0.5545885588784663,
+    "lo": 0.5240008315039202,
+    "hi": 0.5850892518851841,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "LPL",
+    "condition": "R4",
+    "estimate": 0.5768399168399168,
+    "lo": 0.5215774973830646,
+    "hi": 0.6281480964094788,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "MA",
+    "condition": "R4",
+    "estimate": 0.6064583333333333,
+    "lo": 0.4082766827131581,
+    "hi": 0.7792063618788793,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "LPL",
+    "condition": "R5",
+    "estimate": 0.5142862263215432,
+    "lo": 0.4900447483654999,
+    "hi": 0.537947153966777,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "CM",
+    "condition": "R6",
+    "estimate": 0.5412453320454653,
+    "lo": 0.5149016030786645,
+    "hi": 0.5690064051392085,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "LPL",
+    "condition": "R6",
+    "estimate": 0.4331143219366913,
+    "lo": 0.4086683269367765,
+    "hi": 0.4578988348365034,
+    "reference": 0.5
+   },
+   {
+    "spec": "auc",
+    "smell": "MA",
+    "condition": "R6",
+    "estimate": 0.505561348627042,
+    "lo": 0.2964651803725418,
+    "hi": 0.7172330097087378,
+    "reference": 0.5
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "CM",
+    "condition": "primary",
+    "estimate": -0.0244726187362851,
+    "lo": -0.0722288446425301,
+    "hi": 0.0244757018762073,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "LPL",
+    "condition": "primary",
+    "estimate": -0.223797931609774,
+    "lo": -0.3216530165847375,
+    "hi": -0.126646275937206,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "CM",
+    "condition": "R2",
+    "estimate": -0.0142321321935402,
+    "lo": -0.0599835825227625,
+    "hi": 0.0313916512765354,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "LPL",
+    "condition": "R2",
+    "estimate": -0.1123175648879967,
+    "lo": -0.1825725650488886,
+    "hi": -0.0366094117173513,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "CM",
+    "condition": "R3",
+    "estimate": 0.0330512986262664,
+    "lo": -0.0102128378639169,
+    "hi": 0.0761818831290818,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "LPL",
+    "condition": "R3",
+    "estimate": 0.0782319258177811,
+    "lo": -0.0078000226717695,
+    "hi": 0.1594554609675423,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "CM",
+    "condition": "R4",
+    "estimate": -0.0119703779899646,
+    "lo": -0.0633221225386011,
+    "hi": 0.0372109303239092,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "LPL",
+    "condition": "R4",
+    "estimate": -0.2075797864235573,
+    "lo": -0.3724182108471244,
+    "hi": -0.0617582028144304,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "LPL",
+    "condition": "R5",
+    "estimate": -0.2546396522585609,
+    "lo": -0.3433148104797139,
+    "hi": -0.1604936840344598,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "CM",
+    "condition": "R6",
+    "estimate": -0.0105980795391387,
+    "lo": -0.0584589029344249,
+    "hi": 0.0368282982497603,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_LR",
+    "smell": "LPL",
+    "condition": "R6",
+    "estimate": -0.223797931609774,
+    "lo": -0.3216530165847375,
+    "hi": -0.126646275937206,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "CM",
+    "condition": "primary",
+    "estimate": 0.0252484285794697,
+    "lo": -0.0362799980722675,
+    "hi": 0.0892801808606225,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "LPL",
+    "condition": "primary",
+    "estimate": -0.1378143303658132,
+    "lo": -0.2171452514382495,
+    "hi": -0.0615377473624451,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "CM",
+    "condition": "R2",
+    "estimate": 0.0516093484146708,
+    "lo": -0.0074311837741638,
+    "hi": 0.1126636859785982,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "LPL",
+    "condition": "R2",
+    "estimate": -0.0613227758038356,
+    "lo": -0.126794600397638,
+    "hi": 0.0045005460551928,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "CM",
+    "condition": "R3",
+    "estimate": 0.0112597695851212,
+    "lo": -0.0474714421282311,
+    "hi": 0.0719013927447176,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "LPL",
+    "condition": "R3",
+    "estimate": 0.0624826908116436,
+    "lo": -0.0093469227767782,
+    "hi": 0.1255648047726215,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "CM",
+    "condition": "R4",
+    "estimate": 0.0245350657851129,
+    "lo": -0.0444106626041395,
+    "hi": 0.1001605441014996,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "LPL",
+    "condition": "R4",
+    "estimate": -0.1134398753593337,
+    "lo": -0.2744548893513081,
+    "hi": 0.0448293879464105,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "LPL",
+    "condition": "R5",
+    "estimate": -0.061645234591992,
+    "lo": -0.1367459825818576,
+    "hi": 0.017457390148858,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "CM",
+    "condition": "R6",
+    "estimate": 0.0390371543643148,
+    "lo": -0.0194007078114078,
+    "hi": 0.1012618241440594,
+    "reference": 0.0
+   },
+   {
+    "spec": "rq4_RF",
+    "smell": "LPL",
+    "condition": "R6",
+    "estimate": -0.1378143303658132,
+    "lo": -0.2171452514382495,
+    "hi": -0.0615377473624451,
+    "reference": 0.0
+   },
+   {
+    "spec": "best_mcc",
+    "smell": "CM",
+    "condition": "primary (LR)",
+    "estimate": 0.0953514220045704,
+    "lo": 0.0517152909296825,
+    "hi": 0.1359802076510277,
+    "reference": 0.0
+   },
+   {
+    "spec": "best_mcc",
+    "smell": "LPL",
+    "condition": "primary (GB)",
+    "estimate": 0.2324880771245812,
+    "lo": 0.1835531976905827,
+    "hi": 0.277867660213098,
+    "reference": 0.0
+   },
+   {
+    "spec": "best_mcc",
+    "smell": "LPL",
+    "condition": "R5 (SVM)",
+    "estimate": 0.268941390302125,
+    "lo": 0.2126429727020557,
+    "hi": 0.3210405387994594,
+    "reference": 0.0
+   }
+  ],
+  "labels": {
+   "alpha": "Krippendorff's alpha",
+   "auc": "Primary-metric ROC-AUC",
+   "rq4_LR": "Transfer MCC difference (LR)",
+   "rq4_RF": "Transfer MCC difference (RF)",
+   "best_mcc": "Best-model MCC"
+  },
+  "caption": "Each headline number under the primary analysis and every robustness reading of the data."
+ },
+ "ablation": {
+  "rows": [
+   {
+    "population": "CM",
+    "model": "LR",
+    "variant": "(i) primary only",
+    "delta_mcc": [
+     -0.0436851378592574,
+     -0.0904014682867269,
+     0.0047985011626259
+    ]
+   },
+   {
+    "population": "CM",
+    "model": "LR",
+    "variant": "DACOSX only",
+    "delta_mcc": [
+     -0.0413433131424098,
+     -0.0858334695785973,
+     0.0029613597918771
+    ]
+   },
+   {
+    "population": "CM",
+    "model": "LR",
+    "variant": "DACOSX + DACOS",
+    "delta_mcc": [
+     -0.0953514220045704,
+     -0.1359802076510277,
+     -0.0517152909296825
+    ]
+   },
+   {
+    "population": "CM",
+    "model": "LR",
+    "variant": "DACOSX only, primary metric removed",
+    "delta_mcc": [
+     -0.0518483774603207,
+     -0.1065304093777927,
+     0.0031447108484354
+    ]
+   },
+   {
+    "population": "LPL R5",
+    "model": "SVM",
+    "variant": "(i) primary only",
+    "delta_mcc": [
+     -0.2782689755769953,
+     -0.3394367910229572,
+     -0.2140276412036304
+    ]
+   },
+   {
+    "population": "LPL R5",
+    "model": "SVM",
+    "variant": "DACOSX only",
+    "delta_mcc": [
+     -0.2230266743194316,
+     -0.2958105284062969,
+     -0.150260208946287
+    ]
+   },
+   {
+    "population": "LPL R5",
+    "model": "SVM",
+    "variant": "DACOSX + DACOS",
+    "delta_mcc": [
+     -0.2648481778588921,
+     -0.3176229883514165,
+     -0.207961138617348
+    ]
+   },
+   {
+    "population": "LPL R5",
+    "model": "SVM",
+    "variant": "DACOSX only, primary metric removed",
+    "delta_mcc": [
+     -0.3753193240809571,
+     -0.4521050034227215,
+     -0.2932325155632007
+    ]
+   }
+  ],
+  "caption": "Training on threshold-labelled DACOSX snippets, or on the primary metric alone, does worse than training on human-labelled borderline snippets with all features."
+ },
+ "links": {
+  "repository": "https://github.com/Prafful7601/beyond-thresholds-code-smells",
+  "results": "https://github.com/Prafful7601/beyond-thresholds-code-smells/blob/main/results/results.md",
+  "paper": "Metric Thresholds Versus Human Judgment on Borderline Code Smells: A Robustness-First Audit of the DACOS Benchmark"
+ }
+}

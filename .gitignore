@@ -8,3 +8,8 @@ __pycache__/
 .coverage
 htmlcov/
 webapp/backend/codesniff.db
+node_modules/
+webapp/frontend/dist/
+webapp/frontend/test-results/
+webapp/frontend/playwright-report/
+webapp/frontend/coverage/
