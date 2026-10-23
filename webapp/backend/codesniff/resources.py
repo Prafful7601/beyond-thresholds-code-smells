@@ -8,12 +8,14 @@ import json
 import os
 import sys
 
-APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REPO = os.path.dirname(APP_DIR)
+BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))           # webapp/backend
+APP_DIR = BACKEND_DIR
+# Repository root holding src/ and results/; overridable for container layouts.
+REPO = os.environ.get("CODESNIFF_ROOT") or os.path.dirname(os.path.dirname(BACKEND_DIR))
 SRC = os.path.join(REPO, "src")
 RESULTS = os.path.join(REPO, "results")
 TABLES = os.path.join(RESULTS, "tables")
-MODELS = os.path.join(APP_DIR, "models")
+MODELS = os.path.join(BACKEND_DIR, "models")
 REPO_URL = "https://github.com/Prafful7601/beyond-thresholds-code-smells"
 PAPER_TITLE = ("Metric Thresholds Versus Human Judgment on Borderline Code Smells: "
                "A Robustness-First Audit of the DACOS Benchmark")

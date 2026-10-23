@@ -6,7 +6,7 @@
 * cc: lizard counts `&&` and `||` as decision points, DesigniteJava (the paper's metric) does not. CodeSniff
   reports both `cc_lizard` and the DesigniteJava-compatible `cc` = lizard cc minus the number of `&&`/`||`
   operators outside strings and comments (floored at 1). On DACOS method snippets this raises exact agreement
-  with the stored DesigniteJava value from 0.50 to 0.77 (see app/models/lizard_agreement.json).
+  with the stored DesigniteJava value from 0.50 to 0.77 (see webapp/backend/models/lizard_agreement.json).
 * pc: counted from the declaration's parameter list (top-level commas, generics-aware).
 * loc: lizard NLOC (non-blank, non-comment lines); for bodiless declarations, non-blank lines after stripping
   comments.

@@ -1,7 +1,7 @@
 """CodeSniff cc/pc versus the stored DesigniteJava values on 200 DACOS snippets (paper: raw lizard 59% cc, 96% pc).
 
 The check needs the DACOS data (downloaded by run_all.sh, not redistributed). Without it, the stored result written
-by app/train_models.py is verified and reported instead.
+by webapp/backend/train_models.py is verified and reported instead.
 """
 import json
 import os
