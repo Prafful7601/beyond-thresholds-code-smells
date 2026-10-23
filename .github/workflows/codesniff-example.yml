@@ -1,0 +1,20 @@
+# Example: score every pull request that touches Java code and comment the result.
+# In another repository use:  uses: Prafful7601/beyond-thresholds-code-smells@v1.1  (or a later tag)
+name: CodeSniff (example)
+on:
+  pull_request:
+    paths: ["**/*.java"]
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  smell-risk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        id: codesniff
+        with:
+          fail-on: high        # high | medium | never
+      - run: echo "Smell risk ${{ steps.codesniff.outputs.score }} (${{ steps.codesniff.outputs.band }})"
+        if: always()

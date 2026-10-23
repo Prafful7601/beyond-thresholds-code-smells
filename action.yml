@@ -1,0 +1,72 @@
+name: CodeSniff smell risk
+description: >-
+  Scores the code-smell risk (Complex Method, Long Parameter List) of the Java methods changed by a pull request,
+  posts the score and per-method table as a PR comment, and fails at the configured band. The score measures
+  code-smell risk; it is not a bug or build-failure prediction.
+branding: { icon: search, color: blue }
+inputs:
+  fail-on:
+    description: "Fail the step when the band is reached: high, medium or never"
+    default: high
+  comment:
+    description: "Post the result as a PR comment (true/false)"
+    default: "true"
+  github-token:
+    description: "Token for the GitHub API and for posting the comment"
+    default: ${{ github.token }}
+  pr-url:
+    description: "Pull-request URL (defaults to the PR that triggered the workflow)"
+    default: ${{ github.event.pull_request.html_url }}
+outputs:
+  score:
+    description: "Smell risk score (0-100, or n/a)"
+    value: ${{ steps.check.outputs.score }}
+  band:
+    description: "Low, Medium or High"
+    value: ${{ steps.check.outputs.band }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with: { python-version: "3.11" }
+    - name: Install CodeSniff
+      shell: bash
+      run: python -m pip install -q -r "${{ github.action_path }}/webapp/backend/requirements.txt"
+    - name: Score the pull request
+      id: check
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        PR_URL: ${{ inputs.pr-url }}
+        CLI: ${{ github.action_path }}/webapp/backend/cli.py
+      run: |
+        if [ -z "$PR_URL" ]; then echo "::error::CodeSniff needs a pull request (run on pull_request or set pr-url)"; exit 2; fi
+        python "$CLI" check --pr "$PR_URL" --format json --fail-on never -o "$RUNNER_TEMP/codesniff.json"
+        python - "$RUNNER_TEMP" >> "$GITHUB_OUTPUT" <<'PY'
+        import json, os, sys
+        sys.path.insert(0, os.path.join(os.environ["GITHUB_ACTION_PATH"], "webapp", "backend"))
+        from codesniff.cli import to_markdown
+        result = json.load(open(os.path.join(sys.argv[1], "codesniff.json")))
+        open(os.path.join(sys.argv[1], "codesniff.md"), "w").write(to_markdown(result))
+        r = result["risk"]
+        print("score=" + ("n/a" if r["score"] is None else f"{r['score']:.1f}"))
+        print("band=" + r["band"])
+        PY
+        cat "$RUNNER_TEMP/codesniff.md" >> "$GITHUB_STEP_SUMMARY"
+    - name: Comment on the pull request
+      if: inputs.comment == 'true'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR_URL: ${{ inputs.pr-url }}
+      run: gh pr comment "$PR_URL" --body-file "$RUNNER_TEMP/codesniff.md"
+    - name: Apply the fail-on band
+      shell: bash
+      env:
+        BAND: ${{ steps.check.outputs.band }}
+        FAIL_ON: ${{ inputs.fail-on }}
+      run: |
+        case "$FAIL_ON:$BAND" in
+          high:High|medium:High|medium:Medium) echo "::error::CodeSniff smell risk band $BAND reaches fail-on=$FAIL_ON"; exit 1 ;;
+          *) echo "CodeSniff smell risk band $BAND (fail-on=$FAIL_ON)" ;;
+        esac

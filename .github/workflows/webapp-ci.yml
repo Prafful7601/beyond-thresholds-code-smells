@@ -1,0 +1,39 @@
+# CodeSniff website: backend pytest, frontend Vitest and the Playwright end-to-end test, with coverage.
+name: webapp CI
+on:
+  push:
+    paths: ["webapp/**", "src/features.py", "src/common.py", "results/**", ".github/workflows/webapp-ci.yml"]
+  pull_request:
+    paths: ["webapp/**", "src/features.py", "src/common.py", "results/**", ".github/workflows/webapp-ci.yml"]
+permissions:
+  contents: read
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: webapp/backend } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip, cache-dependency-path: webapp/backend/requirements*.txt }
+      - run: pip install -r requirements-dev.txt
+      - run: python -m pytest tests -q --cov --cov-config=.coveragerc --cov-report=term --cov-report=xml
+      - run: echo "### Backend coverage" >> "$GITHUB_STEP_SUMMARY" && python -m coverage report --format=markdown >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with: { name: backend-coverage, path: webapp/backend/coverage.xml }
+  frontend:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: webapp/frontend } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20", cache: npm, cache-dependency-path: webapp/frontend/package-lock.json }
+      - run: npm ci
+      - run: npx tsc -p tsconfig.json --noEmit
+      - run: npx vitest run --coverage
+      - run: npx vite build
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+        env: { CI: "true" }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: frontend-reports, path: "webapp/frontend/coverage\nwebapp/frontend/playwright-report" }
