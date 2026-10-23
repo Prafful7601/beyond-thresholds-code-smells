@@ -3,10 +3,10 @@ export const PROJECT = {
   label: "MAJOR PROJECT · 2026–27",
   title: "An Empirical Examination of Code Smell Severity and Structural Influence in Extensive Open-Source Systems",
   team: [
-    { name: "Mohd Aatir", roll: "202510116100142" },
     { name: "Prafful Gupta", roll: "202510116100161" },
-    { name: "Pragya Mishra", roll: "202510116100162" },
     { name: "Prashant K. Singh", roll: "202510116100167" },
+    { name: "Mohd Aatir", roll: "202510116100142" },
+    { name: "Pragya Mishra", roll: "202510116100162" },
   ],
   meta: "Section C | MCA | Group G-3",
   supervisor: "Mr. Rabi N. Panda (Associate Professor & Addl. HOD)",
