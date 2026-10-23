@@ -21,6 +21,7 @@ it("Project card shows the team, supervisors and SDG badge", () => {
   render(<ProjectCard />);
   const card = screen.getByTestId("project-card");
   expect(card).toHaveTextContent("MAJOR PROJECT · 2026–27");
+  expect(card).toHaveTextContent("Metric Thresholds Versus Human Judgment on Borderline Code Smells: A Robustness-First Audit of the DACOS Benchmark");
   expect(card).toHaveTextContent("202510116100161");
   expect(card).toHaveTextContent("Rabi N. Panda");
   expect(card).toHaveTextContent("SDG 9");

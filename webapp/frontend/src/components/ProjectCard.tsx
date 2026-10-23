@@ -1,7 +1,7 @@
 import { PROJECT } from "../project";
 import { REPO_URL_FALLBACK } from "./links";
 
-export default function ProjectCard({ repo, paper }: { repo?: string; paper?: string }) {
+export default function ProjectCard({ repo }: { repo?: string }) {
   const repoUrl = repo || REPO_URL_FALLBACK;
   return (
     <footer className="mt-16 border-t border-surface-3 bg-white" data-testid="project-card">
@@ -34,8 +34,7 @@ export default function ProjectCard({ repo, paper }: { repo?: string; paper?: st
             <div>
               <p className="font-semibold text-ink-2">Links</p>
               <p className="mt-1"><a className="text-brand hover:underline" href={repoUrl} target="_blank" rel="noreferrer">GitHub repository</a></p>
-              <p><a className="text-brand hover:underline" href={`${repoUrl}/blob/main/results/results.md`} target="_blank" rel="noreferrer">Paper results</a>
-                {paper ? <span className="block text-xs text-ink-3">{paper}</span> : null}</p>
+              <p><a className="text-brand hover:underline" href={`${repoUrl}/blob/main/results/results.md`} target="_blank" rel="noreferrer">Paper results</a></p>
             </div>
           </div>
         </div>

@@ -24,7 +24,7 @@ export default function Layout() {
         </div>
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6"><Outlet /></main>
-      <ProjectCard repo={config?.links.repository} paper={config?.links.paper} />
+      <ProjectCard repo={config?.links.repository} />
     </div>
   );
 }

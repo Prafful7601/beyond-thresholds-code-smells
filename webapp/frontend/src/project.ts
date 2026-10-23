@@ -1,7 +1,7 @@
 /** Project card shown in the footer of every page (text supplied by the project team). */
 export const PROJECT = {
   label: "MAJOR PROJECT · 2026–27",
-  title: "An Empirical Examination of Code Smell Severity and Structural Influence in Extensive Open-Source Systems",
+  title: "Metric Thresholds Versus Human Judgment on Borderline Code Smells: A Robustness-First Audit of the DACOS Benchmark",
   team: [
     { name: "Prafful Gupta", roll: "202510116100161" },
     { name: "Prashant K. Singh", roll: "202510116100167" },
