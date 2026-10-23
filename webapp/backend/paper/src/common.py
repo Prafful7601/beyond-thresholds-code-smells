@@ -18,7 +18,10 @@ FIG = os.path.join(ROOT, "results/figures")
 LOG = os.path.join(ROOT, "results/logs")
 FRAG = os.path.join(ROOT, "results/fragments")
 for d in (TAB, FIG, LOG, FRAG, FEAT_DIR):
-    os.makedirs(d, exist_ok=True)
+    try:
+        os.makedirs(d, exist_ok=True)
+    except OSError:  # read-only deployments (e.g. the CodeSniff API on Vercel) only import the definitions
+        pass
 
 SEED = 20261021
 B = 2000
